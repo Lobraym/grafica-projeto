@@ -3,7 +3,9 @@
 import { useState, useMemo } from 'react';
 import { Package, CheckCircle2, Truck, Calendar, Layers, Ruler } from 'lucide-react';
 import { PageHeader } from '@/components/layout/PageHeader';
-import { EmptyState, NotificationButton, ConfirmDialog } from '@/components/ui';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { NotificationButton } from '@/components/ui/NotificationButton';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useQuoteStore } from '@/stores/useQuoteStore';
 import { useClientStore } from '@/stores/useClientStore';
 import { formatDateShort } from '@/lib/utils';
@@ -12,6 +14,12 @@ export default function ProntosPage(): React.ReactElement {
   const quotes = useQuoteStore((s) => s.quotes);
   const markAsDelivered = useQuoteStore((s) => s.markAsDelivered);
   const clients = useClientStore((s) => s.clients);
+
+  // js-index-maps: Map O(1) para lookups de cliente
+  const clientById = useMemo(
+    () => new Map(clients.map((c) => [c.id, c])),
+    [clients]
+  );
 
   const readyQuotes = useMemo(
     () => quotes.filter((q) => q.status === 'pronto'),
@@ -56,7 +64,7 @@ export default function ProntosPage(): React.ReactElement {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {readyQuotes.map((quote) => {
-          const client = clients.find((c) => c.id === quote.clientId);
+          const client = clientById.get(quote.clientId);
 
           return (
             <div

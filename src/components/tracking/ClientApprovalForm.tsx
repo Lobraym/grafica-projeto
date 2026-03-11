@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { CheckCircle2, XCircle, ImageIcon, MessageCircle } from 'lucide-react';
 import { useQuoteStore } from '@/stores/useQuoteStore';
-import { ConfirmDialog } from '@/components/ui';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import type { Quote } from '@/types/quote';
 
 interface ClientApprovalFormProps {

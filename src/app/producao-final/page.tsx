@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { PageHeader } from '@/components/layout/PageHeader';
-import { TabGroup } from '@/components/ui';
+import { TabGroup } from '@/components/ui/TabGroup';
 import { ProductionKanban } from '@/components/final-production/ProductionKanban';
 import type { FinalProductionTab } from '@/types/common';
 

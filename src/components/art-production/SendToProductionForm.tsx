@@ -3,7 +3,8 @@
 import { useState, useCallback } from 'react';
 import { X, Send, FileText } from 'lucide-react';
 import { useQuoteStore } from '@/stores/useQuoteStore';
-import { ConfirmDialog, FileUpload } from '@/components/ui';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { FileUpload } from '@/components/ui/FileUpload';
 import { generateId } from '@/lib/utils';
 import type { FileAttachment } from '@/types/common';
 

@@ -1,16 +1,26 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import { Palette, Clock, CheckCircle2, Send } from 'lucide-react';
 import { PageHeader } from '@/components/layout/PageHeader';
-import { TabGroup, EmptyState } from '@/components/ui';
+import { TabGroup } from '@/components/ui/TabGroup';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { ArtJobCard } from '@/components/art-production/ArtJobCard';
 import { ArtChecklist } from '@/components/art-production/ArtChecklist';
-import { ArtReviewForm } from '@/components/art-production/ArtReviewForm';
-import { SendToProductionForm } from '@/components/art-production/SendToProductionForm';
 import { useQuoteStore } from '@/stores/useQuoteStore';
 import type { ArtProductionTab } from '@/types/common';
 import type { Quote } from '@/types/quote';
+
+// bundle-dynamic-imports: modais pesados carregam sob demanda
+const ArtReviewForm = dynamic(
+  () => import('@/components/art-production/ArtReviewForm').then((m) => m.ArtReviewForm),
+  { ssr: false }
+);
+const SendToProductionForm = dynamic(
+  () => import('@/components/art-production/SendToProductionForm').then((m) => m.SendToProductionForm),
+  { ssr: false }
+);
 
 const TABS = [
   { id: 'disponivel' as const, label: 'Disponível' },
@@ -59,8 +69,9 @@ export default function ProducaoArtesPage(): React.ReactElement {
     setSelectedQuoteId(quote.id);
   };
 
+  // rerender-functional-setstate: previne stale closures
   const handleOpenDetails = (quoteId: string): void => {
-    setSelectedQuoteId(selectedQuoteId === quoteId ? null : quoteId);
+    setSelectedQuoteId((prev) => (prev === quoteId ? null : quoteId));
   };
 
   const handleOpenReview = (quoteId: string): void => {

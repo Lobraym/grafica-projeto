@@ -6,7 +6,7 @@ import { useQuoteStore } from '@/stores/useQuoteStore';
 import { useClientStore } from '@/stores/useClientStore';
 import { TrackingTimeline } from '@/components/tracking/TrackingTimeline';
 import { ClientApprovalForm } from '@/components/tracking/ClientApprovalForm';
-import { StatusBadge } from '@/components/ui';
+import { StatusBadge } from '@/components/ui/StatusBadge';
 import { formatDate, formatCurrency } from '@/lib/utils';
 
 interface AcompanhamentoPageProps {

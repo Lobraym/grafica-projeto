@@ -1,7 +1,8 @@
 'use client';
 
 import { useMemo } from 'react';
-import { KanbanColumn, EmptyState } from '@/components/ui';
+import { KanbanColumn } from '@/components/ui/KanbanColumn';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { ProductionJobCard } from './ProductionJobCard';
 import { useQuoteStore } from '@/stores/useQuoteStore';
 import { Printer, Wrench } from 'lucide-react';

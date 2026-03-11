@@ -17,13 +17,19 @@ import {
   Calendar,
   StickyNote,
 } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { useClientStore } from '@/stores/useClientStore';
 import { useQuoteStore } from '@/stores/useQuoteStore';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import { ClientForm } from '@/components/clients/ClientForm';
+
+// bundle-dynamic-imports: formulário pesado (RHF + Zod) carrega sob demanda
+const ClientForm = dynamic(
+  () => import('@/components/clients/ClientForm').then((m) => m.ClientForm),
+  { ssr: false }
+);
 import {
   formatPhone,
   formatCurrency,

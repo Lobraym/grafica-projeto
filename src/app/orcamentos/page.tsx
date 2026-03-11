@@ -31,11 +31,18 @@ export default function OrcamentosPage(): React.ReactElement {
   const quotes = useQuoteStore((state) => state.quotes);
   const clients = useClientStore((state) => state.clients);
 
-  // Contagem por status
+  // js-index-maps: Map O(1) para lookups de cliente por ID
+  const clientById = useMemo(
+    () => new Map(clients.map((c) => [c.id, c])),
+    [clients]
+  );
+
+  // js-combine-iterations: contagem em uma única iteração O(n)
   const statusCounts = useMemo(() => {
     const counts: Record<string, number> = { [ALL_TAB]: quotes.length };
-    for (const status of STATUS_TABS) {
-      counts[status] = quotes.filter((q) => q.status === status).length;
+    for (const status of STATUS_TABS) counts[status] = 0;
+    for (const q of quotes) {
+      counts[q.status] = (counts[q.status] ?? 0) + 1;
     }
     return counts;
   }, [quotes]);
@@ -70,7 +77,7 @@ export default function OrcamentosPage(): React.ReactElement {
 
     const query = search.toLowerCase().trim();
     return base.filter((quote) => {
-      const client = clients.find((c) => c.id === quote.clientId);
+      const client = clientById.get(quote.clientId);
       return (
         quote.service.toLowerCase().includes(query) ||
         quote.material.toLowerCase().includes(query) ||
@@ -79,7 +86,7 @@ export default function OrcamentosPage(): React.ReactElement {
         (client?.name.toLowerCase().includes(query) ?? false)
       );
     });
-  }, [quotes, activeTab, search, clients]);
+  }, [quotes, activeTab, search, clientById]);
 
   return (
     <div className="space-y-6">

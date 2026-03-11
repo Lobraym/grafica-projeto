@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { X, Send, ImageIcon } from 'lucide-react';
 import { useQuoteStore } from '@/stores/useQuoteStore';
-import { ConfirmDialog } from '@/components/ui';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 
 interface ArtReviewFormProps {
   readonly quoteId: string;
