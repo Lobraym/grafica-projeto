@@ -41,7 +41,7 @@ export function ArtJobCard({ quote, onAction }: ArtJobCardProps): React.ReactEle
         : `${daysLeft}d restantes`;
 
   return (
-    <div className="group rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-all hover:shadow-md hover:border-gray-300">
+    <div className="group bg-white rounded-xl border border-slate-200 p-4 shadow-sm transition-all duration-200 ease-out hover:shadow-md hover:border-slate-300">
       {/* Header */}
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="min-w-0 flex-1">
@@ -82,7 +82,7 @@ export function ArtJobCard({ quote, onAction }: ArtJobCardProps): React.ReactEle
         <button
           type="button"
           onClick={onAction}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-cyan-600 px-3 py-2.5 text-sm font-medium text-white transition-colors duration-200 ease-out hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 cursor-pointer"
         >
           <Play className="h-4 w-4" />
           Iniciar
@@ -93,7 +93,7 @@ export function ArtJobCard({ quote, onAction }: ArtJobCardProps): React.ReactEle
         <button
           type="button"
           onClick={onAction}
-          className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+          className="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 transition-colors duration-200 ease-out hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 cursor-pointer"
         >
           <Eye className="h-4 w-4" />
           Ver Detalhes
@@ -109,7 +109,7 @@ export function ArtJobCard({ quote, onAction }: ArtJobCardProps): React.ReactEle
           <button
             type="button"
             onClick={onAction}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white transition-colors duration-200 ease-out hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 cursor-pointer"
           >
             <Palette className="h-3.5 w-3.5" />
             Enviar para Produção

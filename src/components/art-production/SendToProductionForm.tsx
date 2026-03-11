@@ -46,9 +46,9 @@ export function SendToProductionForm({ quoteId, onClose }: SendToProductionFormP
   return (
     <>
       <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-        <div className="w-full max-w-lg animate-in fade-in zoom-in-95 rounded-xl bg-white shadow-xl">
+        <div className="w-full max-w-lg animate-in fade-in zoom-in-95 rounded-2xl bg-white shadow-xl">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
+          <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
             <div>
               <h3 className="text-base font-semibold text-gray-900">Enviar para Produção Final</h3>
               <p className="text-xs text-gray-500 mt-0.5">
@@ -58,7 +58,7 @@ export function SendToProductionForm({ quoteId, onClose }: SendToProductionFormP
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
+              className="rounded-lg p-1.5 text-gray-400 hover:bg-slate-100 hover:text-gray-600 transition-colors duration-200 ease-out cursor-pointer"
             >
               <X className="h-5 w-5" />
             </button>
@@ -68,7 +68,7 @@ export function SendToProductionForm({ quoteId, onClose }: SendToProductionFormP
           <div className="space-y-5 px-6 py-5">
             {/* File Upload */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 mb-2">
                 Arquivo Final (PDF)
               </label>
               <FileUpload
@@ -80,7 +80,7 @@ export function SendToProductionForm({ quoteId, onClose }: SendToProductionFormP
 
             {/* Production Notes */}
             <div>
-              <label htmlFor="productionNotes" className="flex items-center gap-1.5 text-sm font-medium text-gray-700 mb-1.5">
+              <label htmlFor="productionNotes" className="flex items-center gap-1.5 text-sm font-medium text-slate-700 mb-1.5">
                 <FileText className="h-4 w-4 text-gray-400" />
                 Instruções de Produção
               </label>
@@ -90,7 +90,7 @@ export function SendToProductionForm({ quoteId, onClose }: SendToProductionFormP
                 onChange={(e) => setProductionNotes(e.target.value)}
                 placeholder={"Imprimir em lona brilho\nTamanho 2m x 1m\nUsar ilhós nas pontas"}
                 rows={5}
-                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors resize-none"
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out resize-none"
               />
               <p className="mt-1 text-xs text-gray-400">
                 Informações importantes para a equipe de produção
@@ -99,11 +99,11 @@ export function SendToProductionForm({ quoteId, onClose }: SendToProductionFormP
           </div>
 
           {/* Footer */}
-          <div className="flex justify-end gap-3 border-t border-gray-100 px-6 py-4">
+          <div className="flex justify-end gap-3 border-t border-slate-200 px-6 py-4">
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              className="rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors duration-200 ease-out cursor-pointer"
             >
               Cancelar
             </button>
@@ -111,7 +111,7 @@ export function SendToProductionForm({ quoteId, onClose }: SendToProductionFormP
               type="button"
               onClick={handleSubmit}
               disabled={!isValid}
-              className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-colors duration-200 ease-out disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               <Send className="h-4 w-4" />
               Enviar para Produção

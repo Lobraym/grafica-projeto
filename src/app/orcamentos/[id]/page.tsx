@@ -70,7 +70,7 @@ export default function QuoteDetailPage(): React.ReactElement {
         <button
           type="button"
           onClick={() => router.push('/orcamentos')}
-          className="mt-6 inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+          className="mt-6 inline-flex items-center gap-2 rounded-lg bg-cyan-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-cyan-700 transition-colors duration-200 ease-out cursor-pointer"
         >
           Voltar para Orcamentos
         </button>
@@ -103,12 +103,12 @@ export default function QuoteDetailPage(): React.ReactElement {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-gray-200 pb-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-slate-200 pb-6">
         <div className="flex items-center gap-4">
           <button
             type="button"
             onClick={() => router.push('/orcamentos')}
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-gray-500 hover:bg-slate-50 hover:text-gray-700 transition-colors duration-200 ease-out cursor-pointer"
             aria-label="Voltar"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -128,7 +128,7 @@ export default function QuoteDetailPage(): React.ReactElement {
           <button
             type="button"
             onClick={handleCopyLink}
-            className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors duration-200 ease-out cursor-pointer"
           >
             <Copy className="h-4 w-4" />
             {copiedLink ? 'Copiado!' : 'Copiar Link'}
@@ -138,7 +138,7 @@ export default function QuoteDetailPage(): React.ReactElement {
             <button
               type="button"
               onClick={handleStartProduction}
-              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center gap-2 rounded-lg bg-cyan-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 transition-colors duration-200 ease-out cursor-pointer"
             >
               <Play className="h-4 w-4" />
               Iniciar Producao de Arte
@@ -148,7 +148,7 @@ export default function QuoteDetailPage(): React.ReactElement {
       </div>
 
       {/* Timeline */}
-      <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+      <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
         <h2 className="mb-5 text-sm font-semibold text-gray-900 uppercase tracking-wider">
           Progresso
         </h2>
@@ -159,7 +159,7 @@ export default function QuoteDetailPage(): React.ReactElement {
         {/* Coluna principal */}
         <div className="space-y-6 lg:col-span-2">
           {/* Detalhes do Servico */}
-          <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
             <h2 className="mb-4 text-sm font-semibold text-gray-900 uppercase tracking-wider">
               Detalhes do Servico
             </h2>
@@ -177,7 +177,7 @@ export default function QuoteDetailPage(): React.ReactElement {
             </div>
 
             {/* Prazo */}
-            <div className="mt-4 pt-4 border-t border-gray-100">
+            <div className="mt-4 pt-4 border-t border-slate-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <Calendar className="h-4 w-4" />
@@ -196,7 +196,7 @@ export default function QuoteDetailPage(): React.ReactElement {
 
             {/* Descricao */}
             {quote.description && (
-              <div className="mt-4 pt-4 border-t border-gray-100">
+              <div className="mt-4 pt-4 border-t border-slate-200">
                 <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
                   Descricao
                 </p>
@@ -207,7 +207,7 @@ export default function QuoteDetailPage(): React.ReactElement {
             )}
 
             {/* Etapas */}
-            <div className="mt-4 pt-4 border-t border-gray-100 flex gap-3">
+            <div className="mt-4 pt-4 border-t border-slate-200 flex gap-3">
               {quote.requiresPrinting && (
                 <span className="inline-flex items-center gap-1.5 rounded-lg bg-purple-50 px-3 py-1.5 text-xs font-medium text-purple-700">
                   <Printer className="h-3.5 w-3.5" />
@@ -227,7 +227,7 @@ export default function QuoteDetailPage(): React.ReactElement {
           </div>
 
           {/* Arquivos */}
-          <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
             <h2 className="mb-4 text-sm font-semibold text-gray-900 uppercase tracking-wider">
               Arquivos
             </h2>
@@ -237,7 +237,7 @@ export default function QuoteDetailPage(): React.ReactElement {
                 {quote.files.map((file) => (
                   <div
                     key={file.id}
-                    className="flex items-center gap-3 rounded-lg border border-gray-100 px-4 py-3 hover:bg-gray-50 transition-colors"
+                    className="flex items-center gap-3 rounded-lg border border-slate-200 px-4 py-3 hover:bg-slate-50 transition-colors"
                   >
                     <FileText className="h-5 w-5 text-gray-400 shrink-0" />
                     <div className="min-w-0 flex-1">
@@ -258,7 +258,7 @@ export default function QuoteDetailPage(): React.ReactElement {
 
         {/* Sidebar: Dados do Cliente */}
         <div className="space-y-6">
-          <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
             <h2 className="mb-4 text-sm font-semibold text-gray-900 uppercase tracking-wider">
               Cliente
             </h2>
@@ -266,7 +266,7 @@ export default function QuoteDetailPage(): React.ReactElement {
             {client ? (
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-sm font-semibold text-white">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500 to-cyan-600 text-sm font-semibold text-white">
                     {client.name.charAt(0).toUpperCase()}
                   </div>
                   <div className="min-w-0">
@@ -275,7 +275,7 @@ export default function QuoteDetailPage(): React.ReactElement {
                   </div>
                 </div>
 
-                <div className="space-y-3 pt-3 border-t border-gray-100">
+                <div className="space-y-3 pt-3 border-t border-slate-200">
                   {client.phone && (
                     <div className="flex items-center gap-2.5 text-sm text-gray-600">
                       <Phone className="h-4 w-4 text-gray-400 shrink-0" />
@@ -300,7 +300,7 @@ export default function QuoteDetailPage(): React.ReactElement {
                 <button
                   type="button"
                   onClick={() => router.push(`/clientes/${client.id}`)}
-                  className="mt-2 w-full rounded-lg border border-gray-200 py-2 text-center text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="mt-2 w-full rounded-lg border border-slate-200 py-2.5 text-center text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors duration-200 ease-out cursor-pointer"
                 >
                   Ver Perfil do Cliente
                 </button>
@@ -314,7 +314,7 @@ export default function QuoteDetailPage(): React.ReactElement {
           </div>
 
           {/* Informacoes adicionais */}
-          <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
             <h2 className="mb-4 text-sm font-semibold text-gray-900 uppercase tracking-wider">
               Informacoes
             </h2>

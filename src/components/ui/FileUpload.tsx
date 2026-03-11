@@ -60,11 +60,13 @@ export function FileUpload({
       onDrop={handleDrop}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
-      className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed px-6 py-8 transition-colors
+      className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed px-6 py-8 transition-colors duration-200 ease-out
         ${
           isDragging
-            ? 'border-blue-400 bg-blue-50'
-            : 'border-gray-300 bg-gray-50/50 hover:border-gray-400 hover:bg-gray-50'
+            ? 'border-cyan-400 bg-cyan-50/50'
+            : selectedFileName
+              ? 'border-emerald-200 bg-emerald-50'
+              : 'border-slate-300 bg-white hover:border-slate-400 hover:bg-slate-50'
         }`}
       role="button"
       tabIndex={0}
@@ -87,19 +89,19 @@ export function FileUpload({
 
       {selectedFileName ? (
         <>
-          <File className="h-8 w-8 text-blue-500" />
-          <span className="text-sm font-medium text-gray-700">
+          <File className="h-8 w-8 text-emerald-500" />
+          <span className="text-sm font-medium text-slate-700">
             {selectedFileName}
           </span>
-          <span className="text-xs text-gray-500">
+          <span className="text-xs text-slate-500">
             Clique para trocar o arquivo
           </span>
         </>
       ) : (
         <>
-          <Upload className="h-8 w-8 text-gray-400" />
-          <span className="text-sm text-gray-600">{label}</span>
-          <span className="text-xs text-gray-400">
+          <Upload className="h-8 w-8 text-slate-400" />
+          <span className="text-sm text-slate-600">Arraste ou clique para enviar</span>
+          <span className="text-xs text-slate-400">
             Formatos aceitos: PDF, PNG, JPG
           </span>
         </>

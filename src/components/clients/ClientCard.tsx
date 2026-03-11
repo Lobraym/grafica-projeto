@@ -41,17 +41,17 @@ export function ClientCard({ client }: ClientCardProps): React.ReactElement {
       onKeyDown={handleKeyDown}
       role="button"
       tabIndex={0}
-      className="group flex items-center gap-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-200 hover:shadow-md hover:border-gray-200 hover:-translate-y-0.5 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300"
+      className="group flex items-center gap-4 bg-white rounded-xl border border-slate-200 p-4 shadow-sm transition-all duration-200 ease-out hover:shadow-md hover:border-slate-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400"
     >
       {/* Avatar */}
-      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-lg font-semibold text-white shadow-sm">
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500 to-cyan-600 text-lg font-semibold text-white shadow-sm">
         {firstLetter}
       </div>
 
       {/* Info */}
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <h3 className="truncate text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+          <h3 className="truncate text-sm font-semibold text-gray-900 group-hover:text-cyan-600 transition-colors duration-200 ease-out">
             {client.name}
           </h3>
           <span

@@ -20,7 +20,7 @@ const STAGE_BUTTON_CONFIG: Record<
   disponivel: {
     label: 'Iniciar',
     icon: <Play className="h-4 w-4" />,
-    className: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500/20',
+    className: 'bg-cyan-600 text-white hover:bg-cyan-700 focus:ring-cyan-500/20',
   },
   em_andamento: {
     label: 'Finalizar',
@@ -50,10 +50,10 @@ export function ProductionJobCard({ quote, type, stage }: ProductionJobCardProps
   return (
     <div
       className={cn(
-        'rounded-lg border bg-white p-3.5 transition-all',
+        'rounded-lg border bg-white p-3.5 transition-all duration-200 ease-out',
         isConcluida
           ? 'border-emerald-200 bg-emerald-50/30'
-          : 'border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300',
+          : 'border-slate-200 shadow-sm hover:shadow-md hover:border-slate-300',
       )}
     >
       {/* Client & Service */}
@@ -87,7 +87,7 @@ export function ProductionJobCard({ quote, type, stage }: ProductionJobCardProps
           type="button"
           onClick={handleAction}
           className={cn(
-            'flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2',
+            'flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors duration-200 ease-out focus:outline-none focus:ring-2 cursor-pointer',
             STAGE_BUTTON_CONFIG[stage as 'disponivel' | 'em_andamento'].className,
           )}
         >

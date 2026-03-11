@@ -81,7 +81,7 @@ export function TrackingTimeline({ status }: TrackingTimelineProps): React.React
                 <div
                   className={cn(
                     'absolute left-5 top-11 w-0.5 h-full -ml-px',
-                    isPast ? 'bg-emerald-400' : isCurrent ? 'bg-blue-300' : 'bg-gray-200',
+                    isPast ? 'bg-emerald-400' : isCurrent ? 'bg-cyan-300' : 'bg-slate-200',
                   )}
                 />
               )}
@@ -91,8 +91,8 @@ export function TrackingTimeline({ status }: TrackingTimelineProps): React.React
                 className={cn(
                   'relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 transition-all',
                   isPast && 'border-emerald-500 bg-emerald-500 text-white',
-                  isCurrent && 'border-blue-500 bg-blue-500 text-white shadow-lg shadow-blue-500/25',
-                  isFuture && 'border-gray-200 bg-white text-gray-300',
+                  isCurrent && 'border-cyan-600 bg-cyan-600 text-white shadow-lg shadow-cyan-500/25 ring-4 ring-cyan-100',
+                  isFuture && 'border-slate-200 bg-white text-gray-300',
                 )}
               >
                 {isPast ? <CheckCircle2 className="h-5 w-5" /> : step.icon}
@@ -104,7 +104,7 @@ export function TrackingTimeline({ status }: TrackingTimelineProps): React.React
                   className={cn(
                     'text-sm font-semibold',
                     isPast && 'text-emerald-700',
-                    isCurrent && 'text-blue-700',
+                    isCurrent && 'text-cyan-700',
                     isFuture && 'text-gray-400',
                   )}
                 >
@@ -114,7 +114,7 @@ export function TrackingTimeline({ status }: TrackingTimelineProps): React.React
                   className={cn(
                     'text-xs mt-0.5',
                     isPast && 'text-emerald-600/70',
-                    isCurrent && 'text-blue-600/70',
+                    isCurrent && 'text-cyan-600/70',
                     isFuture && 'text-gray-400',
                   )}
                 >

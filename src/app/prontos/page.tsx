@@ -69,7 +69,7 @@ export default function ProntosPage(): React.ReactElement {
           return (
             <div
               key={quote.id}
-              className="rounded-xl border border-emerald-200 bg-white p-5 shadow-sm transition-all hover:shadow-md"
+              className="bg-white rounded-xl border border-emerald-200 p-5 shadow-sm transition-all duration-200 ease-out hover:shadow-md"
             >
               {/* Status Badge */}
               <div className="flex items-center justify-between mb-4">
@@ -114,7 +114,7 @@ export default function ProntosPage(): React.ReactElement {
                 <button
                   type="button"
                   onClick={() => setConfirmDeliverId(quote.id)}
-                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-emerald-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-emerald-600 px-3 py-2.5 text-sm font-medium text-white transition-colors duration-200 ease-out hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 cursor-pointer"
                 >
                   <Truck className="h-4 w-4" />
                   Marcar como Entregue

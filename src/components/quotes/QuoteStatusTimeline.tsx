@@ -36,8 +36,8 @@ export function QuoteStatusTimeline({ status }: QuoteStatusTimelineProps): React
                   className={cn(
                     'flex h-8 w-8 items-center justify-center rounded-full border-2 text-xs font-bold transition-colors',
                     isPast && 'border-emerald-500 bg-emerald-500 text-white',
-                    isCurrent && 'border-blue-600 bg-blue-600 text-white ring-4 ring-blue-100',
-                    isFuture && 'border-gray-200 bg-white text-gray-400'
+                    isCurrent && 'border-cyan-600 bg-cyan-600 text-white ring-4 ring-cyan-100 animate-pulse',
+                    isFuture && 'border-slate-200 bg-white text-gray-400'
                   )}
                 >
                   {isPast ? <Check className="h-4 w-4" /> : index + 1}
@@ -46,7 +46,7 @@ export function QuoteStatusTimeline({ status }: QuoteStatusTimelineProps): React
                   className={cn(
                     'text-[11px] font-medium text-center max-w-[90px] leading-tight',
                     isPast && 'text-emerald-600',
-                    isCurrent && 'text-blue-600',
+                    isCurrent && 'text-cyan-600',
                     isFuture && 'text-gray-400'
                   )}
                 >
@@ -60,7 +60,7 @@ export function QuoteStatusTimeline({ status }: QuoteStatusTimelineProps): React
                   <div
                     className={cn(
                       'h-0.5 w-full rounded-full',
-                      index < currentIndex ? 'bg-emerald-400' : 'bg-gray-200'
+                      index < currentIndex ? 'bg-emerald-400' : 'bg-slate-200'
                     )}
                   />
                 </div>
@@ -85,8 +85,8 @@ export function QuoteStatusTimeline({ status }: QuoteStatusTimelineProps): React
                   className={cn(
                     'flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold',
                     isPast && 'border-emerald-500 bg-emerald-500 text-white',
-                    isCurrent && 'border-blue-600 bg-blue-600 text-white ring-4 ring-blue-100',
-                    isFuture && 'border-gray-200 bg-white text-gray-400'
+                    isCurrent && 'border-cyan-600 bg-cyan-600 text-white ring-4 ring-cyan-100 animate-pulse',
+                    isFuture && 'border-slate-200 bg-white text-gray-400'
                   )}
                 >
                   {isPast ? <Check className="h-3.5 w-3.5" /> : index + 1}
@@ -95,7 +95,7 @@ export function QuoteStatusTimeline({ status }: QuoteStatusTimelineProps): React
                   <div
                     className={cn(
                       'w-0.5 flex-1 min-h-[20px]',
-                      index < currentIndex ? 'bg-emerald-400' : 'bg-gray-200'
+                      index < currentIndex ? 'bg-emerald-400' : 'bg-slate-200'
                     )}
                   />
                 )}
@@ -107,7 +107,7 @@ export function QuoteStatusTimeline({ status }: QuoteStatusTimelineProps): React
                   className={cn(
                     'text-sm font-medium',
                     isPast && 'text-emerald-600',
-                    isCurrent && 'text-blue-600',
+                    isCurrent && 'text-cyan-600',
                     isFuture && 'text-gray-400'
                   )}
                 >

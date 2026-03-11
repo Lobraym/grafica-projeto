@@ -10,14 +10,14 @@ export function PageHeader({
   children,
 }: PageHeaderProps): React.ReactElement {
   return (
-    <div className="border-b border-border pb-6">
+    <div className="border-b border-slate-200 pb-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <h1 className="truncate text-2xl font-semibold tracking-tight text-foreground">
+          <h1 className="truncate text-xl font-bold tracking-tight text-slate-900">
             {title}
           </h1>
           {subtitle && (
-            <p className="mt-1 text-sm text-foreground/50">{subtitle}</p>
+            <p className="mt-1 text-sm text-slate-500">{subtitle}</p>
           )}
         </div>
 

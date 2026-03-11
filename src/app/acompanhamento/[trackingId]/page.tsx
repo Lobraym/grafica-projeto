@@ -33,7 +33,7 @@ export default function AcompanhamentoPage({ params }: AcompanhamentoPageProps):
       <header className="border-b border-gray-200 bg-white shadow-sm">
         <div className="mx-auto max-w-3xl px-4 py-4 sm:px-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-600">
               <Printer className="h-5 w-5 text-white" />
             </div>
             <div>
@@ -69,13 +69,13 @@ export default function AcompanhamentoPage({ params }: AcompanhamentoPageProps):
           ) : (
             <div className="space-y-6">
               {/* Tracking ID Banner */}
-              <div className="rounded-xl border border-blue-100 bg-blue-50/50 px-5 py-3 flex items-center justify-between">
+              <div className="rounded-xl border border-cyan-200 bg-cyan-50 px-5 py-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <ExternalLink className="h-4 w-4 text-blue-500" />
-                  <span className="text-xs text-blue-600 font-medium">
+                  <ExternalLink className="h-4 w-4 text-cyan-500" />
+                  <span className="text-xs text-cyan-600 font-medium">
                     Rastreamento:
                   </span>
-                  <span className="text-xs text-blue-800 font-mono font-semibold">
+                  <span className="text-xs text-cyan-800 font-mono font-semibold">
                     {quote.trackingId}
                   </span>
                 </div>
@@ -83,7 +83,7 @@ export default function AcompanhamentoPage({ params }: AcompanhamentoPageProps):
               </div>
 
               {/* Order Info Card */}
-              <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
                 <h2 className="text-lg font-semibold text-gray-900 mb-4">
                   Detalhes do Pedido
                 </h2>
@@ -117,7 +117,7 @@ export default function AcompanhamentoPage({ params }: AcompanhamentoPageProps):
               </div>
 
               {/* Timeline */}
-              <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
                 <h2 className="text-lg font-semibold text-gray-900 mb-6">
                   Progresso do Pedido
                 </h2>

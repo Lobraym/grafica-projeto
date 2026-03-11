@@ -18,7 +18,7 @@ export function TabGroup({
   onTabChange,
 }: TabGroupProps): React.ReactElement {
   return (
-    <div className="border-b border-gray-200">
+    <div className="border-b border-slate-200">
       <nav className="-mb-px flex gap-6" aria-label="Abas">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
@@ -30,22 +30,22 @@ export function TabGroup({
               onClick={() => onTabChange(tab.id)}
               role="tab"
               aria-selected={isActive}
-              className={`relative inline-flex items-center gap-2 whitespace-nowrap pb-3 text-sm font-medium transition-colors
+              className={`relative cursor-pointer inline-flex items-center gap-2 whitespace-nowrap pb-3 text-sm transition-colors duration-200 ease-out
                 ${
                   isActive
-                    ? 'text-blue-600'
-                    : 'text-gray-500 hover:text-gray-700'
+                    ? 'text-cyan-600 font-medium'
+                    : 'text-slate-500 hover:text-slate-700'
                 }`}
             >
               {tab.label}
 
               {tab.count !== undefined && (
                 <span
-                  className={`inline-flex h-5 min-w-[20px] items-center justify-center rounded-full px-1.5 text-xs font-medium
+                  className={`inline-flex h-5 min-w-[20px] items-center justify-center rounded-full px-1.5 text-xs font-medium transition-colors duration-200 ease-out
                     ${
                       isActive
-                        ? 'bg-blue-100 text-blue-700'
-                        : 'bg-gray-100 text-gray-600'
+                        ? 'bg-cyan-50 text-cyan-700'
+                        : 'bg-slate-100 text-slate-600'
                     }`}
                 >
                   {tab.count}
@@ -53,7 +53,7 @@ export function TabGroup({
               )}
 
               {isActive && (
-                <span className="absolute inset-x-0 -bottom-px h-0.5 rounded-full bg-blue-600" />
+                <span className="absolute inset-x-0 -bottom-px h-0.5 rounded-full bg-cyan-600" />
               )}
             </button>
           );

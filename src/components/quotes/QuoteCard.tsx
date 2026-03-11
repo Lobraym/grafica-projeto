@@ -14,7 +14,7 @@ interface QuoteCardProps {
 
 const URGENCY_BORDER: Record<ReturnType<typeof getDeadlineUrgency>, string> = {
   overdue: 'border-l-red-500',
-  urgent: 'border-l-orange-400',
+  urgent: 'border-l-amber-400',
   normal: 'border-l-emerald-400',
 } as const;
 
@@ -56,7 +56,7 @@ export function QuoteCard({ quote }: QuoteCardProps): React.ReactElement {
       role="button"
       tabIndex={0}
       className={cn(
-        'group relative rounded-xl border border-gray-100 border-l-4 bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:border-gray-200 hover:-translate-y-0.5 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300',
+        'group relative bg-white rounded-xl border border-slate-200 border-l-4 p-5 shadow-sm transition-all duration-200 ease-out hover:shadow-md hover:border-slate-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400',
         URGENCY_BORDER[urgency]
       )}
     >
@@ -64,7 +64,7 @@ export function QuoteCard({ quote }: QuoteCardProps): React.ReactElement {
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2.5 flex-wrap">
-            <h3 className="truncate text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+            <h3 className="truncate text-sm font-semibold text-gray-900 group-hover:text-cyan-600 transition-colors duration-200 ease-out">
               {client?.name ?? 'Cliente desconhecido'}
             </h3>
             <StatusBadge status={quote.status} />

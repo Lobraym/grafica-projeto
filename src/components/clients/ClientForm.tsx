@@ -94,7 +94,7 @@ export function ClientForm({
       noValidate
     >
       {/* Dados Pessoais */}
-      <fieldset className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+      <fieldset className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <legend className="px-2 text-sm font-semibold text-gray-900">
           Dados do Cliente
         </legend>
@@ -102,24 +102,24 @@ export function ClientForm({
         <div className="mt-2 space-y-5">
           {/* Nome */}
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="name" className="block text-sm font-medium text-slate-700">
               Nome completo <span className="text-red-500">*</span>
             </label>
             <input
               id="name"
               type="text"
               {...register('name')}
-              className="mt-1 block w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors"
+              className="mt-1 block w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out"
               placeholder="Nome do cliente"
             />
             {errors.name && (
-              <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>
+              <p className="mt-1 text-xs text-red-600">{errors.name.message}</p>
             )}
           </div>
 
           {/* Tipo de Pessoa */}
           <div>
-            <span className="block text-sm font-medium text-gray-700">
+            <span className="block text-sm font-medium text-slate-700">
               Tipo de pessoa <span className="text-red-500">*</span>
             </span>
             <div className="mt-2 flex gap-3">
@@ -128,8 +128,8 @@ export function ClientForm({
                   key={type}
                   className={`flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg border-2 px-4 py-2.5 text-sm font-medium transition-all ${
                     personType === type
-                      ? 'border-blue-500 bg-blue-50 text-blue-700'
-                      : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
+                      ? 'border-cyan-500 bg-cyan-50 text-cyan-700'
+                      : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
                   }`}
                 >
                   <input
@@ -144,13 +144,13 @@ export function ClientForm({
               ))}
             </div>
             {errors.personType && (
-              <p className="mt-1 text-xs text-red-500">{errors.personType.message}</p>
+              <p className="mt-1 text-xs text-red-600">{errors.personType.message}</p>
             )}
           </div>
 
           {/* CPF/CNPJ */}
           <div>
-            <label htmlFor="cpfCnpj" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="cpfCnpj" className="block text-sm font-medium text-slate-700">
               {personType === 'PF' ? 'CPF' : 'CNPJ'} <span className="text-red-500">*</span>
             </label>
             <Controller
@@ -167,20 +167,20 @@ export function ClientForm({
                       : formatCNPJ(e.target.value);
                     field.onChange(formatted);
                   }}
-                  className="mt-1 block w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors"
+                  className="mt-1 block w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out"
                   placeholder={personType === 'PF' ? '000.000.000-00' : '00.000.000/0000-00'}
                 />
               )}
             />
             {errors.cpfCnpj && (
-              <p className="mt-1 text-xs text-red-500">{errors.cpfCnpj.message}</p>
+              <p className="mt-1 text-xs text-red-600">{errors.cpfCnpj.message}</p>
             )}
           </div>
 
           {/* Telefone e Email */}
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="phone" className="block text-sm font-medium text-slate-700">
                 Telefone <span className="text-red-500">*</span>
               </label>
               <Controller
@@ -192,29 +192,29 @@ export function ClientForm({
                     type="text"
                     value={field.value}
                     onChange={(e) => field.onChange(formatPhone(e.target.value))}
-                    className="mt-1 block w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors"
+                    className="mt-1 block w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out"
                     placeholder="(00) 00000-0000"
                   />
                 )}
               />
               {errors.phone && (
-                <p className="mt-1 text-xs text-red-500">{errors.phone.message}</p>
+                <p className="mt-1 text-xs text-red-600">{errors.phone.message}</p>
               )}
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="email" className="block text-sm font-medium text-slate-700">
                 Email
               </label>
               <input
                 id="email"
                 type="email"
                 {...register('email')}
-                className="mt-1 block w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors"
+                className="mt-1 block w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out"
                 placeholder="email@exemplo.com"
               />
               {errors.email && (
-                <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>
+                <p className="mt-1 text-xs text-red-600">{errors.email.message}</p>
               )}
             </div>
           </div>
@@ -222,7 +222,7 @@ export function ClientForm({
       </fieldset>
 
       {/* Endereco */}
-      <fieldset className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+      <fieldset className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <legend className="px-2 text-sm font-semibold text-gray-900">
           Endereco
         </legend>
@@ -230,7 +230,7 @@ export function ClientForm({
         <div className="mt-2 space-y-5">
           {/* CEP */}
           <div className="max-w-xs">
-            <label htmlFor="cep" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="cep" className="block text-sm font-medium text-slate-700">
               CEP
             </label>
             <div className="relative">
@@ -243,13 +243,13 @@ export function ClientForm({
                     type="text"
                     value={field.value}
                     onChange={(e) => field.onChange(formatCEP(e.target.value))}
-                    className="mt-1 block w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors"
+                    className="mt-1 block w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out"
                     placeholder="00000-000"
                   />
                 )}
               />
               {cepLoading && (
-                <Loader2 className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-blue-500 mt-0.5" />
+                <Loader2 className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-cyan-500 mt-0.5" />
               )}
             </div>
           </div>
@@ -257,27 +257,27 @@ export function ClientForm({
           {/* Rua + Numero */}
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-[1fr_120px]">
             <div>
-              <label htmlFor="street" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="street" className="block text-sm font-medium text-slate-700">
                 Rua
               </label>
               <input
                 id="street"
                 type="text"
                 {...register('address.street')}
-                className="mt-1 block w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors"
+                className="mt-1 block w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out"
                 placeholder="Nome da rua"
               />
             </div>
 
             <div>
-              <label htmlFor="number" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="number" className="block text-sm font-medium text-slate-700">
                 Numero
               </label>
               <input
                 id="number"
                 type="text"
                 {...register('address.number')}
-                className="mt-1 block w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors"
+                className="mt-1 block w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out"
                 placeholder="123"
               />
             </div>
@@ -286,27 +286,27 @@ export function ClientForm({
           {/* Complemento + Bairro */}
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <div>
-              <label htmlFor="complement" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="complement" className="block text-sm font-medium text-slate-700">
                 Complemento
               </label>
               <input
                 id="complement"
                 type="text"
                 {...register('address.complement')}
-                className="mt-1 block w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors"
+                className="mt-1 block w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out"
                 placeholder="Apto, Sala..."
               />
             </div>
 
             <div>
-              <label htmlFor="neighborhood" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="neighborhood" className="block text-sm font-medium text-slate-700">
                 Bairro
               </label>
               <input
                 id="neighborhood"
                 type="text"
                 {...register('address.neighborhood')}
-                className="mt-1 block w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors"
+                className="mt-1 block w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out"
                 placeholder="Bairro"
               />
             </div>
@@ -315,26 +315,26 @@ export function ClientForm({
           {/* Cidade + Estado */}
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-[1fr_100px]">
             <div>
-              <label htmlFor="city" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="city" className="block text-sm font-medium text-slate-700">
                 Cidade
               </label>
               <input
                 id="city"
                 type="text"
                 {...register('address.city')}
-                className="mt-1 block w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors"
+                className="mt-1 block w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out"
                 placeholder="Cidade"
               />
             </div>
 
             <div>
-              <label htmlFor="state" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="state" className="block text-sm font-medium text-slate-700">
                 Estado
               </label>
               <select
                 id="state"
                 {...register('address.state')}
-                className="mt-1 block w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors"
+                className="mt-1 block w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-gray-900 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out"
               >
                 <option value="">UF</option>
                 {BRAZILIAN_STATES.map((uf) => (
@@ -349,7 +349,7 @@ export function ClientForm({
       </fieldset>
 
       {/* Observacoes */}
-      <fieldset className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+      <fieldset className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <legend className="px-2 text-sm font-semibold text-gray-900">
           Observacoes
         </legend>
@@ -359,7 +359,7 @@ export function ClientForm({
             id="notes"
             rows={4}
             {...register('notes')}
-            className="block w-full resize-none rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors"
+            className="block w-full resize-none rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out"
             placeholder="Anotacoes sobre o cliente..."
           />
         </div>
@@ -370,14 +370,14 @@ export function ClientForm({
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-colors"
+          className="rounded-lg border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out cursor-pointer"
         >
           Cancelar
         </button>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="inline-flex items-center gap-2 rounded-lg bg-cyan-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 ease-out cursor-pointer"
         >
           {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
           Salvar Cliente

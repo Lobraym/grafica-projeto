@@ -27,13 +27,13 @@ export function AlphabetGrid({
             type="button"
             disabled={!isAvailable}
             onClick={() => onLetterClick(letter)}
-            className={`flex h-9 w-9 items-center justify-center rounded-lg text-sm font-medium transition-colors
+            className={`flex min-w-[40px] h-10 items-center justify-center rounded-lg text-sm font-medium transition-colors duration-200 ease-out
               ${
                 isActive
-                  ? 'bg-blue-600 text-white shadow-sm'
+                  ? 'bg-cyan-600 text-white shadow-sm'
                   : isAvailable
-                    ? 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 hover:border-gray-300'
-                    : 'bg-gray-50 text-gray-300 cursor-not-allowed border border-transparent'
+                    ? 'cursor-pointer bg-white text-slate-700 border border-slate-200 hover:border-cyan-300 hover:text-cyan-600'
+                    : 'bg-slate-50 text-slate-300 cursor-not-allowed border border-transparent'
               }`}
             aria-label={`Filtrar pela letra ${letter}`}
             aria-pressed={isActive}

@@ -24,10 +24,10 @@ function CheckItem({ checked, label, description, icon, onChange }: CheckItemPro
   return (
     <label
       className={cn(
-        'flex items-start gap-3 rounded-lg border p-3.5 cursor-pointer transition-all',
+        'flex items-start gap-3 rounded-lg border p-3.5 cursor-pointer transition-all duration-200 ease-out',
         checked
           ? 'border-emerald-200 bg-emerald-50/50'
-          : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/50',
+          : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50',
       )}
     >
       <input
@@ -47,7 +47,7 @@ function CheckItem({ checked, label, description, icon, onChange }: CheckItemPro
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className={cn('text-sm font-medium', checked ? 'text-emerald-800' : 'text-gray-700')}>
+          <span className={cn('text-sm font-medium', checked ? 'text-emerald-600' : 'text-slate-700')}>
             {label}
           </span>
           <span className={cn('shrink-0', checked ? 'text-emerald-500' : 'text-gray-400')}>

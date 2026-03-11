@@ -46,7 +46,7 @@ export function NotificationButton({
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors"
+        className="cursor-pointer inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out"
         aria-haspopup="true"
         aria-expanded={isOpen}
       >
@@ -55,13 +55,13 @@ export function NotificationButton({
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full z-30 mt-2 w-72 rounded-xl border border-gray-100 bg-white p-4 shadow-lg">
+        <div className="absolute right-0 top-full z-30 mt-2 w-72 rounded-xl border border-slate-200 bg-white p-4 shadow-lg">
           {/* Preview */}
-          <p className="mb-3 rounded-lg bg-gray-50 px-3 py-2 text-xs text-gray-600 leading-relaxed">
+          <p className="mb-3 rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-600 leading-relaxed">
             {previewMessage}
           </p>
 
-          <p className="mb-2 text-xs font-medium text-gray-500">
+          <p className="mb-2 text-xs font-medium text-slate-500">
             Enviar via:
           </p>
 
@@ -69,7 +69,7 @@ export function NotificationButton({
             <button
               type="button"
               onClick={() => handleNotify('whatsapp')}
-              className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors"
+              className="cursor-pointer flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors duration-200 ease-out"
             >
               <MessageCircle className="h-4 w-4" />
               WhatsApp
@@ -77,7 +77,7 @@ export function NotificationButton({
             <button
               type="button"
               onClick={() => handleNotify('email')}
-              className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+              className="cursor-pointer flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm text-slate-700 hover:bg-cyan-50 hover:text-cyan-700 transition-colors duration-200 ease-out"
             >
               <Mail className="h-4 w-4" />
               E-mail

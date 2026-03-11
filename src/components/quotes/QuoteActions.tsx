@@ -91,7 +91,7 @@ export function QuoteActions({ quote, onStartProduction }: QuoteActionsProps): R
         onClick={handleToggle}
         aria-label="Acoes do orcamento"
         aria-expanded={isOpen}
-        className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
+        className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 hover:bg-slate-100 hover:text-gray-600 transition-colors duration-200 ease-out cursor-pointer"
       >
         <MoreVertical className="h-4 w-4" />
       </button>
@@ -99,14 +99,14 @@ export function QuoteActions({ quote, onStartProduction }: QuoteActionsProps): R
       {isOpen && (
         <div
           ref={menuRef}
-          className="absolute right-0 top-full z-50 mt-1 w-56 rounded-xl border border-gray-100 bg-white py-1.5 shadow-lg ring-1 ring-black/5 animate-in fade-in slide-in-from-top-1"
+          className="absolute right-0 top-full z-50 mt-1 w-56 rounded-xl border border-slate-200 bg-white py-1.5 shadow-lg ring-1 ring-black/5 animate-in fade-in slide-in-from-top-1"
           role="menu"
         >
           <button
             type="button"
             onClick={handleView}
             role="menuitem"
-            className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+            className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors duration-200 ease-out"
           >
             <Eye className="h-4 w-4 text-gray-400" />
             Visualizar
@@ -116,7 +116,7 @@ export function QuoteActions({ quote, onStartProduction }: QuoteActionsProps): R
             type="button"
             onClick={handleEdit}
             role="menuitem"
-            className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+            className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors duration-200 ease-out"
           >
             <Pencil className="h-4 w-4 text-gray-400" />
             Editar
@@ -126,7 +126,7 @@ export function QuoteActions({ quote, onStartProduction }: QuoteActionsProps): R
             type="button"
             onClick={handleCopyLink}
             role="menuitem"
-            className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+            className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors duration-200 ease-out"
           >
             <Link2 className="h-4 w-4 text-gray-400" />
             {copied ? (
@@ -138,12 +138,12 @@ export function QuoteActions({ quote, onStartProduction }: QuoteActionsProps): R
 
           {quote.status === 'pendente' && (
             <>
-              <div className="mx-3 my-1.5 border-t border-gray-100" />
+              <div className="mx-3 my-1.5 border-t border-slate-200" />
               <button
                 type="button"
                 onClick={handleStartProduction}
                 role="menuitem"
-                className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-blue-600 hover:bg-blue-50 transition-colors font-medium"
+                className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-cyan-600 hover:bg-cyan-50 rounded-lg cursor-pointer transition-colors duration-200 ease-out font-medium"
               >
                 <Play className="h-4 w-4" />
                 Iniciar Producao de Arte

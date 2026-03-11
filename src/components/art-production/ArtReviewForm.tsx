@@ -33,9 +33,9 @@ export function ArtReviewForm({ quoteId, onClose }: ArtReviewFormProps): React.R
   return (
     <>
       <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-        <div className="w-full max-w-lg animate-in fade-in zoom-in-95 rounded-xl bg-white shadow-xl">
+        <div className="w-full max-w-lg animate-in fade-in zoom-in-95 rounded-2xl bg-white shadow-xl">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
+          <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
             <div>
               <h3 className="text-base font-semibold text-gray-900">Enviar para Revisão do Cliente</h3>
               <p className="text-xs text-gray-500 mt-0.5">
@@ -45,7 +45,7 @@ export function ArtReviewForm({ quoteId, onClose }: ArtReviewFormProps): React.R
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
+              className="rounded-lg p-1.5 text-gray-400 hover:bg-slate-100 hover:text-gray-600 transition-colors duration-200 ease-out cursor-pointer"
             >
               <X className="h-5 w-5" />
             </button>
@@ -55,7 +55,7 @@ export function ArtReviewForm({ quoteId, onClose }: ArtReviewFormProps): React.R
           <div className="space-y-4 px-6 py-5">
             {/* Art Image URL */}
             <div>
-              <label htmlFor="artImageUrl" className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label htmlFor="artImageUrl" className="block text-sm font-medium text-slate-700 mb-1.5">
                 URL da imagem da arte
               </label>
               <div className="relative">
@@ -68,14 +68,14 @@ export function ArtReviewForm({ quoteId, onClose }: ArtReviewFormProps): React.R
                   value={artImageUrl}
                   onChange={(e) => setArtImageUrl(e.target.value)}
                   placeholder="https://exemplo.com/arte-final.png"
-                  className="w-full rounded-lg border border-gray-200 bg-white py-2.5 pl-10 pr-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors"
+                  className="w-full rounded-lg border border-slate-200 bg-white py-2.5 pl-10 pr-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out h-10"
                 />
               </div>
             </div>
 
             {/* Designer Message */}
             <div>
-              <label htmlFor="designerMessage" className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label htmlFor="designerMessage" className="block text-sm font-medium text-slate-700 mb-1.5">
                 Mensagem para o cliente
               </label>
               <textarea
@@ -84,17 +84,17 @@ export function ArtReviewForm({ quoteId, onClose }: ArtReviewFormProps): React.R
                 onChange={(e) => setDesignerMessage(e.target.value)}
                 placeholder="Segue a arte para sua aprovação. Foram utilizadas as cores conforme solicitado..."
                 rows={4}
-                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors resize-none"
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out resize-none"
               />
             </div>
           </div>
 
           {/* Footer */}
-          <div className="flex justify-end gap-3 border-t border-gray-100 px-6 py-4">
+          <div className="flex justify-end gap-3 border-t border-slate-200 px-6 py-4">
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              className="rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors duration-200 ease-out cursor-pointer"
             >
               Cancelar
             </button>
@@ -102,7 +102,7 @@ export function ArtReviewForm({ quoteId, onClose }: ArtReviewFormProps): React.R
               type="button"
               onClick={handleSubmit}
               disabled={!isValid}
-              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 rounded-lg bg-cyan-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               <Send className="h-4 w-4" />
               Enviar para Revisão

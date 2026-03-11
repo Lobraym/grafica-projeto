@@ -60,7 +60,7 @@ export default function ClientesPage(): React.ReactElement {
       <PageHeader title="Clientes" subtitle={`${clients.length} clientes cadastrados`}>
         <Link
           href="/clientes/novo"
-          className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors"
+          className="inline-flex items-center gap-2 rounded-lg bg-cyan-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out cursor-pointer"
         >
           <Plus className="h-4 w-4" />
           Novo Cliente
@@ -83,7 +83,7 @@ export default function ClientesPage(): React.ReactElement {
 
       {/* Alfabeto */}
       {!isSearching && (
-        <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+        <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
           <AlphabetGrid
             letters={ALPHABET}
             activeLetter={activeLetter}

@@ -61,7 +61,7 @@ export function QuoteForm({
   });
 
   const inputBaseClass =
-    'block w-full rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors';
+    'block w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out h-10';
 
   const errorInputClass = 'border-red-300 focus:border-red-500 focus:ring-red-500/20';
 
@@ -71,7 +71,7 @@ export function QuoteForm({
       <fieldset>
         <legend className="text-base font-semibold text-gray-900 mb-4">Informacoes do Cliente</legend>
         <div>
-          <label htmlFor="clientId" className="block text-sm font-medium text-gray-700 mb-1.5">
+          <label htmlFor="clientId" className="block text-sm font-medium text-slate-700 mb-1.5">
             Cliente <span className="text-red-500">*</span>
           </label>
           <select
@@ -104,7 +104,7 @@ export function QuoteForm({
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           {/* Servico */}
           <div>
-            <label htmlFor="service" className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label htmlFor="service" className="block text-sm font-medium text-slate-700 mb-1.5">
               Servico <span className="text-red-500">*</span>
             </label>
             <input
@@ -121,7 +121,7 @@ export function QuoteForm({
 
           {/* Material */}
           <div>
-            <label htmlFor="material" className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label htmlFor="material" className="block text-sm font-medium text-slate-700 mb-1.5">
               Material <span className="text-red-500">*</span>
             </label>
             <input
@@ -138,7 +138,7 @@ export function QuoteForm({
 
           {/* Tamanho */}
           <div>
-            <label htmlFor="size" className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label htmlFor="size" className="block text-sm font-medium text-slate-700 mb-1.5">
               Tamanho
             </label>
             <input
@@ -155,7 +155,7 @@ export function QuoteForm({
 
           {/* Prazo */}
           <div>
-            <label htmlFor="deadline" className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label htmlFor="deadline" className="block text-sm font-medium text-slate-700 mb-1.5">
               Prazo de Entrega <span className="text-red-500">*</span>
             </label>
             <input
@@ -171,7 +171,7 @@ export function QuoteForm({
 
           {/* Valor */}
           <div>
-            <label htmlFor="value" className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label htmlFor="value" className="block text-sm font-medium text-slate-700 mb-1.5">
               Valor <span className="text-red-500">*</span>
             </label>
             <div className="relative">
@@ -196,7 +196,7 @@ export function QuoteForm({
 
         {/* Descricao */}
         <div className="mt-5">
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1.5">
+          <label htmlFor="description" className="block text-sm font-medium text-slate-700 mb-1.5">
             Descricao
           </label>
           <textarea
@@ -218,13 +218,13 @@ export function QuoteForm({
         <div className="flex flex-col gap-3 sm:flex-row sm:gap-6">
           <label
             htmlFor="requiresPrinting"
-            className="flex items-center gap-3 rounded-lg border border-gray-200 px-4 py-3 cursor-pointer hover:border-gray-300 transition-colors has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50/50"
+            className="flex items-center gap-3 rounded-lg border border-slate-200 px-4 py-3 cursor-pointer hover:border-slate-300 transition-colors duration-200 ease-out has-[:checked]:border-cyan-500 has-[:checked]:bg-cyan-50/50"
           >
             <input
               id="requiresPrinting"
               type="checkbox"
               {...register('requiresPrinting')}
-              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              className="h-4 w-4 rounded border-gray-300 accent-cyan-600 focus:ring-cyan-500"
             />
             <div>
               <span className="text-sm font-medium text-gray-900">Impressao</span>
@@ -234,13 +234,13 @@ export function QuoteForm({
 
           <label
             htmlFor="requiresAssembly"
-            className="flex items-center gap-3 rounded-lg border border-gray-200 px-4 py-3 cursor-pointer hover:border-gray-300 transition-colors has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50/50"
+            className="flex items-center gap-3 rounded-lg border border-slate-200 px-4 py-3 cursor-pointer hover:border-slate-300 transition-colors duration-200 ease-out has-[:checked]:border-cyan-500 has-[:checked]:bg-cyan-50/50"
           >
             <input
               id="requiresAssembly"
               type="checkbox"
               {...register('requiresAssembly')}
-              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              className="h-4 w-4 rounded border-gray-300 accent-cyan-600 focus:ring-cyan-500"
             />
             <div>
               <span className="text-sm font-medium text-gray-900">Montagem</span>
@@ -251,18 +251,18 @@ export function QuoteForm({
       </fieldset>
 
       {/* Botoes */}
-      <div className="flex items-center justify-end gap-3 border-t border-gray-100 pt-6">
+      <div className="flex items-center justify-end gap-3 border-t border-slate-200 pt-6">
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+          className="rounded-lg border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors duration-200 ease-out cursor-pointer"
         >
           Cancelar
         </button>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+          className="rounded-lg bg-cyan-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 ease-out shadow-sm cursor-pointer"
         >
           {isSubmitting ? 'Salvando...' : 'Criar Orcamento'}
         </button>

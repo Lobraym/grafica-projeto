@@ -136,7 +136,7 @@ export default function ClienteDetalhePage(): React.ReactElement {
       <PageHeader title={client.name} subtitle={`Cadastrado em ${formatDate(client.createdAt)}`}>
         <Link
           href="/clientes"
-          className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors duration-200 ease-out cursor-pointer"
         >
           <ArrowLeft className="h-4 w-4" />
           Voltar
@@ -144,7 +144,7 @@ export default function ClienteDetalhePage(): React.ReactElement {
         <button
           type="button"
           onClick={() => setIsEditing(true)}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors duration-200 ease-out cursor-pointer"
         >
           <Pencil className="h-4 w-4" />
           Editar
@@ -152,7 +152,7 @@ export default function ClienteDetalhePage(): React.ReactElement {
         <button
           type="button"
           onClick={() => setShowDeleteDialog(true)}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-white px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-white px-3 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors duration-200 ease-out cursor-pointer"
         >
           <Trash2 className="h-4 w-4" />
           Excluir
@@ -162,7 +162,7 @@ export default function ClienteDetalhePage(): React.ReactElement {
       {/* Info do Cliente */}
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Dados Principais */}
-        <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm lg:col-span-2">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm lg:col-span-2">
           <h2 className="flex items-center gap-2 text-sm font-semibold text-gray-900">
             <User className="h-4 w-4 text-gray-400" />
             Dados do Cliente
@@ -194,7 +194,7 @@ export default function ClienteDetalhePage(): React.ReactElement {
 
           {/* Endereco */}
           {hasAddress && (
-            <div className="mt-6 border-t border-gray-100 pt-4">
+            <div className="mt-6 border-t border-slate-200 pt-4">
               <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-900">
                 <MapPin className="h-4 w-4 text-gray-400" />
                 Endereco
@@ -223,7 +223,7 @@ export default function ClienteDetalhePage(): React.ReactElement {
 
           {/* Observacoes */}
           {client.notes && (
-            <div className="mt-6 border-t border-gray-100 pt-4">
+            <div className="mt-6 border-t border-slate-200 pt-4">
               <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-900">
                 <StickyNote className="h-4 w-4 text-gray-400" />
                 Observacoes
@@ -237,7 +237,7 @@ export default function ClienteDetalhePage(): React.ReactElement {
 
         {/* Resumo */}
         <div className="space-y-4">
-          <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
             <h3 className="text-sm font-semibold text-gray-900">Resumo</h3>
             <div className="mt-4 space-y-3">
               <SummaryRow label="Total de orcamentos" value={String(clientQuotes.length)} />
@@ -255,7 +255,7 @@ export default function ClienteDetalhePage(): React.ReactElement {
 
           <Link
             href={`/orcamentos/novo?clientId=${client.id}`}
-            className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-blue-700 transition-colors"
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-cyan-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 transition-colors duration-200 ease-out cursor-pointer"
           >
             <Plus className="h-4 w-4" />
             Novo Orcamento
@@ -264,8 +264,8 @@ export default function ClienteDetalhePage(): React.ReactElement {
       </div>
 
       {/* Historico de Orcamentos */}
-      <div className="rounded-xl border border-gray-100 bg-white shadow-sm">
-        <div className="border-b border-gray-100 px-6 py-4">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
+        <div className="border-b border-slate-200 px-6 py-4">
           <h2 className="flex items-center gap-2 text-sm font-semibold text-gray-900">
             <FileText className="h-4 w-4 text-gray-400" />
             Historico de Orcamentos
@@ -378,7 +378,7 @@ function SummaryRow({ label, value, highlight = false }: SummaryRowProps): React
   return (
     <div className="flex items-center justify-between">
       <span className="text-sm text-gray-500">{label}</span>
-      <span className={`text-sm font-semibold ${highlight ? 'text-blue-600' : 'text-gray-900'}`}>
+      <span className={`text-sm font-semibold ${highlight ? 'text-cyan-600' : 'text-gray-900'}`}>
         {value}
       </span>
     </div>

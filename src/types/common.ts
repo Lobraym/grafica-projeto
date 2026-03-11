@@ -31,19 +31,19 @@ export const STATUS_LABELS: Record<QuoteStatus, string> = {
 } as const;
 
 export const STATUS_COLORS: Record<QuoteStatus, string> = {
-  pendente: 'bg-blue-100 text-blue-800',
-  producao_arte: 'bg-yellow-100 text-yellow-800',
-  aguardando_aprovacao: 'bg-orange-100 text-orange-800',
-  em_producao: 'bg-green-100 text-green-800',
-  pronto: 'bg-emerald-100 text-emerald-800',
-  entregue: 'bg-gray-100 text-gray-600',
+  pendente: 'bg-sky-50 text-sky-700',
+  producao_arte: 'bg-amber-50 text-amber-700',
+  aguardando_aprovacao: 'bg-orange-50 text-orange-700',
+  em_producao: 'bg-cyan-50 text-cyan-700',
+  pronto: 'bg-emerald-50 text-emerald-700',
+  entregue: 'bg-slate-100 text-slate-500',
 } as const;
 
 export const STATUS_DOTS: Record<QuoteStatus, string> = {
-  pendente: 'bg-blue-500',
-  producao_arte: 'bg-yellow-500',
+  pendente: 'bg-sky-500',
+  producao_arte: 'bg-amber-500',
   aguardando_aprovacao: 'bg-orange-500',
-  em_producao: 'bg-green-500',
+  em_producao: 'bg-cyan-500',
   pronto: 'bg-emerald-500',
-  entregue: 'bg-gray-400',
+  entregue: 'bg-slate-400',
 } as const;
