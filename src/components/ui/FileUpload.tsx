@@ -4,33 +4,38 @@ import { useCallback, useRef, useState } from 'react';
 import { Upload, File } from 'lucide-react';
 
 interface FileUploadProps {
-  readonly onFileSelect: (file: { name: string; url: string }) => void;
+  readonly onFileSelect: (file: { name: string; url: string; type?: string }) => void;
   readonly accept?: string;
   readonly label?: string;
+  readonly multiple?: boolean;
 }
 
 export function FileUpload({
   onFileSelect,
   accept = '*',
   label = 'Arraste um arquivo ou clique para selecionar',
+  multiple = false,
 }: FileUploadProps): React.ReactElement {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+  const [selectedCount, setSelectedCount] = useState(0);
 
   const processFile = useCallback(
     (file: globalThis.File) => {
       const mockUrl = URL.createObjectURL(file);
       setSelectedFileName(file.name);
-      onFileSelect({ name: file.name, url: mockUrl });
+      onFileSelect({ name: file.name, url: mockUrl, type: file.type });
     },
     [onFileSelect],
   );
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (file) processFile(file);
+      const files = Array.from(e.target.files ?? []);
+      if (files.length === 0) return;
+      setSelectedCount(files.length);
+      files.forEach(processFile);
     },
     [processFile],
   );
@@ -39,8 +44,10 @@ export function FileUpload({
     (e: React.DragEvent) => {
       e.preventDefault();
       setIsDragging(false);
-      const file = e.dataTransfer.files[0];
-      if (file) processFile(file);
+      const files = Array.from(e.dataTransfer.files ?? []);
+      if (files.length === 0) return;
+      setSelectedCount(files.length);
+      files.forEach(processFile);
     },
     [processFile],
   );
@@ -82,6 +89,7 @@ export function FileUpload({
         ref={inputRef}
         type="file"
         accept={accept}
+        multiple={multiple}
         onChange={handleChange}
         className="hidden"
         tabIndex={-1}
@@ -91,10 +99,10 @@ export function FileUpload({
         <>
           <File className="h-8 w-8 text-emerald-500" />
           <span className="text-sm font-medium text-slate-700">
-            {selectedFileName}
+            {selectedCount > 1 ? `${selectedCount} arquivos selecionados` : selectedFileName}
           </span>
           <span className="text-xs text-slate-500">
-            Clique para trocar o arquivo
+            {multiple ? 'Clique para adicionar mais arquivos' : 'Clique para trocar o arquivo'}
           </span>
         </>
       ) : (

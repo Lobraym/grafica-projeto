@@ -27,7 +27,7 @@ export function ClientApprovalForm({ quote }: ClientApprovalFormProps): React.Re
           <div className="space-y-2">
             <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-500" />
             <h3 className="text-lg font-semibold text-emerald-700">Arte Aprovada</h3>
-            <p className="text-sm text-gray-500">Obrigado! Seu pedido está em produção.</p>
+            <p className="text-sm text-gray-500">Obrigado! O prazo de produção foi iniciado e a equipe seguirá com o pedido.</p>
           </div>
         ) : (
           <div className="space-y-2">

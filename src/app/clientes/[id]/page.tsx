@@ -37,7 +37,9 @@ import {
   formatCEP,
   getDaysUntil,
   getDeadlineUrgency,
+  isValidDateString,
 } from '@/lib/utils';
+import { getQuoteSizeLabel } from '@/lib/quote-utils';
 import type { ClientFormData } from '@/types/client';
 
 const URGENCY_STYLES = {
@@ -281,8 +283,10 @@ export default function ClienteDetalhePage(): React.ReactElement {
         ) : (
           <div className="divide-y divide-gray-50">
             {clientQuotes.map((quote) => {
+              const hasDeadline = isValidDateString(quote.deadline);
               const daysUntil = getDaysUntil(quote.deadline);
               const urgency = getDeadlineUrgency(quote.deadline);
+              const sizeLabel = getQuoteSizeLabel(quote);
 
               return (
                 <Link
@@ -299,7 +303,7 @@ export default function ClienteDetalhePage(): React.ReactElement {
                     </div>
                     <p className="mt-1 text-xs text-gray-500">
                       {quote.material}
-                      {quote.size ? ` - ${quote.size}` : ''}
+                      {sizeLabel ? ` - ${sizeLabel}` : ''}
                     </p>
                   </div>
 
@@ -312,6 +316,8 @@ export default function ClienteDetalhePage(): React.ReactElement {
                         <Calendar className="mr-1 inline h-3 w-3" />
                         {quote.status === 'entregue'
                           ? `Entregue em ${formatDate(quote.updatedAt)}`
+                          : !hasDeadline
+                            ? 'Prazo inicia apos a aprovacao'
                           : daysUntil < 0
                             ? `${Math.abs(daysUntil)} dia${Math.abs(daysUntil) !== 1 ? 's' : ''} atrasado`
                             : daysUntil === 0

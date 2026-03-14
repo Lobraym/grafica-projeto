@@ -21,16 +21,21 @@ const SendToProductionForm = dynamic(
   () => import('@/components/art-production/SendToProductionForm').then((m) => m.SendToProductionForm),
   { ssr: false }
 );
+const ArtQuoteDetailsModal = dynamic(
+  () => import('@/components/art-production/ArtQuoteDetailsModal').then((m) => m.ArtQuoteDetailsModal),
+  { ssr: false }
+);
 
 const TABS = [
   { id: 'disponivel' as const, label: 'Disponível' },
-  { id: 'em_producao' as const, label: 'Em Produção' },
-  { id: 'concluidas' as const, label: 'Concluídas' },
+  { id: 'em_producao' as const, label: 'Produção de Artes' },
+  { id: 'concluidas' as const, label: 'Arte Aprovada' },
 ] as const;
 
 export default function ProducaoArtesPage(): React.ReactElement {
   const [activeTab, setActiveTab] = useState<ArtProductionTab>('disponivel');
   const [selectedQuoteId, setSelectedQuoteId] = useState<string | null>(null);
+  const [detailsQuoteId, setDetailsQuoteId] = useState<string | null>(null);
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [showProductionForm, setShowProductionForm] = useState(false);
 
@@ -38,7 +43,13 @@ export default function ProducaoArtesPage(): React.ReactElement {
   const startArtProduction = useQuoteStore((s) => s.startArtProduction);
 
   const available = useMemo(
-    () => quotes.filter((q) => q.status === 'producao_arte' && !q.artChecklist.colorsCorrect && !q.artChecklist.sizeCorrect),
+    () =>
+      quotes.filter(
+        (q) =>
+          (q.status === 'pendente' || q.status === 'producao_arte') &&
+          !q.artChecklist.colorsCorrect &&
+          !q.artChecklist.sizeCorrect
+      ),
     [quotes]
   );
 
@@ -52,7 +63,7 @@ export default function ProducaoArtesPage(): React.ReactElement {
     [quotes]
   );
 
-  const selectedQuote = selectedQuoteId ? quotes.find((q) => q.id === selectedQuoteId) : undefined;
+  const detailsQuote = detailsQuoteId ? quotes.find((q) => q.id === detailsQuoteId) : undefined;
 
   const tabsWithCounts = TABS.map((tab) => ({
     ...tab,
@@ -79,6 +90,10 @@ export default function ProducaoArtesPage(): React.ReactElement {
     setShowReviewForm(true);
   };
 
+  const handleOpenDetailsModal = (quoteId: string): void => {
+    setDetailsQuoteId(quoteId);
+  };
+
   const handleOpenProductionForm = (quoteId: string): void => {
     setSelectedQuoteId(quoteId);
     setShowProductionForm(true);
@@ -89,7 +104,7 @@ export default function ProducaoArtesPage(): React.ReactElement {
       return (
         <EmptyState
           title="Nenhuma arte disponível"
-          description="Quando um orçamento for aprovado, ele aparecerá aqui para iniciar a produção da arte."
+          description="Quando a recepcao criar um novo orçamento, ele aparecerá aqui para a designer iniciar a arte."
           icon={Palette}
         />
       );
@@ -102,6 +117,7 @@ export default function ProducaoArtesPage(): React.ReactElement {
             key={quote.id}
             quote={quote}
             onAction={() => handleStartProduction(quote)}
+            onDetails={() => handleOpenDetailsModal(quote.id)}
           />
         ))}
       </div>
@@ -130,6 +146,7 @@ export default function ProducaoArtesPage(): React.ReactElement {
               <ArtJobCard
                 quote={quote}
                 onAction={() => handleOpenDetails(quote.id)}
+                onDetails={() => handleOpenDetailsModal(quote.id)}
               />
 
               {isSelected && (
@@ -176,6 +193,7 @@ export default function ProducaoArtesPage(): React.ReactElement {
             key={quote.id}
             quote={quote}
             onAction={() => handleOpenProductionForm(quote.id)}
+            onDetails={() => handleOpenDetailsModal(quote.id)}
           />
         ))}
       </div>
@@ -195,6 +213,7 @@ export default function ProducaoArtesPage(): React.ReactElement {
         onTabChange={(id) => {
           setActiveTab(id as ArtProductionTab);
           setSelectedQuoteId(null);
+          setDetailsQuoteId(null);
         }}
       />
 
@@ -222,6 +241,13 @@ export default function ProducaoArtesPage(): React.ReactElement {
             setShowProductionForm(false);
             setSelectedQuoteId(null);
           }}
+        />
+      )}
+
+      {detailsQuote && (
+        <ArtQuoteDetailsModal
+          quote={detailsQuote}
+          onClose={() => setDetailsQuoteId(null)}
         />
       )}
     </div>

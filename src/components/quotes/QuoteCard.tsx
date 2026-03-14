@@ -6,7 +6,8 @@ import type { Quote } from '@/types/quote';
 import { useClientStore } from '@/stores/useClientStore';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { QuoteActions } from './QuoteActions';
-import { formatCurrency, formatDate, getDaysUntil, getDeadlineUrgency, cn } from '@/lib/utils';
+import { formatCurrency, formatDate, getDaysUntil, getDeadlineUrgency, isValidDateString, cn } from '@/lib/utils';
+import { getQuoteSizeLabel, hasQuoteInstallation } from '@/lib/quote-utils';
 
 interface QuoteCardProps {
   readonly quote: Quote;
@@ -25,6 +26,7 @@ const URGENCY_TEXT: Record<ReturnType<typeof getDeadlineUrgency>, string> = {
 } as const;
 
 function getDeadlineLabel(deadline: string): string {
+  if (!isValidDateString(deadline)) return 'Prazo apos aprovacao';
   const days = getDaysUntil(deadline);
   if (days < 0) return `${Math.abs(days)} dia(s) atrasado`;
   if (days === 0) return 'Vence hoje';
@@ -37,6 +39,9 @@ export function QuoteCard({ quote }: QuoteCardProps): React.ReactElement {
   const clients = useClientStore((state) => state.clients);
   const client = clients.find((c) => c.id === quote.clientId);
   const urgency = getDeadlineUrgency(quote.deadline);
+  const hasDeadline = isValidDateString(quote.deadline);
+  const sizeLabel = getQuoteSizeLabel(quote);
+  const hasInstallation = hasQuoteInstallation(quote);
 
   const handleClick = (): void => {
     router.push(`/orcamentos/${quote.id}`);
@@ -89,9 +94,9 @@ export function QuoteCard({ quote }: QuoteCardProps): React.ReactElement {
       {/* Details row */}
       <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs">
         {/* Deadline */}
-        <span className={cn('inline-flex items-center gap-1.5 font-medium', URGENCY_TEXT[urgency])}>
+        <span className={cn('inline-flex items-center gap-1.5 font-medium', hasDeadline ? URGENCY_TEXT[urgency] : 'text-gray-500')}>
           <Calendar className="h-3.5 w-3.5" />
-          {formatDate(quote.deadline)}
+          {hasDeadline ? formatDate(quote.deadline) : 'Aguardando aprovacao'}
           <span className="font-normal">({getDeadlineLabel(quote.deadline)})</span>
         </span>
 
@@ -102,16 +107,16 @@ export function QuoteCard({ quote }: QuoteCardProps): React.ReactElement {
         </span>
 
         {/* Size */}
-        {quote.size && (
+        {sizeLabel && (
           <span className="inline-flex items-center gap-1.5 text-gray-500">
             <Package className="h-3.5 w-3.5" />
-            {quote.size}
+            {sizeLabel}
           </span>
         )}
       </div>
 
       {/* Production flags */}
-      {(quote.requiresPrinting || quote.requiresAssembly) && (
+      {(quote.requiresPrinting || quote.requiresAssembly || hasInstallation) && (
         <div className="mt-3 flex gap-2">
           {quote.requiresPrinting && (
             <span className="inline-flex items-center rounded-md bg-purple-50 px-2 py-0.5 text-[10px] font-medium text-purple-700 ring-1 ring-inset ring-purple-600/10">
@@ -121,6 +126,11 @@ export function QuoteCard({ quote }: QuoteCardProps): React.ReactElement {
           {quote.requiresAssembly && (
             <span className="inline-flex items-center rounded-md bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-amber-700 ring-1 ring-inset ring-amber-600/10">
               Montagem
+            </span>
+          )}
+          {hasInstallation && (
+            <span className="inline-flex items-center rounded-md bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/10">
+              Instalacao
             </span>
           )}
         </div>

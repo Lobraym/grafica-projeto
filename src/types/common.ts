@@ -12,7 +12,7 @@ export type ProductionStage = 'nao_iniciado' | 'disponivel' | 'em_andamento' | '
 
 export type ArtProductionTab = 'disponivel' | 'em_producao' | 'concluidas';
 
-export type FinalProductionTab = 'impressao' | 'montagem';
+export type FinalProductionTab = 'impressao' | 'montagem' | 'instalacao';
 
 export interface FileAttachment {
   readonly id: string;

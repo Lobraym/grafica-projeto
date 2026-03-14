@@ -9,6 +9,7 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useQuoteStore } from '@/stores/useQuoteStore';
 import { useClientStore } from '@/stores/useClientStore';
 import { formatDateShort } from '@/lib/utils';
+import { getQuoteSizeLabel } from '@/lib/quote-utils';
 
 export default function ProntosPage(): React.ReactElement {
   const quotes = useQuoteStore((s) => s.quotes);
@@ -65,6 +66,7 @@ export default function ProntosPage(): React.ReactElement {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {readyQuotes.map((quote) => {
           const client = clientById.get(quote.clientId);
+          const sizeLabel = getQuoteSizeLabel(quote);
 
           return (
             <div
@@ -99,7 +101,7 @@ export default function ProntosPage(): React.ReactElement {
                 </span>
                 <span className="inline-flex items-center gap-1">
                   <Ruler className="h-3 w-3 text-gray-400" />
-                  {quote.size}
+                  {sizeLabel || '-'}
                 </span>
               </div>
 

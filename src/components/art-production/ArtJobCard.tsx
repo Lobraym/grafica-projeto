@@ -2,12 +2,14 @@
 
 import { Calendar, Palette, Play, Eye, CheckCircle2, Ruler, Layers } from 'lucide-react';
 import { useClientStore } from '@/stores/useClientStore';
-import { formatDateShort, getDaysUntil, getDeadlineUrgency, cn } from '@/lib/utils';
+import { formatDateShort, getDaysUntil, getDeadlineUrgency, isValidDateString, cn } from '@/lib/utils';
+import { getQuoteSizeLabel } from '@/lib/quote-utils';
 import type { Quote } from '@/types/quote';
 
 interface ArtJobCardProps {
   readonly quote: Quote;
   readonly onAction?: () => void;
+  readonly onDetails?: () => void;
 }
 
 const URGENCY_STYLES: Record<ReturnType<typeof getDeadlineUrgency>, string> = {
@@ -26,15 +28,18 @@ function getCardVariant(quote: Quote): 'available' | 'in_progress' | 'completed'
   return 'available';
 }
 
-export function ArtJobCard({ quote, onAction }: ArtJobCardProps): React.ReactElement {
+export function ArtJobCard({ quote, onAction, onDetails }: ArtJobCardProps): React.ReactElement {
   const clients = useClientStore((state) => state.clients);
   const client = clients.find((c) => c.id === quote.clientId);
   const urgency = getDeadlineUrgency(quote.deadline);
+  const hasDeadline = isValidDateString(quote.deadline);
   const daysLeft = getDaysUntil(quote.deadline);
   const variant = getCardVariant(quote);
+  const sizeLabel = getQuoteSizeLabel(quote);
 
-  const deadlineLabel =
-    daysLeft < 0
+  const deadlineLabel = !hasDeadline
+    ? 'Apos aprovacao'
+    : daysLeft < 0
       ? `${Math.abs(daysLeft)}d atrasado`
       : daysLeft === 0
         ? 'Hoje'
@@ -53,7 +58,7 @@ export function ArtJobCard({ quote, onAction }: ArtJobCardProps): React.ReactEle
         <span
           className={cn(
             'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium shrink-0',
-            URGENCY_STYLES[urgency],
+            hasDeadline ? URGENCY_STYLES[urgency] : 'text-gray-500 bg-gray-50',
           )}
         >
           <Calendar className="h-3 w-3" />
@@ -69,51 +74,81 @@ export function ArtJobCard({ quote, onAction }: ArtJobCardProps): React.ReactEle
         </div>
         <div className="flex items-center gap-1.5 text-xs text-gray-500">
           <Ruler className="h-3.5 w-3.5 text-gray-400" />
-          <span className="truncate">{quote.size}</span>
+          <span className="truncate">{sizeLabel || '-'}</span>
         </div>
         <div className="flex items-center gap-1.5 text-xs text-gray-500 col-span-2">
           <Calendar className="h-3.5 w-3.5 text-gray-400" />
-          <span>Entrega: {formatDateShort(quote.deadline)}</span>
+          <span>{hasDeadline ? `Prazo: ${formatDateShort(quote.deadline)}` : 'Prazo inicia apos a aprovacao'}</span>
         </div>
       </div>
 
       {/* Action */}
       {variant === 'available' && (
-        <button
-          type="button"
-          onClick={onAction}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-cyan-600 px-3 py-2.5 text-sm font-medium text-white transition-colors duration-200 ease-out hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 cursor-pointer"
-        >
-          <Play className="h-4 w-4" />
-          Iniciar
-        </button>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={onDetails}
+            className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 transition-colors duration-200 ease-out hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 cursor-pointer"
+          >
+            <Eye className="h-4 w-4" />
+            Detalhes
+          </button>
+          <button
+            type="button"
+            onClick={onAction}
+            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-cyan-600 px-3 py-2.5 text-sm font-medium text-white transition-colors duration-200 ease-out hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 cursor-pointer"
+          >
+            <Play className="h-4 w-4" />
+            Iniciar
+          </button>
+        </div>
       )}
 
       {variant === 'in_progress' && (
-        <button
-          type="button"
-          onClick={onAction}
-          className="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 transition-colors duration-200 ease-out hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 cursor-pointer"
-        >
-          <Eye className="h-4 w-4" />
-          Ver Detalhes
-        </button>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={onDetails}
+            className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 transition-colors duration-200 ease-out hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 cursor-pointer"
+          >
+            <Eye className="h-4 w-4" />
+            Detalhes
+          </button>
+          <button
+            type="button"
+            onClick={onAction}
+            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-slate-900 px-3 py-2.5 text-sm font-medium text-white transition-colors duration-200 ease-out hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-500/20 cursor-pointer"
+          >
+            <Palette className="h-4 w-4" />
+            Checklist
+          </button>
+        </div>
       )}
 
       {variant === 'completed' && (
-        <div className="flex items-center justify-between">
+        <div className="space-y-3">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
             <CheckCircle2 className="h-3.5 w-3.5" />
             Arte Aprovada
           </span>
-          <button
-            type="button"
-            onClick={onAction}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white transition-colors duration-200 ease-out hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 cursor-pointer"
-          >
-            <Palette className="h-3.5 w-3.5" />
-            Enviar para Produção
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={onDetails}
+              className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 transition-colors duration-200 ease-out hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 cursor-pointer"
+            >
+              <Eye className="h-4 w-4" />
+              Detalhes
+            </button>
+            <button
+              type="button"
+              onClick={onAction}
+              className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-2.5 text-sm font-medium text-white transition-colors duration-200 ease-out hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 cursor-pointer"
+            >
+              <Palette className="h-3.5 w-3.5" />
+              Enviar para Produção
+            </button>
+          </div>
         </div>
       )}
     </div>

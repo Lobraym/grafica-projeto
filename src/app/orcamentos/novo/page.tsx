@@ -15,8 +15,8 @@ function NovoOrcamentoContent(): React.ReactElement {
   const clientId = searchParams.get('clientId') ?? undefined;
 
   const handleSubmit = (data: QuoteFormData): void => {
-    addQuote(data);
-    router.push('/orcamentos');
+    const quote = addQuote(data);
+    router.push(`/orcamentos/${quote.id}`);
   };
 
   const handleCancel = (): void => {

@@ -13,7 +13,7 @@ import { QuoteKanbanCard } from '@/components/quotes/QuoteKanbanCard';
 import { QuoteListRow } from '@/components/quotes/QuoteListRow';
 import type { QuoteStatus } from '@/types/common';
 import { STATUS_LABELS } from '@/types/common';
-import { cn } from '@/lib/utils';
+import { cn, compareOptionalDates } from '@/lib/utils';
 
 type ViewMode = 'kanban' | 'list';
 
@@ -70,11 +70,11 @@ export default function OrcamentosPage(): React.ReactElement {
     const base =
       activeTab === ALL_TAB
         ? [...quotes].sort(
-            (a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+            (a, b) => compareOptionalDates(a.deadline, b.deadline)
           )
         : quotes
             .filter((q) => q.status === activeTab)
-            .sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime());
+            .sort((a, b) => compareOptionalDates(a.deadline, b.deadline));
 
     if (!search.trim()) return base;
 

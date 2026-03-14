@@ -20,14 +20,23 @@ import { useQuoteStore } from '@/stores/useQuoteStore';
 import { useClientStore } from '@/stores/useClientStore';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { QuoteStatusTimeline } from '@/components/quotes/QuoteStatusTimeline';
+import { QuotePrintSummary } from '@/components/quotes/QuotePrintSummary';
 import {
   formatCurrency,
   formatDate,
   getDaysUntil,
   getDeadlineUrgency,
   formatPhone,
+  isValidDateString,
   cn,
 } from '@/lib/utils';
+import {
+  formatQuoteDimension,
+  getQuoteInstallationDate,
+  getQuoteInstallationLabel,
+  getQuoteSizeLabel,
+  hasQuoteInstallation,
+} from '@/lib/quote-utils';
 import { useState, useMemo } from 'react';
 
 const URGENCY_BG: Record<ReturnType<typeof getDeadlineUrgency>, string> = {
@@ -37,6 +46,7 @@ const URGENCY_BG: Record<ReturnType<typeof getDeadlineUrgency>, string> = {
 } as const;
 
 function getDeadlineLabel(deadline: string): string {
+  if (!isValidDateString(deadline)) return 'Prazo inicia apos a aprovacao da arte';
   const days = getDaysUntil(deadline);
   if (days < 0) return `${Math.abs(days)} dia(s) atrasado`;
   if (days === 0) return 'Vence hoje';
@@ -79,6 +89,13 @@ export default function QuoteDetailPage(): React.ReactElement {
   }
 
   const urgency = getDeadlineUrgency(quote.deadline);
+  const hasDeadline = isValidDateString(quote.deadline);
+  const sizeLabel = getQuoteSizeLabel(quote);
+  const widthLabel = formatQuoteDimension(quote.width, quote.measurementUnit);
+  const heightLabel = formatQuoteDimension(quote.height, quote.measurementUnit);
+  const scheduledInstallationDate = getQuoteInstallationDate(quote);
+  const installationLabel = getQuoteInstallationLabel(quote);
+  const hasInstallation = hasQuoteInstallation(quote);
 
   const handleStartProduction = (): void => {
     startArtProduction(quote.id);
@@ -100,50 +117,65 @@ export default function QuoteDetailPage(): React.ReactElement {
     setTimeout(() => setCopiedLink(false), 2000);
   };
 
+  const handlePrintSummary = (): void => {
+    window.print();
+  };
+
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-slate-200 pb-6">
-        <div className="flex items-center gap-4">
-          <button
-            type="button"
-            onClick={() => router.push('/orcamentos')}
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-gray-500 hover:bg-slate-50 hover:text-gray-700 transition-colors duration-200 ease-out cursor-pointer"
-            aria-label="Voltar"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </button>
-          <div>
-            <div className="flex items-center gap-3">
-              <h1 className="text-xl font-semibold text-gray-900">{quote.service}</h1>
-              <StatusBadge status={quote.status} />
-            </div>
-            <p className="mt-0.5 text-sm text-gray-500">
-              ID: {quote.trackingId}
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={handleCopyLink}
-            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors duration-200 ease-out cursor-pointer"
-          >
-            <Copy className="h-4 w-4" />
-            {copiedLink ? 'Copiado!' : 'Copiar Link'}
-          </button>
-
-          {quote.status === 'pendente' && (
+    <>
+      <div className="space-y-6 print:hidden">
+        {/* Header */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-slate-200 pb-6">
+          <div className="flex items-center gap-4">
             <button
               type="button"
-              onClick={handleStartProduction}
-              className="inline-flex items-center gap-2 rounded-lg bg-cyan-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 transition-colors duration-200 ease-out cursor-pointer"
+              onClick={() => router.push('/orcamentos')}
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-gray-500 hover:bg-slate-50 hover:text-gray-700 transition-colors duration-200 ease-out cursor-pointer"
+              aria-label="Voltar"
             >
-              <Play className="h-4 w-4" />
-              Iniciar Producao de Arte
+              <ArrowLeft className="h-4 w-4" />
             </button>
-          )}
+            <div>
+              <div className="flex items-center gap-3">
+                <h1 className="text-xl font-semibold text-gray-900">{quote.service}</h1>
+                <StatusBadge status={quote.status} />
+              </div>
+              <p className="mt-0.5 text-sm text-gray-500">
+                ID: {quote.trackingId}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handlePrintSummary}
+              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors duration-200 ease-out cursor-pointer"
+            >
+              <Printer className="h-4 w-4" />
+              Imprimir Resumo
+            </button>
+
+            <button
+              type="button"
+              onClick={handleCopyLink}
+              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors duration-200 ease-out cursor-pointer"
+            >
+              <Copy className="h-4 w-4" />
+              {copiedLink ? 'Copiado!' : 'Copiar Link'}
+            </button>
+
+            {quote.status === 'pendente' && (
+              <button
+                type="button"
+                onClick={handleStartProduction}
+                className="inline-flex items-center gap-2 rounded-lg bg-cyan-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 transition-colors duration-200 ease-out cursor-pointer"
+              >
+                <Play className="h-4 w-4" />
+                Iniciar Producao de Arte
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -167,7 +199,9 @@ export default function QuoteDetailPage(): React.ReactElement {
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <DetailItem icon={Package} label="Servico" value={quote.service} />
               <DetailItem icon={Package} label="Material" value={quote.material} />
-              {quote.size && <DetailItem icon={Package} label="Tamanho" value={quote.size} />}
+              {widthLabel && <DetailItem icon={Package} label="Largura" value={widthLabel} />}
+              {heightLabel && <DetailItem icon={Package} label="Altura" value={heightLabel} />}
+              {sizeLabel && <DetailItem icon={Package} label="Medidas" value={sizeLabel} />}
               <DetailItem
                 icon={DollarSign}
                 label="Valor"
@@ -181,16 +215,18 @@ export default function QuoteDetailPage(): React.ReactElement {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <Calendar className="h-4 w-4" />
-                  <span>Prazo: {formatDate(quote.deadline)}</span>
+                  <span>{hasDeadline ? `Prazo de producao: ${formatDate(quote.deadline)}` : 'Prazo de producao aguardando aprovacao da arte'}</span>
                 </div>
-                <span
-                  className={cn(
-                    'inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium',
-                    URGENCY_BG[urgency]
-                  )}
-                >
-                  {getDeadlineLabel(quote.deadline)}
-                </span>
+                {hasDeadline && (
+                  <span
+                    className={cn(
+                      'inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium',
+                      URGENCY_BG[urgency]
+                    )}
+                  >
+                    {getDeadlineLabel(quote.deadline)}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -220,16 +256,35 @@ export default function QuoteDetailPage(): React.ReactElement {
                   Montagem
                 </span>
               )}
-              {!quote.requiresPrinting && !quote.requiresAssembly && (
+              {hasInstallation && (
+                <span className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700">
+                  <MapPin className="h-3.5 w-3.5" />
+                  Instalacao
+                </span>
+              )}
+              {!quote.requiresPrinting && !quote.requiresAssembly && !hasInstallation && (
                 <span className="text-xs text-gray-400">Nenhuma etapa de producao definida</span>
               )}
             </div>
+
+            {hasInstallation && (
+              <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50/40 p-4">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <DetailItem icon={MapPin} label="Endereco da instalacao" value={installationLabel || '-'} />
+                  <DetailItem
+                    icon={Calendar}
+                    label="Data da instalacao"
+                    value={scheduledInstallationDate ? formatDate(scheduledInstallationDate) : '-'}
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Arquivos */}
+          {/* Anexos / Referencias */}
           <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
             <h2 className="mb-4 text-sm font-semibold text-gray-900 uppercase tracking-wider">
-              Arquivos
+              Anexos / Referencias
             </h2>
 
             {quote.files.length > 0 ? (
@@ -250,7 +305,7 @@ export default function QuoteDetailPage(): React.ReactElement {
             ) : (
               <div className="flex flex-col items-center py-8 text-center">
                 <FileText className="h-8 w-8 text-gray-300" />
-                <p className="mt-2 text-sm text-gray-500">Nenhum arquivo anexado</p>
+                <p className="mt-2 text-sm text-gray-500">Nenhuma referencia anexada</p>
               </div>
             )}
           </div>
@@ -335,7 +390,9 @@ export default function QuoteDetailPage(): React.ReactElement {
           </div>
         </div>
       </div>
-    </div>
+
+      <QuotePrintSummary quote={quote} clientName={client?.name ?? 'Cliente'} />
+    </>
   );
 }
 

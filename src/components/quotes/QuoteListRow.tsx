@@ -6,7 +6,7 @@ import type { Quote } from '@/types/quote';
 import type { QuoteStatus } from '@/types/common';
 import { useClientStore } from '@/stores/useClientStore';
 import { StatusBadge } from '@/components/ui/StatusBadge';
-import { formatCurrency, formatDate, getDaysUntil, getDeadlineUrgency, cn } from '@/lib/utils';
+import { formatCurrency, formatDate, getDaysUntil, getDeadlineUrgency, isValidDateString, cn } from '@/lib/utils';
 
 interface QuoteListRowProps {
   readonly quote: Quote;
@@ -39,9 +39,10 @@ export function QuoteListRow({ quote }: QuoteListRowProps): React.ReactElement {
   const client = clients.find((c) => c.id === quote.clientId);
   const clientName = client?.name ?? 'Cliente desconhecido';
 
+  const hasDeadline = isValidDateString(quote.deadline);
   const days = getDaysUntil(quote.deadline);
   const urgency = getDeadlineUrgency(quote.deadline);
-  const deadlineLabel = getDeadlineLabel(days);
+  const deadlineLabel = hasDeadline ? getDeadlineLabel(days) : 'Aguardando aprovacao da arte';
 
   return (
     <Link
@@ -97,9 +98,9 @@ export function QuoteListRow({ quote }: QuoteListRowProps): React.ReactElement {
       <div className="w-[140px] shrink-0 text-right">
         <p className="text-sm text-gray-700 flex items-center justify-end gap-1">
           <Calendar className="h-3.5 w-3.5 text-gray-400" />
-          {formatDate(quote.deadline)}
+          {hasDeadline ? formatDate(quote.deadline) : '-'}
         </p>
-        <p className={cn('text-xs font-medium', URGENCY_TEXT[urgency])}>
+        <p className={cn('text-xs font-medium', hasDeadline ? URGENCY_TEXT[urgency] : 'text-gray-500')}>
           {deadlineLabel}
         </p>
       </div>

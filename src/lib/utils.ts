@@ -43,7 +43,13 @@ export function formatCurrency(value: number): string {
   }).format(value);
 }
 
+export function isValidDateString(dateStr: string): boolean {
+  if (!dateStr.trim()) return false;
+  return !Number.isNaN(new Date(dateStr).getTime());
+}
+
 export function formatDate(dateStr: string): string {
+  if (!isValidDateString(dateStr)) return '-';
   const date = new Date(dateStr);
   return new Intl.DateTimeFormat('pt-BR', {
     day: '2-digit',
@@ -53,6 +59,7 @@ export function formatDate(dateStr: string): string {
 }
 
 export function formatDateShort(dateStr: string): string {
+  if (!isValidDateString(dateStr)) return '-';
   const date = new Date(dateStr);
   return new Intl.DateTimeFormat('pt-BR', {
     day: '2-digit',
@@ -65,6 +72,7 @@ export function cn(...classes: (string | boolean | undefined | null)[]): string 
 }
 
 export function getDaysUntil(dateStr: string): number {
+  if (!isValidDateString(dateStr)) return Number.POSITIVE_INFINITY;
   const target = new Date(dateStr);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -73,8 +81,45 @@ export function getDaysUntil(dateStr: string): number {
 }
 
 export function getDeadlineUrgency(dateStr: string): 'overdue' | 'urgent' | 'normal' {
+  if (!isValidDateString(dateStr)) return 'normal';
   const days = getDaysUntil(dateStr);
   if (days < 0) return 'overdue';
   if (days <= 2) return 'urgent';
   return 'normal';
+}
+
+export function addDaysToDate(date: Date, days: number): string {
+  const result = new Date(date);
+  result.setHours(12, 0, 0, 0);
+  result.setDate(result.getDate() + days);
+
+  const year = result.getFullYear();
+  const month = String(result.getMonth() + 1).padStart(2, '0');
+  const day = String(result.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
+export function getDaysBetweenDates(fromDateStr: string, toDateStr: string): number {
+  if (!isValidDateString(fromDateStr) || !isValidDateString(toDateStr)) {
+    return Number.POSITIVE_INFINITY;
+  }
+
+  const fromDate = new Date(fromDateStr);
+  const toDate = new Date(toDateStr);
+  fromDate.setHours(0, 0, 0, 0);
+  toDate.setHours(0, 0, 0, 0);
+
+  return Math.ceil((toDate.getTime() - fromDate.getTime()) / (1000 * 60 * 60 * 24));
+}
+
+export function compareOptionalDates(a: string, b: string): number {
+  const aValid = isValidDateString(a);
+  const bValid = isValidDateString(b);
+
+  if (!aValid && !bValid) return 0;
+  if (!aValid) return 1;
+  if (!bValid) return -1;
+
+  return new Date(a).getTime() - new Date(b).getTime();
 }

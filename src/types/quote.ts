@@ -1,5 +1,7 @@
 import type { QuoteStatus, ProductionStage, FileAttachment } from './common';
 
+export type QuoteMeasurementUnit = 'cm' | 'mm' | 'm';
+
 export interface ClientApproval {
   approved: boolean | null;
   observations: string;
@@ -14,18 +16,33 @@ export interface Quote {
   clientId: string;
   service: string;
   material: string;
+  quantity?: number;
+  width?: string;
+  height?: string;
+  measurementUnit?: QuoteMeasurementUnit;
   size: string;
   description: string;
+  receptionNotes?: string;
   deadline: string;
   value: number;
   status: QuoteStatus;
   files: FileAttachment[];
   artFile: FileAttachment | null;
+  artFiles?: FileAttachment[];
   productionNotes: string;
   printingStage: ProductionStage;
   assemblyStage: ProductionStage;
+  installationStage?: ProductionStage;
   requiresPrinting: boolean;
   requiresAssembly: boolean;
+  requiresInstallation?: boolean;
+  installationStreet?: string;
+  installationNeighborhood?: string;
+  installationNumber?: string;
+  installationCity?: string;
+  installationDate?: string;
+  scheduledInstallationDate?: string;
+  installationScheduledAt?: string;
   clientApproval: ClientApproval | null;
   artChecklist: {
     colorsCorrect: boolean;
@@ -39,10 +56,22 @@ export interface QuoteFormData {
   clientId: string;
   service: string;
   material: string;
+  quantity: number;
+  width: string;
+  height: string;
+  measurementUnit: QuoteMeasurementUnit;
   size: string;
   description: string;
+  receptionNotes: string;
   deadline: string;
   value: number;
+  files: FileAttachment[];
   requiresPrinting: boolean;
   requiresAssembly: boolean;
+  requiresInstallation: boolean;
+  installationStreet: string;
+  installationNeighborhood: string;
+  installationNumber: string;
+  installationCity: string;
+  installationDate: string;
 }

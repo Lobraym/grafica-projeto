@@ -4,7 +4,29 @@ import { create } from 'zustand';
 import type { Quote, QuoteFormData, ClientApproval } from '@/types/quote';
 import type { QuoteStatus, ProductionStage, FileAttachment } from '@/types/common';
 import { mockQuotes } from '@/mock/quotes';
-import { generateId, generateTrackingId } from '@/lib/utils';
+import {
+  getInitialInstallationStage,
+  getQuoteScheduledInstallationDate,
+  shouldUnlockInstallation,
+} from '@/lib/installation-scheduling';
+import { addDaysToDate, compareOptionalDates, generateId, generateTrackingId } from '@/lib/utils';
+
+const PRODUCTION_DEADLINE_DAYS = 10;
+
+function normalizeQuoteForProductionFlow(quote: Quote): Quote {
+  const shouldPreserveInstallationStage =
+    quote.installationStage === 'em_andamento' || quote.installationStage === 'concluida';
+
+  return {
+    ...quote,
+    artFiles: quote.artFiles ?? (quote.artFile ? [quote.artFile] : []),
+    scheduledInstallationDate: quote.scheduledInstallationDate ?? getQuoteScheduledInstallationDate(quote),
+    installationStage:
+      quote.status === 'em_producao' && !shouldPreserveInstallationStage
+        ? getInitialInstallationStage(quote)
+        : quote.installationStage ?? 'nao_iniciado',
+  };
+}
 
 interface QuoteStore {
   quotes: Quote[];
@@ -23,11 +45,13 @@ interface QuoteStore {
   sendForClientReview: (id: string, artImageUrl: string, designerMessage: string) => void;
   clientApprove: (id: string, observations: string) => void;
   clientReject: (id: string, observations: string) => void;
-  sendToFinalProduction: (id: string, artFile: FileAttachment, productionNotes: string) => void;
+  sendToFinalProduction: (id: string, artFiles: FileAttachment[], productionNotes: string) => void;
 
   // Final production actions
   updatePrintingStage: (id: string, stage: ProductionStage) => void;
   updateAssemblyStage: (id: string, stage: ProductionStage) => void;
+  updateInstallationStage: (id: string, stage: ProductionStage) => void;
+  scheduleInstallation: (id: string, scheduledDate: string) => void;
   checkAndMarkReady: (id: string) => void;
 
   // Ready actions
@@ -39,12 +63,13 @@ interface QuoteStore {
   getArtProductionCompleted: () => Quote[];
   getPrintingByStage: (stage: ProductionStage) => Quote[];
   getAssemblyByStage: (stage: ProductionStage) => Quote[];
+  getInstallationByStage: (stage: ProductionStage) => Quote[];
   getReadyQuotes: () => Quote[];
   getDeliveredQuotes: () => Quote[];
 }
 
 export const useQuoteStore = create<QuoteStore>((set, get) => ({
-  quotes: mockQuotes,
+  quotes: mockQuotes.map(normalizeQuoteForProductionFlow),
 
   addQuote: (data: QuoteFormData) => {
     const newQuote: Quote = {
@@ -52,11 +77,14 @@ export const useQuoteStore = create<QuoteStore>((set, get) => ({
       id: generateId(),
       trackingId: generateTrackingId(),
       status: 'pendente',
-      files: [],
       artFile: null,
+      artFiles: [],
       productionNotes: '',
       printingStage: 'nao_iniciado',
       assemblyStage: 'nao_iniciado',
+      installationStage: 'nao_iniciado',
+      scheduledInstallationDate: '',
+      installationScheduledAt: '',
       clientApproval: null,
       artChecklist: { colorsCorrect: false, sizeCorrect: false },
       createdAt: new Date().toISOString(),
@@ -92,7 +120,7 @@ export const useQuoteStore = create<QuoteStore>((set, get) => ({
   getQuotesSortedByDeadline: () =>
     [...get().quotes]
       .filter((q) => q.status !== 'entregue')
-      .sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()),
+      .sort((a, b) => compareOptionalDates(a.deadline, b.deadline)),
 
   // Art Production
   startArtProduction: (id: string) => {
@@ -124,12 +152,14 @@ export const useQuoteStore = create<QuoteStore>((set, get) => ({
   clientApprove: (id: string, observations: string) => {
     const quote = get().getQuoteById(id);
     if (!quote?.clientApproval) return;
+    const approvedAt = new Date();
     get().updateQuote(id, {
+      deadline: addDaysToDate(approvedAt, PRODUCTION_DEADLINE_DAYS),
       clientApproval: {
         ...quote.clientApproval,
         approved: true,
         observations,
-        respondedAt: new Date().toISOString(),
+        respondedAt: approvedAt.toISOString(),
       },
     });
   },
@@ -148,40 +178,69 @@ export const useQuoteStore = create<QuoteStore>((set, get) => ({
     });
   },
 
-  sendToFinalProduction: (id: string, artFile: FileAttachment, productionNotes: string) => {
+  sendToFinalProduction: (id: string, artFiles: FileAttachment[], productionNotes: string) => {
     const quote = get().getQuoteById(id);
-    if (!quote) return;
+    if (!quote || artFiles.length === 0) return;
     get().updateQuote(id, {
       status: 'em_producao',
-      artFile,
+      artFile: artFiles[0],
+      artFiles,
       productionNotes,
       printingStage: quote.requiresPrinting ? 'disponivel' : 'nao_iniciado',
       assemblyStage: quote.requiresAssembly ? 'disponivel' : 'nao_iniciado',
+      installationStage: getInitialInstallationStage({
+        ...quote,
+        status: 'em_producao',
+      }),
     });
   },
 
   // Final production
   updatePrintingStage: (id: string, stage: ProductionStage) => {
     get().updateQuote(id, { printingStage: stage });
-    if (stage === 'concluida') get().checkAndMarkReady(id);
+    if (stage === 'concluida') {
+      const quote = get().getQuoteById(id);
+      if (quote && shouldUnlockInstallation(quote)) {
+        get().updateQuote(id, { installationStage: 'disponivel' });
+      }
+      get().checkAndMarkReady(id);
+    }
   },
 
   updateAssemblyStage: (id: string, stage: ProductionStage) => {
     get().updateQuote(id, { assemblyStage: stage });
+    if (stage === 'concluida') {
+      const quote = get().getQuoteById(id);
+      if (quote && shouldUnlockInstallation(quote)) {
+        get().updateQuote(id, { installationStage: 'disponivel' });
+      }
+      get().checkAndMarkReady(id);
+    }
+  },
+
+  updateInstallationStage: (id: string, stage: ProductionStage) => {
+    get().updateQuote(id, { installationStage: stage });
     if (stage === 'concluida') get().checkAndMarkReady(id);
   },
 
+  scheduleInstallation: (id: string, scheduledDate: string) => {
+    get().updateQuote(id, {
+      scheduledInstallationDate: scheduledDate,
+      installationDate: scheduledDate,
+      installationScheduledAt: new Date().toISOString(),
+    });
+  },
+
   checkAndMarkReady: (id: string) => {
-    const quote = get().getQuoteById(id);
-    if (!quote) return;
-    const printingDone = !quote.requiresPrinting || quote.printingStage === 'concluida';
-    const assemblyDone = !quote.requiresAssembly || quote.assemblyStage === 'concluida';
     // Re-read to get latest state after updateQuote
     const updatedQuote = get().getQuoteById(id);
     if (!updatedQuote) return;
     const updatedPrintingDone = !updatedQuote.requiresPrinting || updatedQuote.printingStage === 'concluida';
     const updatedAssemblyDone = !updatedQuote.requiresAssembly || updatedQuote.assemblyStage === 'concluida';
-    if (updatedPrintingDone && updatedAssemblyDone) {
+    const updatedInstallationDone =
+      !updatedQuote.requiresInstallation || updatedQuote.installationStage === 'concluida';
+
+    if (updatedPrintingDone && updatedAssemblyDone && updatedInstallationDone) {
       get().updateQuote(id, { status: 'pronto' });
     }
   },
@@ -216,6 +275,11 @@ export const useQuoteStore = create<QuoteStore>((set, get) => ({
   getAssemblyByStage: (stage: ProductionStage) =>
     get().quotes.filter(
       (q) => q.status === 'em_producao' && q.requiresAssembly && q.assemblyStage === stage
+    ),
+
+  getInstallationByStage: (stage: ProductionStage) =>
+    get().quotes.filter(
+      (q) => q.status === 'em_producao' && q.requiresInstallation && q.installationStage === stage
     ),
 
   getReadyQuotes: () => get().quotes.filter((q) => q.status === 'pronto'),

@@ -7,7 +7,8 @@ import { useClientStore } from '@/stores/useClientStore';
 import { TrackingTimeline } from '@/components/tracking/TrackingTimeline';
 import { ClientApprovalForm } from '@/components/tracking/ClientApprovalForm';
 import { StatusBadge } from '@/components/ui/StatusBadge';
-import { formatDate, formatCurrency } from '@/lib/utils';
+import { formatDate, formatCurrency, isValidDateString } from '@/lib/utils';
+import { getQuoteSizeLabel } from '@/lib/quote-utils';
 
 interface AcompanhamentoPageProps {
   readonly params: Promise<{ trackingId: string }>;
@@ -26,6 +27,8 @@ export default function AcompanhamentoPage({ params }: AcompanhamentoPageProps):
     () => (quote ? clients.find((c) => c.id === quote.clientId) : undefined),
     [clients, quote],
   );
+  const sizeLabel = quote ? getQuoteSizeLabel(quote) : '';
+  const hasDeadline = quote ? isValidDateString(quote.deadline) : false;
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -103,11 +106,13 @@ export default function AcompanhamentoPage({ params }: AcompanhamentoPageProps):
                   </div>
                   <div>
                     <p className="text-gray-500 text-xs mb-0.5">Tamanho</p>
-                    <p className="font-medium text-gray-900">{quote.size}</p>
+                    <p className="font-medium text-gray-900">{sizeLabel || '-'}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500 text-xs mb-0.5">Prazo</p>
-                    <p className="font-medium text-gray-900">{formatDate(quote.deadline)}</p>
+                    <p className="text-gray-500 text-xs mb-0.5">Prazo de producao</p>
+                    <p className="font-medium text-gray-900">
+                      {hasDeadline ? formatDate(quote.deadline) : 'Inicia apos a aprovacao da arte'}
+                    </p>
                   </div>
                   <div>
                     <p className="text-gray-500 text-xs mb-0.5">Valor</p>
