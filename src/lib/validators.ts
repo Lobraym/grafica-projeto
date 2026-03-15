@@ -93,5 +93,59 @@ export const quoteSchema = z.object({
   }
 });
 
+const productMaterialSchema = z.object({
+  materialId: z.string(),
+  price: z.number().min(0),
+  cost: z.number().min(0),
+  marginPercent: z.number().min(0).max(100),
+});
+
+const productFinishingSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1),
+  priceExtra: z.number().min(0),
+});
+
+export const materialSchema = z.object({
+  name: z.string().min(1, 'Nome do material é obrigatório'),
+  basePrice: z.number().min(0, 'Preço não pode ser negativo'),
+  cost: z.number().min(0, 'Custo não pode ser negativo'),
+  profitMarginPercent: z.number().min(0, 'Mín. 0').max(100, 'Máx. 100').default(0),
+});
+
+export const productSchema = z
+  .object({
+    name: z.string().min(1, 'Nome do produto é obrigatório'),
+    category: z.enum(
+      ['comunicacao_visual', 'impressao_digital'],
+      { message: 'Selecione uma categoria' }
+    ),
+    description: z.string().optional().default(''),
+    calculationType: z.enum(['por_area', 'por_quantidade', 'por_unidade'], {
+      message: 'Selecione o tipo de cálculo',
+    }),
+    measurementUnit: z.enum(['unidade', 'm2', 'metro_linear', 'folha', 'milheiro'], {
+      message: 'Selecione a unidade',
+    }),
+    productMaterials: z.array(productMaterialSchema).default([]),
+    finishings: z.array(productFinishingSchema).default([]),
+    minQuantity: z.number().int().min(0).nullable(),
+    defaultMarginPercent: z.number().min(0, 'Mín. 0').max(100, 'Máx. 100').default(0),
+    status: z.enum(['ativo', 'inativo'], { message: 'Selecione o status' }),
+  })
+  .superRefine((data, ctx) => {
+    if (data.calculationType === 'por_quantidade') {
+      if (data.minQuantity == null || data.minQuantity < 1) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['minQuantity'],
+          message: 'Quantidade mínima é obrigatória (mín. 1) quando o tipo é por quantidade',
+        });
+      }
+    }
+  });
+
 export type ClientSchemaType = z.infer<typeof clientSchema>;
 export type QuoteSchemaType = z.infer<typeof quoteSchema>;
+export type MaterialSchemaType = z.infer<typeof materialSchema>;
+export type ProductSchemaType = z.infer<typeof productSchema>;

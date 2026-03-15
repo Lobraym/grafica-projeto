@@ -4,6 +4,7 @@ import {
   Palette,
   Factory,
   CheckCircle,
+  Package,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -20,6 +21,12 @@ export const MENU_ITEMS: readonly MenuItem[] = [
     href: '/clientes',
     icon: Users,
     description: 'Gerenciar clientes',
+  },
+  {
+    label: 'Produtos',
+    href: '/produtos',
+    icon: Package,
+    description: 'Cadastro de produtos',
   },
   {
     label: 'Orçamentos',

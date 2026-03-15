@@ -1,12 +1,16 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { z } from 'zod';
 import { FileImage, FileText, MapPin, Paperclip, Printer, Trash2, Upload, Wrench } from 'lucide-react';
 import { quoteSchema } from '@/lib/validators';
 import { useClientStore } from '@/stores/useClientStore';
+import { useProductStore } from '@/stores/useProductStore';
+import { useMaterialStore } from '@/stores/useMaterialStore';
+import { calculateQuotePrice } from '@/lib/product-price';
+import { formatCurrency } from '@/lib/utils';
 import type { QuoteFormData, QuoteMeasurementUnit } from '@/types/quote';
 import type { FileAttachment } from '@/types/common';
 import { cn, generateId } from '@/lib/utils';
@@ -37,8 +41,26 @@ export function QuoteForm({
   preselectedClientId,
 }: QuoteFormProps): React.ReactElement {
   const clients = useClientStore((state) => state.clients);
+  const hydrateProducts = useProductStore((s) => s.hydrate);
+  const hydrateMaterials = useMaterialStore((s) => s.hydrate);
+  const products = useProductStore((s) => s.products);
+  const activeProductsList = useMemo(
+    () => products.filter((p) => p.status === 'ativo'),
+    [products]
+  );
+  const getProductById = useProductStore((s) => s.getProductById);
+  const getMaterialById = useMaterialStore((s) => s.getMaterialById);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [referenceFiles, setReferenceFiles] = useState<FileAttachment[]>(initialData?.files ?? []);
+  const [selectedProductId, setSelectedProductId] = useState<string>('');
+  const [selectedMaterialId, setSelectedMaterialId] = useState<string>('');
+  const [selectedFinishingIds, setSelectedFinishingIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    hydrateProducts();
+    hydrateMaterials();
+  }, [hydrateProducts, hydrateMaterials]);
 
   const handleReferenceFilesChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const selectedFiles = Array.from(event.target.files ?? []);
@@ -97,6 +119,8 @@ export function QuoteForm({
     register,
     handleSubmit,
     control,
+    setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<QuoteSchemaInput, unknown, QuoteSchemaOutput>({
     resolver: zodResolver(quoteSchema),
@@ -125,6 +149,51 @@ export function QuoteForm({
   });
 
   const requiresInstallation = useWatch({ control, name: 'requiresInstallation' });
+  const quantity = useWatch({ control, name: 'quantity' });
+  const width = useWatch({ control, name: 'width' });
+  const height = useWatch({ control, name: 'height' });
+  const measurementUnit = useWatch({ control, name: 'measurementUnit' });
+
+  const selectedProduct = selectedProductId ? getProductById(selectedProductId) : null;
+  const productMaterialsWithName = useMemo(() => {
+    if (!selectedProduct?.productMaterials?.length) return [];
+    return selectedProduct.productMaterials
+      .map((pm) => {
+        const mat = getMaterialById(pm.materialId);
+        return { ...pm, materialName: mat?.name ?? 'Material' };
+      })
+      .filter(Boolean);
+  }, [selectedProduct, getMaterialById]);
+
+  const selectedProductMaterial =
+    selectedProduct && selectedMaterialId
+      ? selectedProduct.productMaterials?.find((pm) => pm.materialId === selectedMaterialId) ?? null
+      : null;
+
+  const suggestedValue = useMemo(() => {
+    if (!selectedProduct || !selectedProductMaterial) return null;
+    const qty = typeof quantity === 'number' && Number.isFinite(quantity) ? quantity : 1;
+    const result = calculateQuotePrice(
+      selectedProduct,
+      selectedProductMaterial,
+      {
+        width: typeof width === 'string' ? width : '',
+        height: typeof height === 'string' ? height : '',
+        quoteMeasurementUnit: measurementUnit ?? 'cm',
+        quantity: qty,
+        selectedFinishingIds,
+      }
+    );
+    return result.total;
+  }, [
+    selectedProduct,
+    selectedProductMaterial,
+    width,
+    height,
+    measurementUnit,
+    quantity,
+    selectedFinishingIds,
+  ]);
 
   const inputBaseClass =
     'block w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out h-10';
@@ -172,6 +241,46 @@ export function QuoteForm({
       <fieldset>
         <legend className="text-base font-semibold text-gray-900 mb-4">Detalhes do Servico</legend>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          {/* Produto (opcional) - preenche servico e material */}
+          <div className="sm:col-span-2">
+            <label htmlFor="productId" className="block text-sm font-medium text-slate-700 mb-1.5">
+              Produto
+            </label>
+            <select
+              id="productId"
+              value={selectedProductId}
+              onChange={(e) => {
+                const id = e.target.value;
+                setSelectedProductId(id);
+                setSelectedMaterialId('');
+                setSelectedFinishingIds([]);
+                const product = id ? getProductById(id) : null;
+                if (product) {
+                  setValue('service', product.name);
+                  const first = product.productMaterials?.[0];
+                  if (first) {
+                    const mat = getMaterialById(first.materialId);
+                    setValue('material', mat?.name ?? '');
+                    setSelectedMaterialId(first.materialId);
+                  } else {
+                    setValue('material', '');
+                  }
+                } else {
+                  setValue('service', '');
+                  setValue('material', '');
+                }
+              }}
+              className={cn(selectBaseClass, 'w-full')}
+            >
+              <option value="">Selecione um produto (opcional)</option>
+              {activeProductsList.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {/* Servico */}
           <div>
             <label htmlFor="service" className="block text-sm font-medium text-slate-700 mb-1.5">
@@ -189,18 +298,39 @@ export function QuoteForm({
             )}
           </div>
 
-          {/* Material */}
+          {/* Material: select dos materiais do produto (com preço/custo por material) */}
           <div>
             <label htmlFor="material" className="block text-sm font-medium text-slate-700 mb-1.5">
               Material <span className="text-red-500">*</span>
             </label>
-            <input
-              id="material"
-              type="text"
-              placeholder="Ex: Couche 300g, Vinilico, Lona"
-              {...register('material')}
-              className={cn(inputBaseClass, errors.material && errorInputClass)}
-            />
+            {productMaterialsWithName.length > 0 ? (
+              <select
+                id="material"
+                value={selectedMaterialId}
+                onChange={(e) => {
+                  const materialId = e.target.value;
+                  setSelectedMaterialId(materialId);
+                  const pm = productMaterialsWithName.find((p) => p.materialId === materialId);
+                  setValue('material', pm?.materialName ?? '');
+                }}
+                className={cn(selectBaseClass, 'w-full', errors.material && errorInputClass)}
+              >
+                <option value="">Selecione o material</option>
+                {productMaterialsWithName.map((pm) => (
+                  <option key={pm.materialId} value={pm.materialId}>
+                    {pm.materialName}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                id="material"
+                type="text"
+                placeholder="Ex: Couche 300g, Vinilico, Lona"
+                {...register('material')}
+                className={cn(inputBaseClass, errors.material && errorInputClass)}
+              />
+            )}
             {errors.material && (
               <p className="mt-1.5 text-xs text-red-600">{errors.material.message}</p>
             )}
@@ -298,6 +428,55 @@ export function QuoteForm({
             </div>
           </div>
 
+          {/* Acabamentos (quando produto tem acabamentos) */}
+          {selectedProduct?.finishings?.length ? (
+            <div className="sm:col-span-2">
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Acabamentos (valor extra)
+              </label>
+              <div className="flex flex-wrap gap-3">
+                {selectedProduct.finishings.map((f) => (
+                  <label
+                    key={f.id}
+                    className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 cursor-pointer hover:bg-slate-50"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedFinishingIds.includes(f.id)}
+                      onChange={(e) => {
+                        setSelectedFinishingIds((prev) =>
+                          e.target.checked
+                            ? [...prev, f.id]
+                            : prev.filter((id) => id !== f.id)
+                        );
+                      }}
+                      className="rounded border-slate-300 text-cyan-600 focus:ring-cyan-500"
+                    />
+                    <span className="text-sm text-slate-700">
+                      {f.name} (+{formatCurrency(f.priceExtra)})
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {/* Preço sugerido (quando produto e material selecionados) */}
+          {suggestedValue != null && (
+            <div className="sm:col-span-2 flex flex-wrap items-center gap-3 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3">
+              <span className="text-sm text-cyan-800">
+                Preço sugerido: <strong>{formatCurrency(suggestedValue)}</strong>
+              </span>
+              <button
+                type="button"
+                onClick={() => setValue('value', suggestedValue, { shouldValidate: true })}
+                className="rounded-lg bg-cyan-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+              >
+                Usar este valor
+              </button>
+            </div>
+          )}
+
           {/* Valor */}
           <div>
             <label htmlFor="value" className="block text-sm font-medium text-slate-700 mb-1.5">
@@ -321,23 +500,6 @@ export function QuoteForm({
               <p className="mt-1.5 text-xs text-red-600">{errors.value.message}</p>
             )}
           </div>
-        </div>
-
-        {/* Descricao */}
-        <div className="mt-5">
-          <label htmlFor="description" className="block text-sm font-medium text-slate-700 mb-1.5">
-            Descricao
-          </label>
-          <textarea
-            id="description"
-            rows={5}
-            placeholder="Detalhes adicionais sobre o servico..."
-            {...register('description')}
-            className={cn(textareaBaseClass, 'min-h-24 resize-y', errors.description && errorInputClass)}
-          />
-          {errors.description && (
-            <p className="mt-1.5 text-xs text-red-600">{errors.description.message}</p>
-          )}
         </div>
 
         <div className="mt-4 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-xs text-cyan-800">
