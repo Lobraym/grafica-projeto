@@ -179,6 +179,99 @@ body {
   color: var(--text-primary);
 }
 
+/* ─── Blue Theme ─── */
+.blue-theme {
+  --background: #0c1929;
+  --card-bg: #111d2e;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border: #1e3a5f;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 3px 0 rgba(0, 0, 0, 0.15);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+}
+
+.blue-theme ::selection {
+  background-color: rgba(8, 145, 178, 0.3);
+}
+
+.blue-theme ::-webkit-scrollbar-thumb {
+  background: #1e3a5f;
+}
+
+.blue-theme ::-webkit-scrollbar-thumb:hover {
+  background: #2d5a8e;
+}
+
+.blue-theme * {
+  scrollbar-color: #1e3a5f transparent;
+}
+
+.blue-theme .btn-secondary {
+  background: #162236;
+  color: #e2e8f0;
+  border-color: #1e3a5f;
+}
+
+.blue-theme .btn-secondary:hover {
+  background: #1e3a5f;
+  border-color: #2d5a8e;
+}
+
+.blue-theme .btn-ghost:hover {
+  background: #162236;
+  color: #e2e8f0;
+}
+
+.blue-theme .card-hover:hover {
+  border-color: #2d5a8e;
+}
+
+/* ─── Animations ─── */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 200ms ease-out both;
+}
+
+.animate-slide-up {
+  animation: slide-up 400ms cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+.animate-scale-in {
+  animation: scale-in 300ms cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 300ms cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+/* Staggered animation delays */
+.stagger-1 { animation-delay: 50ms; }
+.stagger-2 { animation-delay: 100ms; }
+.stagger-3 { animation-delay: 150ms; }
+.stagger-4 { animation-delay: 200ms; }
+.stagger-5 { animation-delay: 250ms; }
+.stagger-6 { animation-delay: 300ms; }
+
 /* ─── Reduced motion ─── */
 @media (prefers-reduced-motion: reduce) {
   *,

@@ -1,4 +1,5 @@
 import {
+  LayoutDashboard,
   Users,
   FileText,
   Palette,
@@ -16,6 +17,12 @@ export interface MenuItem {
 }
 
 export const MENU_ITEMS: readonly MenuItem[] = [
+  {
+    label: 'Dashboard',
+    href: '/',
+    icon: LayoutDashboard,
+    description: 'Painel geral',
+  },
   {
     label: 'Clientes',
     href: '/clientes',
