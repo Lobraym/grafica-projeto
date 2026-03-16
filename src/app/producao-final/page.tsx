@@ -56,20 +56,16 @@ export default function ProducaoFinalPage(): React.ReactElement {
       />
 
       {activeTab === 'instalacao' ? (
-        <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.35fr)_420px] xl:items-start">
+        <div className="space-y-6">
           <ProductionKanban
             type={activeTab}
             selectedQuoteId={effectiveSelectedInstallationQuoteId}
             onSelectQuote={setSelectedInstallationQuoteId}
           />
-          <div className="xl:sticky xl:top-6">
-            <InstallationSchedulerPanel quoteId={effectiveSelectedInstallationQuoteId} />
-          </div>
+          <InstallationSchedulerPanel quoteId={effectiveSelectedInstallationQuoteId} />
         </div>
       ) : (
-        <div className="mt-6">
-          <ProductionKanban type={activeTab} />
-        </div>
+        <ProductionKanban type={activeTab} />
       )}
     </div>
   );

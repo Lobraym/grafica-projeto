@@ -10,7 +10,7 @@ import { SearchBar } from '@/components/ui/SearchBar';
 import { TabGroup } from '@/components/ui/TabGroup';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { QuoteKanbanCard } from '@/components/quotes/QuoteKanbanCard';
-import { QuoteListRow } from '@/components/quotes/QuoteListRow';
+import { QuoteListRow, QuoteListTable } from '@/components/quotes/QuoteListRow';
 import type { QuoteStatus } from '@/types/common';
 import { STATUS_LABELS } from '@/types/common';
 import { cn, compareOptionalDates } from '@/lib/utils';
@@ -93,13 +93,13 @@ export default function OrcamentosPage(): React.ReactElement {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Orcamentos" subtitle="Gerencie os orcamentos da grafica">
+      <PageHeader title="Orçamentos" subtitle="Gerencie os orçamentos da gráfica">
         <Link
           href="/orcamentos/novo"
           className="inline-flex items-center gap-2 rounded-lg bg-cyan-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 transition-colors duration-200 ease-out cursor-pointer"
         >
-          <Plus className="h-4 w-4" />
-          Novo Orcamento
+          <Plus className="h-4 w-4" aria-hidden="true" />
+          Novo Orçamento
         </Link>
       </PageHeader>
 
@@ -109,7 +109,7 @@ export default function OrcamentosPage(): React.ReactElement {
           <SearchBar
             value={search}
             onChange={setSearch}
-            placeholder="Buscar por cliente, servico, material..."
+            placeholder="Buscar por cliente, serviço, material…"
           />
 
           {/* View mode toggle */}
@@ -118,7 +118,7 @@ export default function OrcamentosPage(): React.ReactElement {
               type="button"
               onClick={() => setViewMode('kanban')}
               className={cn(
-                'flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors duration-200 ease-out cursor-pointer',
+                'flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium min-h-[44px] transition-colors duration-200 ease-out cursor-pointer',
                 viewMode === 'kanban'
                   ? 'bg-cyan-50 text-cyan-700'
                   : 'text-gray-500 hover:text-gray-700 hover:bg-slate-50'
@@ -126,14 +126,14 @@ export default function OrcamentosPage(): React.ReactElement {
               aria-label="Modo Kanban"
               aria-pressed={viewMode === 'kanban'}
             >
-              <LayoutGrid className="h-4 w-4" />
+              <LayoutGrid className="h-4 w-4" aria-hidden="true" />
               <span className="hidden sm:inline">Kanban</span>
             </button>
             <button
               type="button"
               onClick={() => setViewMode('list')}
               className={cn(
-                'flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors duration-200 ease-out cursor-pointer',
+                'flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium min-h-[44px] transition-colors duration-200 ease-out cursor-pointer',
                 viewMode === 'list'
                   ? 'bg-cyan-50 text-cyan-700'
                   : 'text-gray-500 hover:text-gray-700 hover:bg-slate-50'
@@ -141,7 +141,7 @@ export default function OrcamentosPage(): React.ReactElement {
               aria-label="Modo Lista"
               aria-pressed={viewMode === 'list'}
             >
-              <List className="h-4 w-4" />
+              <List className="h-4 w-4" aria-hidden="true" />
               <span className="hidden sm:inline">Lista</span>
             </button>
           </div>
@@ -154,7 +154,7 @@ export default function OrcamentosPage(): React.ReactElement {
       <div className="flex items-center justify-between">
         <p className="text-xs text-gray-500">
           Mostrando <span className="font-semibold text-gray-700">{filteredQuotes.length}</span> de{' '}
-          <span className="font-semibold text-gray-700">{quotes.length}</span> orcamentos
+          <span className="font-semibold text-gray-700">{quotes.length}</span> orçamentos
         </p>
       </div>
 
@@ -167,20 +167,20 @@ export default function OrcamentosPage(): React.ReactElement {
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <QuoteListTable>
             {filteredQuotes.map((quote) => (
               <QuoteListRow key={quote.id} quote={quote} />
             ))}
-          </div>
+          </QuoteListTable>
         )
       ) : (
         <EmptyState
           icon={FileText}
-          title="Nenhum orcamento encontrado"
+          title="Nenhum orçamento encontrado"
           description={
             search
               ? 'Tente ajustar os termos da busca ou limpar os filtros.'
-              : 'Crie seu primeiro orcamento clicando no botao acima.'
+              : 'Crie seu primeiro orçamento clicando no botão acima.'
           }
         />
       )}

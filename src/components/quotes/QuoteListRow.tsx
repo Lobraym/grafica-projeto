@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Calendar, Printer, Wrench } from 'lucide-react';
+import { Printer, Wrench } from 'lucide-react';
 import type { Quote } from '@/types/quote';
 import type { QuoteStatus } from '@/types/common';
 import { useClientStore } from '@/stores/useClientStore';
@@ -28,10 +28,50 @@ const URGENCY_TEXT: Record<ReturnType<typeof getDeadlineUrgency>, string> = {
 } as const;
 
 function getDeadlineLabel(days: number): string {
-  if (days < 0) return `${Math.abs(days)} dias atrasado`;
+  if (days < 0) return `${Math.abs(days)}d atrasado`;
   if (days === 0) return 'Vence hoje';
-  if (days === 1) return 'Amanha';
-  return `${days} dias restantes`;
+  if (days === 1) return 'Amanhã';
+  return `${days}d restantes`;
+}
+
+/**
+ * Container da tabela de orçamentos com header fixo e scroll horizontal.
+ */
+export function QuoteListTable({ children }: { readonly children: React.ReactNode }): React.ReactElement {
+  return (
+    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[860px]">
+          <thead>
+            <tr className="border-b border-slate-200 bg-slate-50/80">
+              <th className="w-[3px] py-3 pl-5 pr-0" aria-hidden="true" />
+              <th className="py-3 pl-4 pr-3 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                Cliente
+              </th>
+              <th className="py-3 px-3 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                Serviço
+              </th>
+              <th className="py-3 px-3 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-400 w-[130px]">
+                Status
+              </th>
+              <th className="py-3 px-3 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-400 w-[110px]">
+                Valor
+              </th>
+              <th className="py-3 px-3 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-400 w-[130px]">
+                Prazo
+              </th>
+              <th className="py-3 pl-3 pr-5 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-400 w-[140px]">
+                Produção
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100">
+            {children}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 }
 
 export function QuoteListRow({ quote }: QuoteListRowProps): React.ReactElement {
@@ -42,84 +82,78 @@ export function QuoteListRow({ quote }: QuoteListRowProps): React.ReactElement {
   const hasDeadline = isValidDateString(quote.deadline);
   const days = getDaysUntil(quote.deadline);
   const urgency = getDeadlineUrgency(quote.deadline);
-  const deadlineLabel = hasDeadline ? getDeadlineLabel(days) : 'Aguardando aprovacao da arte';
+  const deadlineLabel = hasDeadline ? getDeadlineLabel(days) : 'Aguardando';
 
   return (
-    <Link
-      href={`/orcamentos/${quote.id}`}
-      className={cn(
-        'flex items-center gap-4 px-5 py-4',
-        'bg-white border-b border-slate-100 last:border-b-0',
-        'hover:bg-slate-50/80 transition-colors duration-200 ease-out',
-        'cursor-pointer'
-      )}
-    >
-      {/* Barra lateral colorida por status */}
-      <div
-        className={cn(
-          'h-10 w-[3px] rounded-full shrink-0',
-          STATUS_BAR_COLORS[quote.status]
-        )}
-      />
+    <tr className="group hover:bg-slate-50/80 transition-colors duration-200 ease-out">
+      {/* Barra de status */}
+      <td className="py-3.5 pl-5 pr-0">
+        <div
+          className={cn('h-10 w-[3px] rounded-full', STATUS_BAR_COLORS[quote.status])}
+          aria-hidden="true"
+        />
+      </td>
 
-      {/* Coluna 1: Cliente + Tracking ID */}
-      <div className="min-w-0 flex-1 max-w-[200px]">
-        <p className="truncate text-sm font-semibold text-gray-900">
-          {clientName}
-        </p>
-        <p className="truncate text-xs text-gray-400 font-mono">
-          {quote.trackingId}
-        </p>
-      </div>
+      {/* Cliente */}
+      <td className="py-3.5 pl-4 pr-3">
+        <Link href={`/orcamentos/${quote.id}`} className="block min-w-0">
+          <p className="truncate text-sm font-semibold text-gray-900 group-hover:text-cyan-700 transition-colors duration-200">
+            {clientName}
+          </p>
+          <p className="truncate text-xs text-gray-400 font-mono mt-0.5">
+            {quote.trackingId}
+          </p>
+        </Link>
+      </td>
 
-      {/* Coluna 2: Servico + Material */}
-      <div className="flex-1 min-w-0">
-        <p className="truncate text-sm text-gray-700">
-          {quote.service}
-        </p>
-        <p className="truncate text-xs text-gray-500">
-          {quote.material}
-        </p>
-      </div>
+      {/* Serviço + Material */}
+      <td className="py-3.5 px-3">
+        <p className="truncate text-sm text-gray-700">{quote.service}</p>
+        <p className="truncate text-xs text-gray-500 mt-0.5">{quote.material}</p>
+      </td>
 
-      {/* Coluna 3: Status Badge */}
-      <div className="w-[120px] shrink-0">
+      {/* Status */}
+      <td className="py-3.5 px-3">
         <StatusBadge status={quote.status} />
-      </div>
+      </td>
 
-      {/* Coluna 4: Valor */}
-      <div className="w-[140px] shrink-0 text-right">
-        <p className="text-sm font-semibold text-gray-900">
+      {/* Valor */}
+      <td className="py-3.5 px-3 text-right">
+        <p className="text-sm font-semibold text-gray-900 tabular-nums whitespace-nowrap">
           {formatCurrency(quote.value)}
         </p>
-      </div>
+      </td>
 
-      {/* Coluna 5: Prazo + Urgencia */}
-      <div className="w-[140px] shrink-0 text-right">
-        <p className="text-sm text-gray-700 flex items-center justify-end gap-1">
-          <Calendar className="h-3.5 w-3.5 text-gray-400" />
-          {hasDeadline ? formatDate(quote.deadline) : '-'}
+      {/* Prazo */}
+      <td className="py-3.5 px-3 text-right">
+        <p className="text-sm text-gray-700 tabular-nums whitespace-nowrap">
+          {hasDeadline ? formatDate(quote.deadline) : '—'}
         </p>
-        <p className={cn('text-xs font-medium', hasDeadline ? URGENCY_TEXT[urgency] : 'text-gray-500')}>
+        <p className={cn('text-xs font-medium mt-0.5 whitespace-nowrap', hasDeadline ? URGENCY_TEXT[urgency] : 'text-gray-500')}>
           {deadlineLabel}
         </p>
-      </div>
+      </td>
 
-      {/* Coluna 6: Tags de producao */}
-      <div className="shrink-0 flex gap-1.5">
-        {quote.requiresPrinting && (
-          <span className="inline-flex items-center gap-0.5 rounded-md bg-purple-50 px-1.5 py-0.5 text-[10px] font-medium text-purple-700">
-            <Printer className="h-2.5 w-2.5" />
-            Impressao
-          </span>
-        )}
-        {quote.requiresAssembly && (
-          <span className="inline-flex items-center gap-0.5 rounded-md bg-amber-50 px-1.5 py-0.5 text-[10px] font-medium text-amber-700">
-            <Wrench className="h-2.5 w-2.5" />
-            Montagem
-          </span>
-        )}
-      </div>
-    </Link>
+      {/* Tags de produção */}
+      <td className="py-3.5 pl-3 pr-5">
+        <div className="flex items-center justify-end gap-1">
+          {quote.requiresPrinting && (
+            <span className="inline-flex items-center gap-0.5 rounded-md bg-purple-50 px-1.5 py-0.5 text-[10px] font-medium text-purple-700 ring-1 ring-inset ring-purple-600/10 whitespace-nowrap">
+              <Printer className="h-2.5 w-2.5 shrink-0" aria-hidden="true" />
+              Imp.
+            </span>
+          )}
+          {quote.requiresAssembly && (
+            <span className="inline-flex items-center gap-0.5 rounded-md bg-amber-50 px-1.5 py-0.5 text-[10px] font-medium text-amber-700 ring-1 ring-inset ring-amber-600/10 whitespace-nowrap">
+              <Wrench className="h-2.5 w-2.5 shrink-0" aria-hidden="true" />
+              Mont.
+            </span>
+          )}
+          {!quote.requiresPrinting && !quote.requiresAssembly && (
+            <span className="text-xs text-gray-300">—</span>
+          )}
+        </div>
+      </td>
+    </tr>
   );
 }

@@ -54,6 +54,11 @@ interface QuoteStore {
   scheduleInstallation: (id: string, scheduledDate: string) => void;
   checkAndMarkReady: (id: string) => void;
 
+  // File actions
+  addFileToQuote: (quoteId: string, file: FileAttachment) => void;
+  removeFileFromQuote: (quoteId: string, fileId: string) => void;
+  renameFileInQuote: (quoteId: string, fileId: string, newName: string) => void;
+
   // Ready actions
   markAsDelivered: (id: string) => void;
 
@@ -243,6 +248,26 @@ export const useQuoteStore = create<QuoteStore>((set, get) => ({
     if (updatedPrintingDone && updatedAssemblyDone && updatedInstallationDone) {
       get().updateQuote(id, { status: 'pronto' });
     }
+  },
+
+  addFileToQuote: (quoteId: string, file: FileAttachment) => {
+    const quote = get().getQuoteById(quoteId);
+    if (!quote) return;
+    get().updateQuote(quoteId, { files: [...quote.files, file] });
+  },
+
+  removeFileFromQuote: (quoteId: string, fileId: string) => {
+    const quote = get().getQuoteById(quoteId);
+    if (!quote) return;
+    get().updateQuote(quoteId, { files: quote.files.filter((f) => f.id !== fileId) });
+  },
+
+  renameFileInQuote: (quoteId: string, fileId: string, newName: string) => {
+    const quote = get().getQuoteById(quoteId);
+    if (!quote) return;
+    get().updateQuote(quoteId, {
+      files: quote.files.map((f) => (f.id === fileId ? { ...f, name: newName } : f)),
+    });
   },
 
   markAsDelivered: (id: string) => {
