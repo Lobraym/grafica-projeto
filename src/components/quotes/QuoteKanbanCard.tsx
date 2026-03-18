@@ -25,7 +25,7 @@ const STATUS_BORDER: Record<QuoteStatus, string> = {
 const URGENCY_TEXT: Record<ReturnType<typeof getDeadlineUrgency>, string> = {
   overdue: 'text-red-600',
   urgent: 'text-orange-600',
-  normal: 'text-gray-500',
+  normal: 'text-text-muted',
 } as const;
 
 function getDeadlineLabel(deadline: string): string {
@@ -49,40 +49,40 @@ export function QuoteKanbanCard({ quote }: QuoteKanbanCardProps): React.ReactEle
     <Link
       href={`/orcamentos/${quote.id}`}
       className={cn(
-        'group block bg-white rounded-xl border border-slate-200 border-l-[3px] p-5 shadow-sm cursor-pointer',
+        'group block bg-card-bg rounded-xl border border-border border-l-[3px] p-5 shadow-sm cursor-pointer',
         'transition-shadow duration-200 ease-out hover:shadow-md',
-        'focus:outline-none focus:ring-2 focus:ring-cyan-500/20',
+        'focus:outline-none focus:ring-2 focus:ring-primary/20',
         STATUS_BORDER[quote.status]
       )}
     >
       {/* Row 1: Status badge + Value */}
       <div className="flex items-center justify-between gap-3">
         <StatusBadge status={quote.status} />
-        <span className="text-sm font-bold text-gray-900">
+        <span className="text-sm font-bold text-text-primary">
           {formatCurrency(quote.value)}
         </span>
       </div>
 
       {/* Row 2: Client name + Tracking ID */}
       <div className="mt-3">
-        <p className="text-base font-semibold text-gray-900 truncate">
+        <p className="text-base font-semibold text-text-primary truncate">
           {client?.name ?? 'Cliente desconhecido'}
         </p>
-        <p className="text-xs text-gray-400 mt-0.5">
+        <p className="text-xs text-text-muted mt-0.5">
           #{quote.trackingId}
         </p>
       </div>
 
       {/* Section: Servico */}
       <div className="mt-4">
-        <p className="text-[10px] font-medium uppercase tracking-wider text-gray-400 mb-1">
+        <p className="text-[10px] font-medium uppercase tracking-wider text-text-muted mb-1">
           Servico
         </p>
-        <p className="text-sm text-gray-800 font-medium truncate">
+        <p className="text-sm text-text-secondary font-medium truncate">
           {quote.service}
         </p>
         {(quote.material || sizeLabel) && (
-          <p className="text-xs text-gray-500 mt-0.5 truncate">
+          <p className="text-xs text-text-muted mt-0.5 truncate">
             {[quote.material, sizeLabel].filter(Boolean).join(' - ')}
           </p>
         )}
@@ -90,43 +90,43 @@ export function QuoteKanbanCard({ quote }: QuoteKanbanCardProps): React.ReactEle
 
       {/* Section: Prazo de Producao */}
       <div className="mt-4">
-        <p className="text-[10px] font-medium uppercase tracking-wider text-gray-400 mb-1">
+        <p className="text-[10px] font-medium uppercase tracking-wider text-text-muted mb-1">
           Prazo de Producao
         </p>
         <div className="flex items-center gap-1.5">
-          <Calendar className="h-3.5 w-3.5 text-gray-400" />
-          <span className="text-sm text-gray-700">
+          <Calendar className="h-3.5 w-3.5 text-text-muted" />
+          <span className="text-sm text-text-secondary">
             {hasDeadline ? formatDate(quote.deadline) : 'Aguardando aprovacao'}
           </span>
-          <span className={cn('text-xs font-medium', hasDeadline ? URGENCY_TEXT[urgency] : 'text-gray-500')}>
+          <span className={cn('text-xs font-medium', hasDeadline ? URGENCY_TEXT[urgency] : 'text-text-muted')}>
             {getDeadlineLabel(quote.deadline)}
           </span>
         </div>
       </div>
 
       {/* Bottom: Production tags + Detalhes link */}
-      <div className="mt-4 flex items-center justify-between pt-3 border-t border-slate-100">
+      <div className="mt-4 flex items-center justify-between pt-3 border-t border-border">
         <div className="flex gap-2">
           {quote.requiresPrinting && (
-            <span className="inline-flex items-center gap-1 rounded-md bg-purple-50 px-2 py-0.5 text-[10px] font-medium text-purple-700 ring-1 ring-inset ring-purple-600/10">
-              <Printer className="h-3 w-3" />
+            <span className="inline-flex items-center gap-1 rounded-md bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary ring-1 ring-inset ring-primary/20">
+              <Printer className="h-3 w-3" aria-hidden="true" />
               Impressao
             </span>
           )}
           {quote.requiresAssembly && (
-            <span className="inline-flex items-center gap-1 rounded-md bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-amber-700 ring-1 ring-inset ring-amber-600/10">
-              <Wrench className="h-3 w-3" />
+            <span className="inline-flex items-center gap-1 rounded-md bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary ring-1 ring-inset ring-primary/20">
+              <Wrench className="h-3 w-3" aria-hidden="true" />
               Montagem
             </span>
           )}
           {hasInstallation && (
-            <span className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/10">
+            <span className="inline-flex items-center gap-1 rounded-md bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary ring-1 ring-inset ring-primary/20">
               Instalacao
             </span>
           )}
         </div>
 
-        <span className="inline-flex items-center gap-1 text-xs font-medium text-cyan-600 group-hover:text-cyan-700 transition-colors duration-200 ease-out">
+        <span className="inline-flex items-center gap-1 text-xs font-medium text-primary group-hover:text-primary-hover transition-colors duration-200 ease-out">
           Detalhes
           <ArrowRight className="h-3.5 w-3.5" />
         </span>

@@ -3,32 +3,35 @@
 
 /* ─── Design System: GraficaPro ─── */
 :root {
-  /* Core palette */
-  --primary: #0891B2;
-  --primary-hover: #0E7490;
-  --secondary: #06B6D4;
-  --accent: #10B981;
+  /* Core palette - LIGHT THEME (mantém o claro atual) */
+  --primary: #0891b2;
+  --primary-hover: #0e7490;
+  --secondary: #06b6d4;
+  --accent: #10b981;
   --accent-hover: #059669;
 
   /* Surfaces */
-  --background: #F8FAFC;
-  --sidebar-bg: #0F172A;
+  --background: #f8fafc;
+  --sidebar-bg: #0f172a;
   --sidebar-bg-end: #020617;
-  --card-bg: #FFFFFF;
+  --card-bg: #ffffff;
+  --card-bg-secondary: #f1f5f9;
 
   /* Text */
-  --text-primary: #0F172A;
+  --text-primary: #0f172a;
   --text-secondary: #475569;
-  --text-muted: #94A3B8;
+  --text-muted: #94a3b8;
+  --text-subtle: #64748b;
 
   /* Borders & misc */
-  --border: #E2E8F0;
-  --ring: #0891B2;
+  --border: #e2e8f0;
+  --border-subtle: #cbd5e1;
+  --ring: #0891b2;
   --ring-alpha: rgba(8, 145, 178, 0.2);
 
   /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 3px 0 rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.03), 0 1px 3px 0 rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.12);
 }
 
 @theme inline {
@@ -39,6 +42,7 @@
   --color-sidebar-text: var(--text-muted);
   --color-sidebar-active: #FFFFFF;
   --color-card-bg: var(--card-bg);
+  --color-card-bg-secondary: var(--card-bg-secondary);
   --color-border: var(--border);
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
@@ -48,6 +52,7 @@
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-text-muted: var(--text-muted);
+  --color-text-subtle: var(--text-subtle);
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 }
 
@@ -74,6 +79,29 @@ body {
 :focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
+}
+
+/* Remover contorno dos gráficos (ApexCharts) ao clicar */
+.apexcharts-canvas:focus,
+.apexcharts-canvas:focus-visible,
+.apexcharts-legend-series:focus,
+.apexcharts-legend-series:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Qualquer elemento focável dentro dos gráficos */
+.apexcharts-canvas *:focus,
+.apexcharts-canvas *:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Retângulos de seleção/zoom do ApexCharts */
+.apexcharts-selection-rect,
+.apexcharts-zoom-rect {
+  stroke: transparent !important;
+  fill: transparent !important;
 }
 
 /* ─── Scrollbar ─── */
@@ -115,6 +143,11 @@ body {
 .card-hover:hover {
   box-shadow: var(--shadow-md);
   border-color: #CBD5E1;
+}
+
+/* Dashboard card shadow helper */
+.shadow-card {
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
 }
 
 /* Buttons */
@@ -179,52 +212,119 @@ body {
   color: var(--text-primary);
 }
 
-/* ─── Blue Theme ─── */
+/* ─── Blue Theme (dark completo igual ao dashboard) ─── */
 .blue-theme {
-  --background: #0c1929;
-  --card-bg: #111d2e;
-  --text-primary: #e2e8f0;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --border: #1e3a5f;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 3px 0 rgba(0, 0, 0, 0.15);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+  /* Fundo e superfícies (paleta fornecida) */
+  --background: #0f172a;          /* fundo da página */
+  --sidebar-bg: #0f172a;
+  --sidebar-bg-end: #020617;
+  --card-bg: #1e293b;             /* cards e containers */
+  --card-bg-secondary: #151e2e;   /* cards secundários (ex.: Produção) */
+
+  /* Texto */
+  --text-primary: #f1f5f9;        /* títulos principais */
+  --text-secondary: #e2e8f0;      /* texto secundário */
+  --text-muted: #94a3b8;          /* labels/descrições */
+  --text-subtle: #64748b;         /* eixos, legendas */
+
+  /* Bordas e hover sutis */
+  --border: #334155;
+  --border-subtle: #334155;
+
+  /* Cores de destaque (métricas) */
+  --metric-total-clients: #06b6d4;
+  --metric-total-clients-hover: #22d3ee;
+  --metric-quotes: #f59e0b;
+  --metric-quotes-hover: #fbbf24;
+  --metric-total-revenue: #10b981;
+  --metric-total-revenue-hover: #34d399;
+  --metric-average-ticket: #8b5cf6;
+  --metric-average-ticket-hover: #a78bfa;
+
+  /* Status */
+  --status-pending: #3b82f6;
+  --status-art: #f97316;
+  --status-approval: #f59e0b;
+  --status-production: #06b6d4;
+  --status-ready: #10b981;
+  --status-delivered: #64748b;
+
+  /* Sombras para cartões escuros */
+  --shadow-sm: 0 8px 24px rgba(15, 23, 42, 0.7);
+  --shadow-md: 0 20px 45px rgba(15, 23, 42, 0.9);
 }
 
 .blue-theme ::selection {
-  background-color: rgba(8, 145, 178, 0.3);
+  background-color: rgba(20, 184, 166, 0.35);
 }
 
 .blue-theme ::-webkit-scrollbar-thumb {
-  background: #1e3a5f;
+  background: #1f2937;
 }
 
 .blue-theme ::-webkit-scrollbar-thumb:hover {
-  background: #2d5a8e;
+  background: #334155;
 }
 
 .blue-theme * {
-  scrollbar-color: #1e3a5f transparent;
+  scrollbar-color: #1f2937 transparent;
 }
 
 .blue-theme .btn-secondary {
-  background: #162236;
+  background: #111827;
   color: #e2e8f0;
-  border-color: #1e3a5f;
+  border-color: #1f2937;
 }
 
 .blue-theme .btn-secondary:hover {
-  background: #1e3a5f;
-  border-color: #2d5a8e;
+  background: #1f2937;
+  border-color: #334155;
 }
 
 .blue-theme .btn-ghost:hover {
-  background: #162236;
+  background: #111827;
   color: #e2e8f0;
 }
 
 .blue-theme .card-hover:hover {
-  border-color: #2d5a8e;
+  border-color: #334155;
+}
+
+/* Overrides de classes Tailwind claras quando o tema é dark.
+   Isso garante que nada fique branco/brilhante no dark mode. */
+.blue-theme .bg-white {
+  background-color: var(--card-bg) !important;
+}
+
+.blue-theme .bg-slate-50,
+.blue-theme .bg-slate-100 {
+  background-color: #0b1726 !important;
+}
+
+.blue-theme .border-slate-100,
+.blue-theme .divide-slate-100 {
+  border-color: var(--border) !important;
+}
+
+.blue-theme .text-slate-900,
+.blue-theme .text-slate-800 {
+  color: var(--text-primary) !important;
+}
+
+.blue-theme .text-slate-700,
+.blue-theme .text-slate-600 {
+  color: var(--text-secondary) !important;
+}
+
+.blue-theme .text-slate-500,
+.blue-theme .text-slate-400 {
+  color: var(--text-muted) !important;
+}
+
+.blue-theme .hover\:bg-slate-50\/80:hover,
+.blue-theme .hover\:bg-slate-50\/60:hover,
+.blue-theme .hover\:bg-slate-50\/50:hover {
+  background-color: rgba(15, 23, 42, 0.9) !important;
 }
 
 /* ─── Animations ─── */

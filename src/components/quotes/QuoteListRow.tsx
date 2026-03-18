@@ -24,7 +24,7 @@ const STATUS_BAR_COLORS: Record<QuoteStatus, string> = {
 const URGENCY_TEXT: Record<ReturnType<typeof getDeadlineUrgency>, string> = {
   overdue: 'text-red-600',
   urgent: 'text-orange-600',
-  normal: 'text-gray-500',
+  normal: 'text-text-muted',
 } as const;
 
 function getDeadlineLabel(days: number): string {
@@ -39,33 +39,33 @@ function getDeadlineLabel(days: number): string {
  */
 export function QuoteListTable({ children }: { readonly children: React.ReactNode }): React.ReactElement {
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+    <div className="bg-card-bg rounded-xl border border-border shadow-sm overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[860px]">
           <thead>
-            <tr className="border-b border-slate-200 bg-slate-50/80">
+            <tr className="border-b border-border bg-card-bg-secondary/80">
               <th className="w-[3px] py-3 pl-5 pr-0" aria-hidden="true" />
-              <th className="py-3 pl-4 pr-3 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+              <th className="py-3 pl-4 pr-3 text-left text-[11px] font-semibold uppercase tracking-wider text-text-muted">
                 Cliente
               </th>
-              <th className="py-3 px-3 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+              <th className="py-3 px-3 text-left text-[11px] font-semibold uppercase tracking-wider text-text-muted">
                 Serviço
               </th>
-              <th className="py-3 px-3 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-400 w-[130px]">
+              <th className="py-3 px-3 text-left text-[11px] font-semibold uppercase tracking-wider text-text-muted w-[130px]">
                 Status
               </th>
-              <th className="py-3 px-3 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-400 w-[110px]">
+              <th className="py-3 px-3 text-right text-[11px] font-semibold uppercase tracking-wider text-text-muted w-[110px]">
                 Valor
               </th>
-              <th className="py-3 px-3 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-400 w-[130px]">
+              <th className="py-3 px-3 text-right text-[11px] font-semibold uppercase tracking-wider text-text-muted w-[130px]">
                 Prazo
               </th>
-              <th className="py-3 pl-3 pr-5 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-400 w-[140px]">
+              <th className="py-3 pl-3 pr-5 text-right text-[11px] font-semibold uppercase tracking-wider text-text-muted w-[140px]">
                 Produção
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-border">
             {children}
           </tbody>
         </table>
@@ -85,7 +85,7 @@ export function QuoteListRow({ quote }: QuoteListRowProps): React.ReactElement {
   const deadlineLabel = hasDeadline ? getDeadlineLabel(days) : 'Aguardando';
 
   return (
-    <tr className="group hover:bg-slate-50/80 transition-colors duration-200 ease-out">
+    <tr className="group hover:bg-card-bg-secondary/70 transition-colors duration-200 ease-out">
       {/* Barra de status */}
       <td className="py-3.5 pl-5 pr-0">
         <div
@@ -97,10 +97,10 @@ export function QuoteListRow({ quote }: QuoteListRowProps): React.ReactElement {
       {/* Cliente */}
       <td className="py-3.5 pl-4 pr-3">
         <Link href={`/orcamentos/${quote.id}`} className="block min-w-0">
-          <p className="truncate text-sm font-semibold text-gray-900 group-hover:text-cyan-700 transition-colors duration-200">
+          <p className="truncate text-sm font-semibold text-text-primary group-hover:text-primary transition-colors duration-200">
             {clientName}
           </p>
-          <p className="truncate text-xs text-gray-400 font-mono mt-0.5">
+          <p className="truncate text-xs text-text-muted font-mono mt-0.5">
             {quote.trackingId}
           </p>
         </Link>
@@ -108,8 +108,8 @@ export function QuoteListRow({ quote }: QuoteListRowProps): React.ReactElement {
 
       {/* Serviço + Material */}
       <td className="py-3.5 px-3">
-        <p className="truncate text-sm text-gray-700">{quote.service}</p>
-        <p className="truncate text-xs text-gray-500 mt-0.5">{quote.material}</p>
+        <p className="truncate text-sm text-text-secondary">{quote.service}</p>
+        <p className="truncate text-xs text-text-muted mt-0.5">{quote.material}</p>
       </td>
 
       {/* Status */}
@@ -119,17 +119,22 @@ export function QuoteListRow({ quote }: QuoteListRowProps): React.ReactElement {
 
       {/* Valor */}
       <td className="py-3.5 px-3 text-right">
-        <p className="text-sm font-semibold text-gray-900 tabular-nums whitespace-nowrap">
+        <p className="text-sm font-semibold text-text-primary tabular-nums whitespace-nowrap">
           {formatCurrency(quote.value)}
         </p>
       </td>
 
       {/* Prazo */}
       <td className="py-3.5 px-3 text-right">
-        <p className="text-sm text-gray-700 tabular-nums whitespace-nowrap">
+        <p className="text-sm text-text-secondary tabular-nums whitespace-nowrap">
           {hasDeadline ? formatDate(quote.deadline) : '—'}
         </p>
-        <p className={cn('text-xs font-medium mt-0.5 whitespace-nowrap', hasDeadline ? URGENCY_TEXT[urgency] : 'text-gray-500')}>
+        <p
+          className={cn(
+            'text-xs font-medium mt-0.5 whitespace-nowrap',
+            hasDeadline ? URGENCY_TEXT[urgency] : 'text-text-muted'
+          )}
+        >
           {deadlineLabel}
         </p>
       </td>
@@ -138,19 +143,19 @@ export function QuoteListRow({ quote }: QuoteListRowProps): React.ReactElement {
       <td className="py-3.5 pl-3 pr-5">
         <div className="flex items-center justify-end gap-1">
           {quote.requiresPrinting && (
-            <span className="inline-flex items-center gap-0.5 rounded-md bg-purple-50 px-1.5 py-0.5 text-[10px] font-medium text-purple-700 ring-1 ring-inset ring-purple-600/10 whitespace-nowrap">
+            <span className="inline-flex items-center gap-0.5 rounded-md bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary ring-1 ring-inset ring-primary/20 whitespace-nowrap">
               <Printer className="h-2.5 w-2.5 shrink-0" aria-hidden="true" />
               Imp.
             </span>
           )}
           {quote.requiresAssembly && (
-            <span className="inline-flex items-center gap-0.5 rounded-md bg-amber-50 px-1.5 py-0.5 text-[10px] font-medium text-amber-700 ring-1 ring-inset ring-amber-600/10 whitespace-nowrap">
+            <span className="inline-flex items-center gap-0.5 rounded-md bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary ring-1 ring-inset ring-primary/20 whitespace-nowrap">
               <Wrench className="h-2.5 w-2.5 shrink-0" aria-hidden="true" />
               Mont.
             </span>
           )}
           {!quote.requiresPrinting && !quote.requiresAssembly && (
-            <span className="text-xs text-gray-300">—</span>
+            <span className="text-xs text-text-muted">—</span>
           )}
         </div>
       </td>

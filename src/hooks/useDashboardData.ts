@@ -40,6 +40,7 @@ interface PipelineStage {
   readonly available: number;
   readonly inProgress: number;
   readonly done: number;
+  readonly delivered: number;
 }
 
 interface ProductionPipeline {
@@ -72,6 +73,8 @@ function countByStage(
   quotes: readonly Quote[],
   stageGetter: (q: Quote) => string | undefined,
   requiresGetter: (q: Quote) => boolean | undefined,
+  deliveredQuotes: readonly Quote[],
+  deliveredRequiresGetter: (q: Quote) => boolean | undefined,
 ): PipelineStage {
   let available = 0;
   let inProgress = 0;
@@ -85,7 +88,12 @@ function countByStage(
     else if (stage === 'concluida') done++;
   }
 
-  return { available, inProgress, done } as const;
+  let delivered = 0;
+  for (const q of deliveredQuotes) {
+    if (deliveredRequiresGetter(q)) delivered++;
+  }
+
+  return { available, inProgress, done, delivered } as const;
 }
 
 export function useDashboardData(): DashboardData {
@@ -143,24 +151,31 @@ export function useDashboardData(): DashboardData {
       }))
       .filter((item) => item.count > 0);
 
-    // Production pipeline (only quotes em_producao)
+    // Production pipeline (only quotes em_producao) + entregues para a série "Entregue"
     const inProduction = quotes.filter((q) => q.status === 'em_producao');
+    const deliveredQuotes = quotes.filter((q) => q.status === 'entregue');
 
     const productionPipeline: ProductionPipeline = {
       printing: countByStage(
         inProduction,
         (q) => q.printingStage,
         (q) => q.requiresPrinting,
+        deliveredQuotes,
+        (q) => q.requiresPrinting,
       ),
       assembly: countByStage(
         inProduction,
         (q) => q.assemblyStage,
+        (q) => q.requiresAssembly,
+        deliveredQuotes,
         (q) => q.requiresAssembly,
       ),
       installation: countByStage(
         inProduction,
         (q) => q.installationStage,
         (q) => q.requiresInstallation,
+        deliveredQuotes,
+        (q) => q.requiresInstallation ?? false,
       ),
     };
 

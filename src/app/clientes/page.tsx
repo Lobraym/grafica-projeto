@@ -60,7 +60,7 @@ export default function ClientesPage(): React.ReactElement {
       <PageHeader title="Clientes" subtitle={`${clients.length} clientes cadastrados`}>
         <Link
           href="/clientes/novo"
-          className="inline-flex items-center gap-2 rounded-lg bg-cyan-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out cursor-pointer"
+          className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors duration-200 ease-out cursor-pointer"
         >
           <Plus className="h-4 w-4" />
           Novo Cliente
@@ -75,7 +75,7 @@ export default function ClientesPage(): React.ReactElement {
           placeholder="Buscar por nome, telefone, email ou CPF/CNPJ..."
         />
         {isSearching && (
-          <span className="shrink-0 text-sm text-gray-500">
+          <span className="shrink-0 text-sm text-text-muted">
             {displayedClients.length} resultado{displayedClients.length !== 1 ? 's' : ''}
           </span>
         )}
@@ -83,7 +83,7 @@ export default function ClientesPage(): React.ReactElement {
 
       {/* Alfabeto */}
       {!isSearching && (
-        <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+        <div className="rounded-xl border border-border bg-card-bg p-4 shadow-sm">
           <AlphabetGrid
             letters={ALPHABET}
             activeLetter={activeLetter}
@@ -97,9 +97,9 @@ export default function ClientesPage(): React.ReactElement {
       {showClients && displayedClients.length > 0 && (
         <div className="space-y-2">
           {activeLetter && !isSearching && (
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-text-primary">
               Letra {activeLetter}
-              <span className="ml-2 text-sm font-normal text-gray-500">
+              <span className="ml-2 text-sm font-normal text-text-muted">
                 ({displayedClients.length} cliente{displayedClients.length !== 1 ? 's' : ''})
               </span>
             </h2>
@@ -143,14 +143,6 @@ export default function ClientesPage(): React.ReactElement {
         />
       )}
 
-      {!showClients && clients.length > 0 && (
-        <div className="rounded-xl border border-dashed border-gray-200 bg-gray-50/50 py-12 text-center">
-          <Users className="mx-auto h-8 w-8 text-gray-300" />
-          <p className="mt-3 text-sm text-gray-500">
-            Selecione uma letra ou busque para visualizar os clientes
-          </p>
-        </div>
-      )}
     </div>
   );
 }

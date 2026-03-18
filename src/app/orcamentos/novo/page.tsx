@@ -25,10 +25,10 @@ function NovoOrcamentoContent(): React.ReactElement {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Novo Orcamento" subtitle="Preencha os dados do orcamento" />
+      <PageHeader title="Novo Orçamento" subtitle="Preencha os dados do orçamento" />
 
       <div className="mx-auto max-w-3xl">
-        <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm sm:p-8">
+        <div className="rounded-xl border border-border bg-card-bg p-6 shadow-lg shadow-black/20 sm:p-8">
           <QuoteForm
             onSubmit={handleSubmit}
             onCancel={handleCancel}

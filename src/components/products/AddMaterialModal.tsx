@@ -8,7 +8,7 @@ import { materialSchema } from '@/lib/validators';
 import type { MaterialFormData } from '@/types/product';
 
 const inputBase =
-  'mt-1 block w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20';
+  'mt-1 block w-full rounded-lg border border-border bg-card-bg px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20';
 const errorInput = 'border-red-300 focus:border-red-400 focus:ring-red-500/20';
 
 interface AddMaterialModalProps {
@@ -81,13 +81,13 @@ export function AddMaterialModal({
       aria-modal="true"
       aria-labelledby="add-material-title"
     >
-      <div className="w-full max-w-md animate-in fade-in zoom-in-95 rounded-2xl bg-white p-6 shadow-xl">
-        <h3 id="add-material-title" className="text-lg font-semibold text-slate-900">
+      <div className="w-full max-w-md animate-in fade-in zoom-in-95 rounded-2xl bg-card-bg border border-border p-6 shadow-xl">
+        <h3 id="add-material-title" className="text-lg font-semibold text-text-primary">
           Adicionar novo material
         </h3>
         <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-4" noValidate>
           <div>
-            <label htmlFor="material-name" className="block text-sm font-medium text-slate-700">
+            <label htmlFor="material-name" className="block text-sm font-medium text-text-muted">
               Nome do material <span className="text-red-500">*</span>
             </label>
             <input
@@ -103,7 +103,7 @@ export function AddMaterialModal({
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="material-basePrice" className="block text-sm font-medium text-slate-700">
+              <label htmlFor="material-basePrice" className="block text-sm font-medium text-text-muted">
                 Preço (R$) <span className="text-red-500">*</span>
               </label>
               <input
@@ -120,7 +120,7 @@ export function AddMaterialModal({
               )}
             </div>
             <div>
-              <label htmlFor="material-cost" className="block text-sm font-medium text-slate-700">
+              <label htmlFor="material-cost" className="block text-sm font-medium text-text-muted">
                 Custo (R$) <span className="text-red-500">*</span>
               </label>
               <input
@@ -138,7 +138,7 @@ export function AddMaterialModal({
             </div>
           </div>
           <div>
-            <label htmlFor="material-margin" className="block text-sm font-medium text-slate-700">
+            <label htmlFor="material-margin" className="block text-sm font-medium text-text-muted">
               Margem de lucro (%)
             </label>
             <input
@@ -162,14 +162,14 @@ export function AddMaterialModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-200"
+              className="rounded-lg border border-border bg-card-bg px-4 py-2.5 text-sm font-medium text-text-primary hover:bg-card-bg-secondary focus:outline-none focus:ring-2 focus:ring-primary/20"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="rounded-lg bg-cyan-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 disabled:opacity-50"
+              className="rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-50"
             >
               {isSubmitting ? 'Salvando...' : 'Salvar'}
             </button>

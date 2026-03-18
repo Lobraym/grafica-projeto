@@ -11,6 +11,7 @@ import { ArtChecklist } from '@/components/art-production/ArtChecklist';
 import { useQuoteStore } from '@/stores/useQuoteStore';
 import type { ArtProductionTab } from '@/types/common';
 import type { Quote } from '@/types/quote';
+import { useTheme } from '@/context/ThemeContext';
 
 // bundle-dynamic-imports: modais pesados carregam sob demanda
 const ArtReviewForm = dynamic(
@@ -41,6 +42,8 @@ export default function ProducaoArtesPage(): React.ReactElement {
 
   const quotes = useQuoteStore((s) => s.quotes);
   const startArtProduction = useQuoteStore((s) => s.startArtProduction);
+  const { theme } = useTheme();
+  const isBlueTheme = theme === 'blue';
 
   const available = useMemo(
     () =>
@@ -150,7 +153,13 @@ export default function ProducaoArtesPage(): React.ReactElement {
               />
 
               {isSelected && (
-                <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4 space-y-4">
+                <div
+                  className={
+                    isBlueTheme
+                      ? 'rounded-xl border border-border bg-card-bg p-4 space-y-4'
+                      : 'rounded-xl border border-slate-200 bg-slate-50/50 p-4 space-y-4'
+                  }
+                >
                   <ArtChecklist
                     quoteId={quote.id}
                     checklist={quote.artChecklist}
@@ -160,7 +169,11 @@ export default function ProducaoArtesPage(): React.ReactElement {
                     <button
                       type="button"
                       onClick={() => handleOpenReview(quote.id)}
-                      className="flex w-full items-center justify-center gap-2 rounded-lg bg-cyan-600 px-3 py-2.5 text-sm font-medium text-white transition-colors duration-200 ease-out hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 cursor-pointer"
+                      className={
+                        isBlueTheme
+                          ? 'flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-3 py-2.5 text-sm font-medium text-white transition-colors duration-200 ease-out hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer'
+                          : 'flex w-full items-center justify-center gap-2 rounded-lg bg-cyan-600 px-3 py-2.5 text-sm font-medium text-white transition-colors duration-200 ease-out hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 cursor-pointer'
+                      }
                     >
                       <Send className="h-4 w-4" />
                       Enviar para Revisão do Cliente

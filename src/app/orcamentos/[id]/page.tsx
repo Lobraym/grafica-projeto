@@ -49,9 +49,9 @@ import type { FileAttachment } from '@/types/common';
 import { useState, useMemo, useRef } from 'react';
 
 const URGENCY_BG: Record<ReturnType<typeof getDeadlineUrgency>, string> = {
-  overdue: 'bg-red-50 text-red-700 border-red-200',
-  urgent: 'bg-orange-50 text-orange-700 border-orange-200',
-  normal: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  overdue: 'bg-red-500/10 text-red-200 border-red-500/20',
+  urgent: 'bg-orange-500/10 text-orange-200 border-orange-500/20',
+  normal: 'bg-primary/10 text-primary border-primary/20',
 } as const;
 
 function getDeadlineLabel(deadline: string): string {
@@ -89,13 +89,13 @@ export default function QuoteDetailPage(): React.ReactElement {
   if (!quote) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
-        <FileText className="h-12 w-12 text-gray-300" />
-        <h2 className="mt-4 text-lg font-semibold text-gray-900">Orçamento não encontrado</h2>
-        <p className="mt-1 text-sm text-gray-500">O orçamento solicitado não existe ou foi removido.</p>
+        <FileText className="h-12 w-12 text-text-muted" />
+        <h2 className="mt-4 text-lg font-semibold text-text-primary">Orçamento não encontrado</h2>
+        <p className="mt-1 text-sm text-text-muted">O orçamento solicitado não existe ou foi removido.</p>
         <button
           type="button"
           onClick={() => router.push('/orcamentos')}
-          className="mt-6 inline-flex items-center gap-2 rounded-lg bg-cyan-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-cyan-700 transition-colors duration-200 ease-out cursor-pointer"
+          className="mt-6 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white hover:bg-primary-hover transition-colors duration-200 ease-out cursor-pointer"
         >
           Voltar para Orçamentos
         </button>
@@ -180,22 +180,22 @@ export default function QuoteDetailPage(): React.ReactElement {
     <>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-slate-200 pb-6 print:hidden">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-border pb-6 print:hidden">
           <div className="flex items-center gap-4">
             <button
               type="button"
               onClick={() => router.push('/orcamentos')}
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-gray-500 hover:bg-slate-50 hover:text-gray-700 transition-colors duration-200 ease-out cursor-pointer"
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-text-muted hover:bg-card-bg-secondary hover:text-text-primary transition-colors duration-200 ease-out cursor-pointer"
               aria-label="Voltar"
             >
               <ArrowLeft className="h-4 w-4" />
             </button>
             <div>
               <div className="flex items-center gap-3">
-                <h1 className="text-xl font-semibold text-gray-900">{quote.service}</h1>
+                <h1 className="text-xl font-semibold text-text-primary">{quote.service}</h1>
                 <StatusBadge status={quote.status} />
               </div>
-              <p className="mt-0.5 text-sm text-gray-500">
+              <p className="mt-0.5 text-sm text-text-muted">
                 ID: {quote.trackingId}
               </p>
             </div>
@@ -205,7 +205,7 @@ export default function QuoteDetailPage(): React.ReactElement {
             <button
               type="button"
               onClick={handlePrintSummary}
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors duration-200 ease-out cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-lg border border-border bg-card-bg px-4 py-2.5 text-sm font-medium text-text-secondary hover:bg-card-bg-secondary transition-colors duration-200 ease-out cursor-pointer"
             >
               <Printer className="h-4 w-4" />
               Imprimir Resumo
@@ -214,7 +214,7 @@ export default function QuoteDetailPage(): React.ReactElement {
             <button
               type="button"
               onClick={handleCopyLink}
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors duration-200 ease-out cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-lg border border-border bg-card-bg px-4 py-2.5 text-sm font-medium text-text-secondary hover:bg-card-bg-secondary transition-colors duration-200 ease-out cursor-pointer"
             >
               <Copy className="h-4 w-4" />
               {copiedLink ? 'Copiado!' : 'Copiar Link'}
@@ -224,7 +224,7 @@ export default function QuoteDetailPage(): React.ReactElement {
               <button
                 type="button"
                 onClick={handleStartProduction}
-                className="inline-flex items-center gap-2 rounded-lg bg-cyan-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 transition-colors duration-200 ease-out cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-primary-hover transition-colors duration-200 ease-out cursor-pointer"
               >
                 <Play className="h-4 w-4" />
                 Iniciar Produção de Arte
@@ -234,8 +234,8 @@ export default function QuoteDetailPage(): React.ReactElement {
         </div>
 
         {/* Timeline */}
-      <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-        <h2 className="mb-5 text-sm font-semibold text-gray-900 uppercase tracking-wider">
+      <div className="bg-card-bg rounded-xl border border-border p-6 shadow-sm">
+        <h2 className="mb-5 text-sm font-semibold text-text-primary uppercase tracking-wider">
           Progresso
         </h2>
         <QuoteStatusTimeline status={quote.status} />
@@ -245,8 +245,8 @@ export default function QuoteDetailPage(): React.ReactElement {
         {/* Coluna principal */}
         <div className="space-y-6 lg:col-span-2">
           {/* Detalhes do Servico */}
-          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-            <h2 className="mb-4 text-sm font-semibold text-gray-900 uppercase tracking-wider">
+          <div className="bg-card-bg rounded-xl border border-border p-6 shadow-sm">
+            <h2 className="mb-4 text-sm font-semibold text-text-primary uppercase tracking-wider">
               Detalhes do Serviço
             </h2>
 
@@ -260,14 +260,14 @@ export default function QuoteDetailPage(): React.ReactElement {
                 icon={DollarSign}
                 label="Valor"
                 value={formatCurrency(quote.value)}
-                valueClassName="text-lg font-bold text-gray-900"
+                valueClassName="text-lg font-bold text-text-primary"
               />
             </div>
 
             {/* Prazo */}
-            <div className="mt-5 pt-5 border-t border-slate-200">
+            <div className="mt-5 pt-5 border-t border-border">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-sm text-text-secondary">
                   <Calendar className="h-4 w-4" />
                   <span>{hasDeadline ? `Prazo de produção: ${formatDate(quote.deadline)}` : 'Prazo de produção aguardando aprovação da arte'}</span>
                 </div>
@@ -286,43 +286,43 @@ export default function QuoteDetailPage(): React.ReactElement {
 
             {/* Descricao */}
             {quote.description && (
-              <div className="mt-5 pt-5 border-t border-slate-200">
-                <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
+              <div className="mt-5 pt-5 border-t border-border">
+                <p className="text-xs font-medium text-text-muted uppercase tracking-wider mb-2">
                   Descrição
                 </p>
-                <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+                <p className="text-sm text-text-secondary leading-relaxed whitespace-pre-wrap">
                   {quote.description}
                 </p>
               </div>
             )}
 
             {/* Etapas */}
-            <div className="mt-5 pt-5 border-t border-slate-200 flex flex-wrap gap-3">
+            <div className="mt-5 pt-5 border-t border-border flex flex-wrap gap-3">
               {quote.requiresPrinting && (
-                <span className="inline-flex items-center gap-1.5 rounded-lg bg-purple-50 px-3 py-1.5 text-xs font-medium text-purple-700">
+                <span className="inline-flex items-center gap-1.5 rounded-lg bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary border border-primary/20">
                   <Printer className="h-3.5 w-3.5" />
                   Impressão
                 </span>
               )}
               {quote.requiresAssembly && (
-                <span className="inline-flex items-center gap-1.5 rounded-lg bg-amber-50 px-3 py-1.5 text-xs font-medium text-amber-700">
+                <span className="inline-flex items-center gap-1.5 rounded-lg bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary border border-primary/20">
                   <Wrench className="h-3.5 w-3.5" />
                   Montagem
                 </span>
               )}
               {hasInstallation && (
-                <span className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700">
+                <span className="inline-flex items-center gap-1.5 rounded-lg bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary border border-primary/20">
                   <MapPin className="h-3.5 w-3.5" />
                   Instalação
                 </span>
               )}
               {!quote.requiresPrinting && !quote.requiresAssembly && !hasInstallation && (
-                <span className="text-xs text-gray-400">Nenhuma etapa de produção definida</span>
+                <span className="text-xs text-text-muted">Nenhuma etapa de produção definida</span>
               )}
             </div>
 
             {hasInstallation && (
-              <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50/40 p-4">
+              <div className="mt-4 rounded-xl border border-primary/40 bg-primary/5 p-4">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <DetailItem icon={MapPin} label="Endereço da instalação" value={installationLabel || '-'} />
                   <DetailItem
@@ -336,15 +336,15 @@ export default function QuoteDetailPage(): React.ReactElement {
           </div>
 
           {/* Anexos / Referências */}
-          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+          <div className="bg-card-bg rounded-xl border border-border p-6 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
+              <h2 className="text-sm font-semibold text-text-primary uppercase tracking-wider">
                 Anexos / Referências
               </h2>
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-cyan-600 px-3 py-2 text-xs font-medium text-white hover:bg-cyan-700 transition-colors duration-200 ease-out cursor-pointer min-h-[36px]"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-medium text-white hover:bg-primary-hover transition-colors duration-200 ease-out cursor-pointer min-h-[36px]"
               >
                 <Plus className="h-3.5 w-3.5" aria-hidden="true" />
                 Adicionar
@@ -364,10 +364,10 @@ export default function QuoteDetailPage(): React.ReactElement {
                 {quote.files.map((file) => (
                   <div
                     key={file.id}
-                    className="group flex items-center gap-3 rounded-lg border border-slate-200 px-4 py-3 hover:bg-slate-50 transition-colors duration-200"
+                    className="group flex items-center gap-3 rounded-lg border border-border bg-card-bg px-4 py-3 hover:bg-card-bg-secondary transition-colors duration-200"
                   >
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 group-hover:bg-slate-200 transition-colors duration-200">
-                      <FileText className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-card-bg-secondary group-hover:bg-card-bg px-2 transition-colors duration-200">
+                      <FileText className="h-4 w-4 text-text-muted" aria-hidden="true" />
                     </div>
 
                     <div className="min-w-0 flex-1">
@@ -381,14 +381,14 @@ export default function QuoteDetailPage(): React.ReactElement {
                               if (e.key === 'Enter') handleConfirmRename();
                               if (e.key === 'Escape') handleCancelRename();
                             }}
-                            className="flex-1 rounded-md border border-cyan-400 px-2 py-1 text-sm text-gray-900 focus:ring-2 focus:ring-cyan-500/20 focus:outline-none"
+                            className="flex-1 rounded-md border border-primary/60 bg-card-bg px-2 py-1 text-sm text-text-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
                             autoFocus
                             aria-label="Renomear arquivo"
                           />
                           <button
                             type="button"
                             onClick={handleConfirmRename}
-                            className="flex h-7 w-7 items-center justify-center rounded-md text-emerald-600 hover:bg-emerald-50 transition-colors cursor-pointer"
+                            className="flex h-7 w-7 items-center justify-center rounded-md text-accent hover:bg-accent/10 transition-colors cursor-pointer"
                             aria-label="Confirmar renomeação"
                           >
                             <Check className="h-3.5 w-3.5" />
@@ -396,7 +396,7 @@ export default function QuoteDetailPage(): React.ReactElement {
                           <button
                             type="button"
                             onClick={handleCancelRename}
-                            className="flex h-7 w-7 items-center justify-center rounded-md text-gray-400 hover:bg-slate-100 transition-colors cursor-pointer"
+                            className="flex h-7 w-7 items-center justify-center rounded-md text-text-muted hover:bg-card-bg-secondary transition-colors cursor-pointer"
                             aria-label="Cancelar renomeação"
                           >
                             <X className="h-3.5 w-3.5" />
@@ -404,8 +404,8 @@ export default function QuoteDetailPage(): React.ReactElement {
                         </div>
                       ) : (
                         <>
-                          <p className="truncate text-sm font-medium text-gray-900">{file.name}</p>
-                          <p className="text-xs text-gray-500">{file.type}</p>
+                          <p className="truncate text-sm font-medium text-text-primary">{file.name}</p>
+                          <p className="text-xs text-text-muted">{file.type}</p>
                         </>
                       )}
                     </div>
@@ -415,7 +415,7 @@ export default function QuoteDetailPage(): React.ReactElement {
                         <button
                           type="button"
                           onClick={() => handleDownloadFile(file)}
-                          className="flex h-8 w-8 items-center justify-center rounded-md text-gray-400 hover:bg-slate-100 hover:text-cyan-600 transition-colors duration-200 cursor-pointer"
+                          className="flex h-8 w-8 items-center justify-center rounded-md text-text-muted hover:bg-card-bg-secondary hover:text-primary transition-colors duration-200 cursor-pointer"
                           aria-label={`Baixar ${file.name}`}
                         >
                           <Download className="h-4 w-4" />
@@ -423,7 +423,7 @@ export default function QuoteDetailPage(): React.ReactElement {
                         <button
                           type="button"
                           onClick={() => handleStartRename(file.id, file.name)}
-                          className="flex h-8 w-8 items-center justify-center rounded-md text-gray-400 hover:bg-slate-100 hover:text-amber-600 transition-colors duration-200 cursor-pointer"
+                          className="flex h-8 w-8 items-center justify-center rounded-md text-text-muted hover:bg-card-bg-secondary hover:text-primary transition-colors duration-200 cursor-pointer"
                           aria-label={`Renomear ${file.name}`}
                         >
                           <Pencil className="h-4 w-4" />
@@ -431,7 +431,7 @@ export default function QuoteDetailPage(): React.ReactElement {
                         <button
                           type="button"
                           onClick={() => removeFileFromQuote(quote.id, file.id)}
-                          className="flex h-8 w-8 items-center justify-center rounded-md text-gray-400 hover:bg-red-50 hover:text-red-600 transition-colors duration-200 cursor-pointer"
+                          className="flex h-8 w-8 items-center justify-center rounded-md text-text-muted hover:bg-red-500/10 hover:text-red-400 transition-colors duration-200 cursor-pointer"
                           aria-label={`Remover ${file.name}`}
                         >
                           <Trash2 className="h-4 w-4" />
@@ -442,10 +442,10 @@ export default function QuoteDetailPage(): React.ReactElement {
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center rounded-xl border-2 border-dashed border-slate-200 py-10 text-center">
-                <Upload className="h-8 w-8 text-gray-300" aria-hidden="true" />
-                <p className="mt-3 text-sm font-medium text-gray-900">Nenhuma referência anexada</p>
-                <p className="mt-1 text-xs text-gray-500">Clique em "Adicionar" para anexar arquivos</p>
+              <div className="flex flex-col items-center rounded-xl border-2 border-dashed border-border py-10 text-center">
+                <Upload className="h-8 w-8 text-text-muted" aria-hidden="true" />
+                <p className="mt-3 text-sm font-medium text-text-primary">Nenhuma referência anexada</p>
+                <p className="mt-1 text-xs text-text-muted">Clique em "Adicionar" para anexar arquivos</p>
               </div>
             )}
           </div>
@@ -453,8 +453,8 @@ export default function QuoteDetailPage(): React.ReactElement {
 
         {/* Sidebar: Dados do Cliente */}
         <div className="space-y-6">
-          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-            <h2 className="mb-4 text-sm font-semibold text-gray-900 uppercase tracking-wider">
+          <div className="bg-card-bg rounded-xl border border-border p-6 shadow-sm">
+            <h2 className="mb-4 text-sm font-semibold text-text-primary uppercase tracking-wider">
               Cliente
             </h2>
 
@@ -465,27 +465,27 @@ export default function QuoteDetailPage(): React.ReactElement {
                     {client.name.charAt(0).toUpperCase()}
                   </div>
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-gray-900">{client.name}</p>
-                    <p className="text-xs text-gray-500">{client.cpfCnpj}</p>
+                    <p className="truncate text-sm font-semibold text-text-primary">{client.name}</p>
+                    <p className="text-xs text-text-muted">{client.cpfCnpj}</p>
                   </div>
                 </div>
 
-                <div className="space-y-3 pt-3 border-t border-slate-200">
+                <div className="space-y-3 pt-3 border-t border-border">
                   {client.phone && (
-                    <div className="flex items-center gap-2.5 text-sm text-gray-600">
-                      <Phone className="h-4 w-4 text-gray-400 shrink-0" />
+                    <div className="flex items-center gap-2.5 text-sm text-text-secondary">
+                      <Phone className="h-4 w-4 text-text-muted shrink-0" />
                       {formatPhone(client.phone)}
                     </div>
                   )}
                   {client.email && (
-                    <div className="flex items-center gap-2.5 text-sm text-gray-600">
-                      <Mail className="h-4 w-4 text-gray-400 shrink-0" />
+                    <div className="flex items-center gap-2.5 text-sm text-text-secondary">
+                      <Mail className="h-4 w-4 text-text-muted shrink-0" />
                       <span className="truncate">{client.email}</span>
                     </div>
                   )}
                   {client.address.city && (
-                    <div className="flex items-center gap-2.5 text-sm text-gray-600">
-                      <MapPin className="h-4 w-4 text-gray-400 shrink-0" />
+                    <div className="flex items-center gap-2.5 text-sm text-text-secondary">
+                      <MapPin className="h-4 w-4 text-text-muted shrink-0" />
                       {client.address.city}
                       {client.address.state ? `, ${client.address.state}` : ''}
                     </div>
@@ -495,36 +495,36 @@ export default function QuoteDetailPage(): React.ReactElement {
                 <button
                   type="button"
                   onClick={() => router.push(`/clientes/${client.id}`)}
-                  className="mt-2 w-full rounded-lg border border-slate-200 py-2.5 text-center text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors duration-200 ease-out cursor-pointer"
+                className="mt-2 w-full rounded-lg border border-border bg-card-bg py-2.5 text-center text-sm font-medium text-text-secondary hover:bg-card-bg-secondary transition-colors duration-200 ease-out cursor-pointer"
                 >
                   Ver Perfil do Cliente
                 </button>
               </div>
             ) : (
               <div className="flex flex-col items-center py-4 text-center">
-                <User className="h-8 w-8 text-gray-300" />
-                <p className="mt-2 text-sm text-gray-500">Cliente não encontrado</p>
+                <User className="h-8 w-8 text-text-muted" />
+                <p className="mt-2 text-sm text-text-muted">Cliente não encontrado</p>
               </div>
             )}
           </div>
 
           {/* Informacoes adicionais */}
-          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-            <h2 className="mb-4 text-sm font-semibold text-gray-900 uppercase tracking-wider">
+          <div className="bg-card-bg rounded-xl border border-border p-6 shadow-sm">
+            <h2 className="mb-4 text-sm font-semibold text-text-primary uppercase tracking-wider">
               Informações
             </h2>
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-500">Criado em</span>
-                <span className="font-medium text-gray-900">{formatDate(quote.createdAt)}</span>
+                <span className="text-text-muted">Criado em</span>
+                <span className="font-medium text-text-primary">{formatDate(quote.createdAt)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500">Atualizado em</span>
-                <span className="font-medium text-gray-900">{formatDate(quote.updatedAt)}</span>
+                <span className="text-text-muted">Atualizado em</span>
+                <span className="font-medium text-text-primary">{formatDate(quote.updatedAt)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500">ID Rastreio</span>
-                <span className="font-mono text-xs text-gray-700">{quote.trackingId}</span>
+                <span className="text-text-muted">ID Rastreio</span>
+                <span className="font-mono text-xs text-text-secondary">{quote.trackingId}</span>
               </div>
             </div>
           </div>
@@ -552,13 +552,13 @@ function DetailItem({
   valueClassName,
 }: DetailItemProps): React.ReactElement {
   return (
-    <div className="flex items-start gap-3 rounded-xl bg-slate-50/60 px-4 py-3.5 ring-1 ring-slate-100">
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white shadow-sm ring-1 ring-slate-200/60">
-        <Icon className="h-4 w-4 text-slate-400" aria-hidden="true" />
+    <div className="flex items-start gap-3 rounded-xl bg-card-bg-secondary/50 px-4 py-3.5 ring-1 ring-border/70">
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-card-bg shadow-sm ring-1 ring-border/70">
+        <Icon className="h-4 w-4 text-text-muted" aria-hidden="true" />
       </div>
       <div className="min-w-0 pt-0.5">
-        <p className="text-[11px] font-medium uppercase tracking-wider text-slate-400">{label}</p>
-        <p className={cn('mt-1 text-sm font-semibold text-gray-900', valueClassName)}>{value}</p>
+        <p className="text-[11px] font-medium uppercase tracking-wider text-text-muted">{label}</p>
+        <p className={cn('mt-1 text-sm font-semibold text-text-primary', valueClassName)}>{value}</p>
       </div>
     </div>
   );

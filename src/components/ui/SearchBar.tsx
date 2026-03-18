@@ -23,7 +23,7 @@ export function SearchBar({
 
   return (
     <div className="relative w-full max-w-md">
-      <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+      <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" />
 
       <input
         ref={inputRef}
@@ -31,7 +31,7 @@ export function SearchBar({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="h-10 w-full rounded-lg border border-slate-200 bg-white pl-10 pr-9 text-sm text-slate-900 placeholder:text-slate-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-colors duration-200 ease-out"
+        className="h-10 w-full rounded-lg border border-border bg-background pl-10 pr-9 text-sm text-text-primary placeholder:text-text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors duration-200"
       />
 
       {value.length > 0 && (
@@ -39,7 +39,7 @@ export function SearchBar({
           type="button"
           onClick={handleClear}
           aria-label="Limpar busca"
-          className="absolute right-2.5 top-1/2 -translate-y-1/2 cursor-pointer rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors duration-200 ease-out"
+          className="absolute right-2.5 top-1/2 -translate-y-1/2 cursor-pointer rounded-full p-1 text-text-muted hover:bg-card-bg-secondary hover:text-text-primary transition-colors duration-200"
         >
           <X className="h-4 w-4" />
         </button>

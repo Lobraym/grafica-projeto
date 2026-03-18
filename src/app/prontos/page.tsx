@@ -8,13 +8,16 @@ import { NotificationButton } from '@/components/ui/NotificationButton';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useQuoteStore } from '@/stores/useQuoteStore';
 import { useClientStore } from '@/stores/useClientStore';
-import { formatDateShort } from '@/lib/utils';
+import { cn, formatDateShort } from '@/lib/utils';
 import { getQuoteSizeLabel } from '@/lib/quote-utils';
+import { useTheme } from '@/context/ThemeContext';
 
 export default function ProntosPage(): React.ReactElement {
   const quotes = useQuoteStore((s) => s.quotes);
   const markAsDelivered = useQuoteStore((s) => s.markAsDelivered);
   const clients = useClientStore((s) => s.clients);
+  const { theme } = useTheme();
+  const isBlueTheme = theme === 'blue';
 
   // js-index-maps: Map O(1) para lookups de cliente
   const clientById = useMemo(
@@ -71,15 +74,25 @@ export default function ProntosPage(): React.ReactElement {
           return (
             <div
               key={quote.id}
-              className="bg-white rounded-xl border border-emerald-200 p-5 shadow-sm transition-all duration-200 ease-out hover:shadow-md"
+              className={cn(
+                'rounded-xl border p-5 shadow-sm transition-shadow duration-200 ease-out hover:shadow-md',
+                isBlueTheme ? 'bg-card-bg border-border' : 'bg-white border-emerald-200'
+              )}
             >
               {/* Status Badge */}
               <div className="flex items-center justify-between mb-4">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-medium text-emerald-700">
-                  <CheckCircle2 className="h-3.5 w-3.5" />
+                <span
+                  className={cn(
+                    'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium',
+                    isBlueTheme ? 'bg-accent/10 text-accent' : 'bg-emerald-100 text-emerald-700'
+                  )}
+                >
+                  <CheckCircle2
+                    className={cn('h-3.5 w-3.5', isBlueTheme ? 'text-accent' : 'text-emerald-700')}
+                  />
                   Produção Finalizada
                 </span>
-                <span className="inline-flex items-center gap-1 text-xs text-gray-400">
+                <span className={cn('inline-flex items-center gap-1 text-xs', isBlueTheme ? 'text-text-muted' : 'text-gray-400')}>
                   <Calendar className="h-3 w-3" />
                   {formatDateShort(quote.deadline)}
                 </span>
@@ -87,26 +100,28 @@ export default function ProntosPage(): React.ReactElement {
 
               {/* Client & Service Info */}
               <div className="mb-4">
-                <h3 className="text-sm font-semibold text-gray-900 truncate">
+                <h3 className={cn('text-sm font-semibold truncate', isBlueTheme ? 'text-text-primary' : 'text-gray-900')}>
                   {client?.name ?? 'Cliente'}
                 </h3>
-                <p className="text-xs text-gray-500 mt-0.5 truncate">{quote.service}</p>
+                <p className={cn('text-xs mt-0.5 truncate', isBlueTheme ? 'text-text-muted' : 'text-gray-500')}>
+                  {quote.service}
+                </p>
               </div>
 
               {/* Details */}
-              <div className="flex items-center gap-3 mb-5 text-xs text-gray-500">
+              <div className={cn('flex items-center gap-3 mb-5 text-xs', isBlueTheme ? 'text-text-muted' : 'text-gray-500')}>
                 <span className="inline-flex items-center gap-1">
-                  <Layers className="h-3 w-3 text-gray-400" />
+                  <Layers className={cn('h-3 w-3', isBlueTheme ? 'text-text-muted' : 'text-gray-400')} />
                   {quote.material}
                 </span>
                 <span className="inline-flex items-center gap-1">
-                  <Ruler className="h-3 w-3 text-gray-400" />
+                  <Ruler className={cn('h-3 w-3', isBlueTheme ? 'text-text-muted' : 'text-gray-400')} />
                   {sizeLabel || '-'}
                 </span>
               </div>
 
               {/* Actions */}
-              <div className="flex items-center gap-2 border-t border-gray-100 pt-4">
+              <div className={cn('flex items-center gap-2 border-t pt-4', isBlueTheme ? 'border-border' : 'border-gray-100')}>
                 <NotificationButton
                   clientName={client?.name ?? 'Cliente'}
                   service={quote.service}
@@ -116,7 +131,12 @@ export default function ProntosPage(): React.ReactElement {
                 <button
                   type="button"
                   onClick={() => setConfirmDeliverId(quote.id)}
-                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-emerald-600 px-3 py-2.5 text-sm font-medium text-white transition-colors duration-200 ease-out hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 cursor-pointer"
+                  className={cn(
+                    'inline-flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-white transition-colors duration-200 ease-out focus:outline-none focus:ring-2 cursor-pointer',
+                    isBlueTheme
+                      ? 'bg-accent hover:bg-accent-hover focus:ring-accent/20'
+                      : 'bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500/20'
+                  )}
                 >
                   <Truck className="h-4 w-4" />
                   Marcar como Entregue

@@ -105,8 +105,8 @@ export function RevenueTrendChart({ data }: RevenueTrendChartProps): React.React
   ];
 
   return (
-    <div className="bg-card-bg rounded-xl border border-border p-5 shadow-sm transition-all duration-300 ease-out hover:shadow-md">
-      <h3 className="text-sm font-semibold text-text-primary uppercase tracking-wider mb-4">
+    <div className="bg-white rounded-2xl p-6 shadow-card border border-slate-100 flex flex-col h-[360px]">
+      <h3 className="text-sm font-semibold text-slate-800 tracking-wide uppercase mb-6">
         Tendência de Receita
       </h3>
       <Chart

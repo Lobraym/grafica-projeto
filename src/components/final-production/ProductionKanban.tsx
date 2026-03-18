@@ -83,7 +83,7 @@ export function ProductionKanban({
             color={column.color}
           >
             {column.quotes.length === 0 ? (
-              <p className="px-3 py-8 text-center text-xs text-gray-400">
+              <p className="px-3 py-8 text-center text-xs text-text-muted">
                 Nenhum item
               </p>
             ) : (

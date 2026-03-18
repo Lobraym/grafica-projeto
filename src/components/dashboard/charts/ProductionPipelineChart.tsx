@@ -27,6 +27,10 @@ export function ProductionPipelineChart({ data }: ProductionPipelineChartProps):
       name: 'Concluído',
       data: stages.map((s) => s.done),
     },
+    {
+      name: 'Entregue',
+      data: stages.map((s) => s.delivered),
+    },
   ];
 
   const chartOptions: ChartProps['options'] = {
@@ -49,7 +53,7 @@ export function ProductionPipelineChart({ data }: ProductionPipelineChartProps):
         barHeight: '50%',
       },
     },
-    colors: ['#0891B2', '#F59E0B', '#10B981'],
+    colors: ['#06b6d4', '#f59e0b', '#10b981', '#64748b'],
     dataLabels: {
       enabled: true,
       style: {
@@ -104,8 +108,8 @@ export function ProductionPipelineChart({ data }: ProductionPipelineChartProps):
   };
 
   return (
-    <div className="bg-card-bg rounded-xl border border-border p-5 shadow-sm transition-all duration-300 ease-out hover:shadow-md">
-      <h3 className="text-sm font-semibold text-text-primary uppercase tracking-wider mb-4">
+    <div className="bg-card-bg rounded-2xl p-6 shadow-sm border border-border flex flex-col h-[360px]">
+      <h3 className="text-sm font-semibold text-text-primary tracking-wide uppercase mb-8">
         Pipeline de Produção
       </h3>
       <Chart

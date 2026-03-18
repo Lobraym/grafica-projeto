@@ -18,6 +18,8 @@ export function MonthlyRevenueChart({ data }: MonthlyRevenueChartProps): React.R
     chart: {
       type: 'bar',
       toolbar: { show: false },
+      zoom: { enabled: false },
+      selection: { enabled: false },
       fontFamily: 'Plus Jakarta Sans, sans-serif',
       animations: {
         enabled: true,
@@ -82,15 +84,15 @@ export function MonthlyRevenueChart({ data }: MonthlyRevenueChartProps): React.R
   ];
 
   return (
-    <div className="bg-card-bg rounded-xl border border-border p-5 shadow-sm transition-all duration-300 ease-out hover:shadow-md">
-      <h3 className="text-sm font-semibold text-text-primary uppercase tracking-wider mb-4">
+    <div className="bg-white rounded-2xl p-6 shadow-card border border-slate-100 flex flex-col h-[400px]">
+      <h3 className="text-sm font-semibold text-slate-800 tracking-wide uppercase mb-6">
         Receita Mensal
       </h3>
       <Chart
         options={chartOptions}
         series={series}
         type="bar"
-        height={280}
+        height={320}
         width="100%"
       />
     </div>

@@ -13,6 +13,7 @@ import {
 } from '@/lib/installation-scheduling';
 import { getQuoteInstallationLabel } from '@/lib/quote-utils';
 import { cn, formatDate, formatPhone, getDaysBetweenDates, isValidDateString } from '@/lib/utils';
+import { useTheme } from '@/context/ThemeContext';
 
 interface InstallationSchedulerPanelProps {
   readonly quoteId: string | null;
@@ -21,6 +22,9 @@ interface InstallationSchedulerPanelProps {
 export function InstallationSchedulerPanel({
   quoteId,
 }: InstallationSchedulerPanelProps): React.ReactElement {
+  const { theme } = useTheme();
+  const isBlueTheme = theme === 'blue';
+
   const quotes = useQuoteStore((state) => state.quotes);
   const scheduleInstallation = useQuoteStore((state) => state.scheduleInstallation);
   const quote = useMemo(
@@ -35,10 +39,15 @@ export function InstallationSchedulerPanel({
 
   if (!quote) {
     return (
-      <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-10 text-center shadow-sm">
-        <CalendarCheck2 className="mx-auto h-10 w-10 text-slate-300" aria-hidden="true" />
-        <h3 className="mt-4 text-sm font-semibold text-slate-900">Selecione um pedido</h3>
-        <p className="mt-2 text-sm leading-relaxed text-slate-500">
+      <div
+        className={cn(
+          'rounded-2xl border border-dashed px-6 py-10 text-center shadow-sm',
+          isBlueTheme ? 'border-border bg-card-bg' : 'border-slate-300 bg-white'
+        )}
+      >
+        <CalendarCheck2 className={cn('mx-auto h-10 w-10', isBlueTheme ? 'text-text-muted' : 'text-slate-300')} aria-hidden="true" />
+        <h3 className={cn('mt-4 text-sm font-semibold', isBlueTheme ? 'text-text-primary' : 'text-slate-900')}>Selecione um pedido</h3>
+        <p className={cn('mt-2 text-sm leading-relaxed', isBlueTheme ? 'text-text-muted' : 'text-slate-500')}>
           Escolha um trabalho da aba Instalação para definir a data do atendimento e confirmar com o cliente.
         </p>
       </div>
@@ -63,41 +72,53 @@ export function InstallationSchedulerPanel({
       : 'Selecione uma data no calendário para gerar a mensagem automática do cliente.';
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div className={cn('rounded-2xl border shadow-sm', isBlueTheme ? 'border-border bg-card-bg' : 'border-slate-200 bg-white')}>
       {/* Header do painel */}
-      <div className="border-b border-slate-200 px-6 py-4">
+      <div className={cn('border-b px-6 py-4', isBlueTheme ? 'border-border' : 'border-slate-200')}>
         <div className="flex items-center justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-600">
               Agendamento de Instalação
             </p>
-            <h2 className="mt-1 text-lg font-semibold text-slate-900">{quote.service}</h2>
+            <h2 className={cn('mt-1 text-lg font-semibold', isBlueTheme ? 'text-text-primary' : 'text-slate-900')}>{quote.service}</h2>
           </div>
-          <p className="text-sm text-slate-500">
+          <p className={cn('text-sm', isBlueTheme ? 'text-text-muted' : 'text-slate-500')}>
             Defina a data e avise o cliente via WhatsApp
           </p>
         </div>
       </div>
 
       {/* Layout horizontal: Info + Calendário + Mensagem */}
-      <div className="grid gap-0 lg:grid-cols-[1fr_auto_1fr] divide-y lg:divide-y-0 lg:divide-x divide-slate-200">
+      <div
+        className={cn(
+          'grid gap-0 lg:grid-cols-[1fr_auto_1fr] divide-y lg:divide-y-0 lg:divide-x',
+          isBlueTheme ? 'divide-border' : 'divide-slate-200'
+        )}
+      >
         {/* Coluna 1: Informações do pedido + Status */}
         <div className="p-5 space-y-4">
           <div className="grid gap-3 grid-cols-2">
-            <InfoCard label="Cliente" value={client?.name || 'Cliente não encontrado'} />
-            <InfoCard label="Telefone" value={client?.phone ? formatPhone(client.phone) : 'Sem telefone'} icon={<Phone className="h-4 w-4" aria-hidden="true" />} />
-            <InfoCard label="Prazo limite" value={deadlineLabel} icon={<Clock3 className="h-4 w-4" aria-hidden="true" />} />
-            <InfoCard label="Endereço" value={installationLabel} icon={<MapPin className="h-4 w-4" aria-hidden="true" />} />
+            <InfoCard isBlueTheme={isBlueTheme} label="Cliente" value={client?.name || 'Cliente não encontrado'} />
+            <InfoCard
+              isBlueTheme={isBlueTheme}
+              label="Telefone"
+              value={client?.phone ? formatPhone(client.phone) : 'Sem telefone'}
+              icon={<Phone className="h-4 w-4" aria-hidden="true" />}
+            />
+            <InfoCard isBlueTheme={isBlueTheme} label="Prazo limite" value={deadlineLabel} icon={<Clock3 className="h-4 w-4" aria-hidden="true" />} />
+            <InfoCard isBlueTheme={isBlueTheme} label="Endereço" value={installationLabel} icon={<MapPin className="h-4 w-4" aria-hidden="true" />} />
           </div>
 
           {/* Status cards */}
           <div className="grid gap-3 grid-cols-2">
             <StatusCard
+              isBlueTheme={isBlueTheme}
               label="Data escolhida"
               value={scheduledDateLabel}
               tone={hasSelectedDate ? 'neutral' : 'muted'}
             />
             <StatusCard
+              isBlueTheme={isBlueTheme}
               label="Status do prazo"
               value={getDeadlineStatusLabel(deadlineStatus, daysFromDeadline, hasSelectedDate)}
               tone={deadlineStatus === 'after' ? 'after' : deadlineStatus === 'within' ? 'within' : 'muted'}
@@ -109,8 +130,12 @@ export function InstallationSchedulerPanel({
             className={cn(
               'rounded-xl border px-4 py-3 text-sm',
               deadlineStatus === 'after'
-                ? 'border-amber-200 bg-amber-50 text-amber-900'
-                : 'border-emerald-200 bg-emerald-50 text-emerald-900',
+                ? isBlueTheme
+                  ? 'border-amber-500/20 bg-amber-500/5 text-amber-200'
+                  : 'border-amber-200 bg-amber-50 text-amber-900'
+                : isBlueTheme
+                  ? 'border-emerald-500/20 bg-emerald-500/5 text-emerald-200'
+                  : 'border-emerald-200 bg-emerald-50 text-emerald-900',
             )}
           >
             <div className="flex items-start gap-2">
@@ -141,8 +166,13 @@ export function InstallationSchedulerPanel({
             <h3 className="text-sm font-semibold text-slate-900">Mensagem para o Cliente</h3>
           </div>
 
-          <div className="rounded-xl bg-slate-50 p-4 max-h-[280px] overflow-y-auto">
-            <pre className="whitespace-pre-wrap text-sm leading-relaxed text-slate-700">{messagePreview}</pre>
+          <div
+            className={cn(
+              'rounded-xl p-4 max-h-[280px] overflow-y-auto',
+              isBlueTheme ? 'bg-card-bg-secondary' : 'bg-slate-50'
+            )}
+          >
+            <pre className={cn('whitespace-pre-wrap text-sm leading-relaxed', isBlueTheme ? 'text-text-muted' : 'text-slate-700')}>{messagePreview}</pre>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
@@ -158,7 +188,10 @@ export function InstallationSchedulerPanel({
             ) : (
               <span
                 aria-disabled="true"
-                className="inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium min-h-[44px] bg-slate-200 text-slate-400 cursor-not-allowed"
+                className={cn(
+                  'inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium min-h-[44px] cursor-not-allowed',
+                  isBlueTheme ? 'bg-card-bg-secondary text-text-muted' : 'bg-slate-200 text-slate-400'
+                )}
               >
                 Enviar no WhatsApp
               </span>
@@ -181,16 +214,35 @@ function InfoCard({
   label,
   value,
   icon,
+  isBlueTheme,
 }: {
   readonly label: string;
   readonly value: string;
   readonly icon?: React.ReactNode;
+  readonly isBlueTheme: boolean;
 }): React.ReactElement {
   return (
-    <div className="rounded-xl bg-slate-50 px-4 py-3 ring-1 ring-slate-200">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">{label}</p>
-      <p className="mt-2 flex items-center gap-2 text-sm text-slate-800">
-        {icon ? <span className="text-slate-400" aria-hidden="true">{icon}</span> : null}
+    <div
+      className={cn(
+        'rounded-xl px-4 py-3 ring-1',
+        isBlueTheme ? 'bg-card-bg-secondary ring-border' : 'bg-slate-50 ring-slate-200'
+      )}
+    >
+      <p
+        className={cn(
+          'text-[11px] font-semibold uppercase tracking-[0.16em]',
+          isBlueTheme ? 'text-text-muted' : 'text-slate-500'
+        )}
+      >
+        {label}
+      </p>
+      <p
+        className={cn(
+          'mt-2 flex items-center gap-2 text-sm',
+          isBlueTheme ? 'text-text-primary' : 'text-slate-800'
+        )}
+      >
+        {icon ? <span className={cn('text-sm', isBlueTheme ? 'text-text-muted' : 'text-slate-400')} aria-hidden="true">{icon}</span> : null}
         <span className="min-w-0 break-words">{value}</span>
       </p>
     </div>
@@ -201,22 +253,34 @@ function StatusCard({
   label,
   value,
   tone,
+  isBlueTheme,
 }: {
   readonly label: string;
   readonly value: string;
   readonly tone: 'within' | 'after' | 'neutral' | 'muted';
+  readonly isBlueTheme: boolean;
 }): React.ReactElement {
   return (
     <div
       className={cn(
         'rounded-xl px-4 py-3 ring-1',
-        tone === 'within' && 'bg-emerald-50 text-emerald-900 ring-emerald-100',
-        tone === 'after' && 'bg-red-50 text-red-900 ring-red-100',
-        tone === 'neutral' && 'bg-cyan-50 text-cyan-900 ring-cyan-100',
-        tone === 'muted' && 'bg-slate-50 text-slate-700 ring-slate-200',
+        isBlueTheme
+          ? tone === 'within' && 'bg-emerald-500/5 text-emerald-200 ring-emerald-500/20'
+          : tone === 'within' && 'bg-emerald-50 text-emerald-900 ring-emerald-100',
+        isBlueTheme
+          ? tone === 'after' && 'bg-red-500/5 text-red-200 ring-red-500/20'
+          : tone === 'after' && 'bg-red-50 text-red-900 ring-red-100',
+        isBlueTheme
+          ? tone === 'neutral' && 'bg-primary/5 text-primary ring-primary/15'
+          : tone === 'neutral' && 'bg-cyan-50 text-cyan-900 ring-cyan-100',
+        isBlueTheme
+          ? tone === 'muted' && 'bg-card-bg-secondary text-text-muted ring-border'
+          : tone === 'muted' && 'bg-slate-50 text-slate-700 ring-slate-200',
       )}
     >
-      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] opacity-75">{label}</p>
+      <p className={cn('text-[11px] font-semibold uppercase tracking-[0.16em] opacity-75', isBlueTheme ? 'text-text-muted' : '')}>
+        {label}
+      </p>
       <p className="mt-2 text-sm font-medium">{value}</p>
     </div>
   );

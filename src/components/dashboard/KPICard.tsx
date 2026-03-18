@@ -20,20 +20,18 @@ export function KPICard({
     <motion.div
       whileHover={{ y: -3 }}
       transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-      className="bg-card-bg rounded-xl border border-border p-5 shadow-sm cursor-default"
+      className="bg-white rounded-2xl p-5 shadow-card border border-slate-100 flex items-center gap-4 cursor-default transition-transform duration-300 hover:-translate-y-1"
     >
-      <div className="flex items-start gap-4">
-        <motion.div
-          whileHover={{ scale: 1.1, rotate: 5 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${iconBgClass}`}
-        >
-          <Icon className="h-5 w-5" aria-hidden="true" />
-        </motion.div>
-        <div className="min-w-0">
-          <p className="text-2xl font-bold text-text-primary tabular-nums tracking-tight">{value}</p>
-          <p className="text-sm text-text-secondary mt-0.5">{title}</p>
-        </div>
+      <motion.div
+        whileHover={{ scale: 1.05 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+        className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${iconBgClass}`}
+      >
+        <Icon className="h-5 w-5" aria-hidden="true" />
+      </motion.div>
+      <div className="min-w-0">
+        <p className="text-sm font-medium text-slate-500">{title}</p>
+        <p className="text-2xl font-bold text-slate-800 mt-0.5 tabular-nums tracking-tight">{value}</p>
       </div>
     </motion.div>
   );

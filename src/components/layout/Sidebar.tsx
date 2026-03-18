@@ -46,7 +46,7 @@ export function Sidebar(): React.ReactElement {
         className={`
           fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0
           bg-sidebar-bg text-white h-screen z-50
-          border-r border-white/[0.06] overflow-hidden
+          border-r border-border overflow-hidden
           ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
           lg:translate-x-0
         `}
@@ -81,7 +81,7 @@ export function Sidebar(): React.ReactElement {
               <div>
                 {/* Section header — dots when collapsed, text when expanded */}
                 <h2
-                  className={`mb-4 text-xs uppercase flex leading-5 text-slate-500 ${
+                  className={`mb-4 text-xs uppercase flex leading-5 text-text-muted ${
                     !showFull ? 'lg:justify-center' : 'justify-start'
                   }`}
                 >
@@ -101,11 +101,7 @@ export function Sidebar(): React.ReactElement {
                             group relative flex items-center w-full gap-3 px-3 py-2.5
                             font-medium rounded-lg text-[13px] cursor-pointer transition-colors
                             ${!showFull ? 'lg:justify-center' : 'lg:justify-start'}
-                            ${
-                              active
-                                ? 'bg-cyan-500/[0.12] text-cyan-400'
-                                : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'
-                            }
+                            ${active ? 'bg-primary/20 text-primary' : 'text-text-muted hover:bg-border/30 hover:text-text-secondary'}
                           `}
                         >
                           {/* Active indicator — spring layout animation */}
@@ -119,7 +115,7 @@ export function Sidebar(): React.ReactElement {
 
                           <span
                             className={`shrink-0 ${
-                              active ? 'text-cyan-400' : 'text-slate-500 group-hover:text-slate-300'
+                              active ? 'text-primary' : 'text-text-muted group-hover:text-text-secondary'
                             }`}
                           >
                             <Icon className="h-[18px] w-[18px]" aria-hidden="true" />
@@ -132,7 +128,7 @@ export function Sidebar(): React.ReactElement {
 
                           {/* Tooltip when collapsed */}
                           {!showFull && (
-                            <div className="absolute left-full ml-3 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-white/10 text-[11px] font-medium text-white whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 shadow-lg z-[60]">
+                            <div className="absolute left-full ml-3 px-2.5 py-1.5 rounded-lg bg-card-bg border border-border text-[11px] font-medium text-text-primary whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 shadow-lg z-[60]">
                               {item.label}
                             </div>
                           )}
@@ -147,9 +143,9 @@ export function Sidebar(): React.ReactElement {
 
           {/* Bottom widget */}
           {showFull && (
-            <div className="border-t border-white/[0.06] pt-4 pb-2">
-              <p className="text-[10px] font-medium text-slate-500 tracking-wider">Sistema de Gestão</p>
-              <span className="mt-1.5 inline-flex items-center rounded-full bg-cyan-500/10 px-2.5 py-0.5 text-[10px] font-semibold text-cyan-400 tracking-wider">
+            <div className="border-t border-border pt-4 pb-2">
+              <p className="text-[10px] font-medium text-text-muted tracking-wider">Sistema de Gestão</p>
+              <span className="mt-1.5 inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-semibold text-primary tracking-wider">
                 v1.0.0
               </span>
             </div>

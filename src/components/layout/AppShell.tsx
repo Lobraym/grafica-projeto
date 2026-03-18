@@ -16,7 +16,7 @@ export function AppShell({ children }: { readonly children: React.ReactNode }): 
       : 'lg:ml-[90px]';
 
   return (
-    <div className="min-h-screen xl:flex">
+    <div className="min-h-screen xl:flex bg-background text-text-primary">
       <Sidebar />
       <Backdrop />
       <div className={`flex-1 transition-all duration-300 ease-in-out ${mainContentMargin}`}>

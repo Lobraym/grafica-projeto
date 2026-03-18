@@ -11,7 +11,7 @@ import { generateId } from '@/lib/utils';
 import type { Product, ProductFormData, ProductMaterial, ProductFinishing } from '@/types/product';
 
 const inputBase =
-  'mt-1 block w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20';
+  'mt-1 block w-full rounded-lg border border-border bg-card-bg px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20';
 const errorInput = 'border-red-300 focus:border-red-400 focus:ring-red-500/20';
 const selectBase = inputBase;
 
@@ -147,13 +147,13 @@ export function ProductForm({
   );
 
   const sectionCard =
-    'rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden';
+    'rounded-xl border border-border bg-card-bg shadow-sm overflow-hidden';
 
   const sectionHeader =
-    'flex items-center gap-3 border-b border-slate-100 bg-slate-50/80 px-5 py-4';
-  const sectionTitle = 'text-base font-semibold text-slate-900';
+    'flex items-center gap-3 border-b border-border bg-card-bg-secondary px-5 py-4';
+  const sectionTitle = 'text-base font-semibold text-text-primary';
   const sectionBadge =
-    'flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-cyan-100 text-sm font-semibold text-cyan-700';
+    'flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary';
   const sectionBody = 'p-5';
 
   return (
@@ -165,14 +165,14 @@ export function ProductForm({
             <span className={sectionBadge}>1</span>
             <div>
               <h2 className={sectionTitle}>Identificação do produto</h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-text-muted mt-0.5">
                 Nome e categoria para organizar no cadastro
               </p>
             </div>
           </div>
           <div className={`${sectionBody} grid grid-cols-1 gap-5 sm:grid-cols-2`}>
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-slate-700">
+              <label htmlFor="name" className="block text-sm font-medium text-text-muted">
                 Nome do produto <span className="text-red-500">*</span>
               </label>
               <input
@@ -187,7 +187,7 @@ export function ProductForm({
               )}
             </div>
             <div>
-              <label htmlFor="category" className="block text-sm font-medium text-slate-700">
+              <label htmlFor="category" className="block text-sm font-medium text-text-muted">
                 Categoria <span className="text-red-500">*</span>
               </label>
               <select
@@ -214,7 +214,7 @@ export function ProductForm({
             <span className={sectionBadge}>2</span>
             <div>
               <h2 className={sectionTitle}>Materiais ou variações</h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-text-muted mt-0.5">
                 Quais materiais podem ser usados neste produto
               </p>
             </div>
@@ -222,7 +222,7 @@ export function ProductForm({
           <div className={sectionBody}>
             <div className="space-y-4">
               {(productMaterials ?? []).length === 0 ? (
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-text-muted">
                   Nenhum material adicionado. Use os botões abaixo para adicionar materiais com preço e custo.
                 </p>
               ) : (
@@ -238,23 +238,23 @@ export function ProductForm({
                     return (
                       <div
                         key={`${pm.materialId}-${index}`}
-                        className="rounded-lg border border-slate-200 bg-slate-50/50 p-4"
+                        className="rounded-lg border border-border bg-card-bg-secondary p-4"
                       >
                         <div className="flex items-start justify-between gap-2">
-                          <span className="text-sm font-medium text-slate-800">
+                          <span className="text-sm font-medium text-text-primary">
                             {mat?.name ?? 'Material'}
                           </span>
                           <button
                             type="button"
                             onClick={() => removeProductMaterial(index)}
-                            className="text-slate-400 hover:text-red-600 text-sm"
+                            className="text-text-muted hover:text-red-600 text-sm"
                           >
                             Remover
                           </button>
                         </div>
                         <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
                           <div>
-                            <label className="block text-xs font-medium text-slate-500">
+                            <label className="block text-xs font-medium text-text-muted">
                               {priceLabel}
                             </label>
                             <input
@@ -270,7 +270,7 @@ export function ProductForm({
                             />
                           </div>
                           <div>
-                            <label className="block text-xs font-medium text-slate-500">
+                            <label className="block text-xs font-medium text-text-muted">
                               Custo (R$)
                             </label>
                             <input
@@ -286,7 +286,7 @@ export function ProductForm({
                             />
                           </div>
                           <div>
-                            <label className="block text-xs font-medium text-slate-500">
+                            <label className="block text-xs font-medium text-text-muted">
                               Margem (%)
                             </label>
                             <input
@@ -339,9 +339,9 @@ export function ProductForm({
                 <button
                   type="button"
                   onClick={() => setShowAddMaterial(true)}
-                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+                  className="inline-flex items-center gap-2 rounded-lg border border-border bg-card-bg px-4 py-2.5 text-sm font-medium text-text-primary hover:bg-card-bg-secondary focus:outline-none focus:ring-2 focus:ring-primary/20"
                 >
-                  <span className="text-cyan-600">+</span> Criar novo material
+                  <span className="text-primary">+</span> Criar novo material
                 </button>
               </div>
             </div>
@@ -354,28 +354,28 @@ export function ProductForm({
             <span className={sectionBadge}>3</span>
             <div>
               <h2 className={sectionTitle}>Forma de cobrança</h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-text-muted mt-0.5">
                 Como deseja cobrar este produto
               </p>
             </div>
           </div>
           <div className={sectionBody}>
-            <span className="block text-sm font-medium text-slate-700 mb-3">
+            <span className="block text-sm font-medium text-text-muted mb-3">
               Tipo de cálculo
             </span>
             <div className="space-y-2 max-w-md">
               {CALCULATION_TYPES.map((opt) => (
                 <label
                   key={opt.value}
-                  className="flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50/50 px-4 py-3 cursor-pointer has-[:checked]:border-cyan-400 has-[:checked]:bg-cyan-50/50 transition-colors"
+                  className="flex items-center gap-3 rounded-lg border border-border bg-card-bg-secondary px-4 py-3 cursor-pointer has-[:checked]:border-primary has-[:checked]:bg-primary/10 transition-colors"
                 >
                   <input
                     type="radio"
                     value={opt.value}
                     {...register('calculationType')}
-                    className="border-slate-300 text-cyan-600 focus:ring-cyan-500"
+                    className="border-border text-primary focus:ring-primary"
                   />
-                  <span className="text-sm font-medium text-slate-700">{opt.label}</span>
+                  <span className="text-sm font-medium text-text-muted">{opt.label}</span>
                 </label>
               ))}
             </div>
@@ -392,14 +392,14 @@ export function ProductForm({
               <span className={sectionBadge}>4</span>
               <div>
                 <h2 className={sectionTitle}>Valores</h2>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-text-muted mt-0.5">
                   Quantidade mínima para este produto
                 </p>
               </div>
             </div>
             <div className={sectionBody}>
               <div className="max-w-xs">
-                <label htmlFor="minQuantity" className="block text-sm font-medium text-slate-700">
+                <label htmlFor="minQuantity" className="block text-sm font-medium text-text-muted">
                   Quantidade mínima <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -431,7 +431,7 @@ export function ProductForm({
             <span className={sectionBadge}>{calculationType === 'por_quantidade' ? '5' : '4'}</span>
             <div>
               <h2 className={sectionTitle}>Acabamentos</h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-text-muted mt-0.5">
                 Opções de acabamento com valor extra (ex.: Ilhós +R$ 10)
               </p>
             </div>
@@ -441,7 +441,7 @@ export function ProductForm({
               {(finishings ?? []).map((f) => (
                 <div
                   key={f.id}
-                  className="flex flex-wrap items-center gap-3 rounded-lg border border-slate-200 bg-slate-50/50 p-3"
+                  className="flex flex-wrap items-center gap-3 rounded-lg border border-border bg-card-bg-secondary p-3"
                 >
                   <input
                     type="text"
@@ -451,7 +451,7 @@ export function ProductForm({
                     className={`${inputBase} flex-1 min-w-[120px]`}
                   />
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-slate-500">+ R$</span>
+                    <span className="text-sm text-text-muted">+ R$</span>
                     <input
                       type="number"
                       step="0.01"
@@ -466,7 +466,7 @@ export function ProductForm({
                   <button
                     type="button"
                     onClick={() => removeFinishing(f.id)}
-                    className="text-slate-400 hover:text-red-600 text-sm"
+                    className="text-text-muted hover:text-red-600 text-sm"
                   >
                     Remover
                   </button>
@@ -475,27 +475,27 @@ export function ProductForm({
               <button
                 type="button"
                 onClick={addFinishing}
-                className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+                className="inline-flex items-center gap-2 rounded-lg border border-border bg-card-bg px-4 py-2.5 text-sm font-medium text-text-primary hover:bg-card-bg-secondary focus:outline-none focus:ring-2 focus:ring-primary/20"
               >
-                <span className="text-cyan-600">+</span> Adicionar acabamento
+                <span className="text-primary">+</span> Adicionar acabamento
               </button>
             </div>
           </div>
         </section>
 
         {/* Ações */}
-        <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end sm:border-t sm:border-slate-200 sm:pt-6">
+        <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end sm:border-t sm:border-border sm:pt-6">
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-lg border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-200"
+            className="rounded-lg border border-border bg-card-bg px-5 py-2.5 text-sm font-medium text-text-primary hover:bg-card-bg-secondary focus:outline-none focus:ring-2 focus:ring-primary/20"
           >
             Cancelar
           </button>
           <button
             type="submit"
             disabled={isSubmitting || !isValid}
-            className="rounded-lg bg-cyan-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? 'Salvando...' : 'Salvar'}
           </button>

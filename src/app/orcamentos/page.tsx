@@ -96,7 +96,7 @@ export default function OrcamentosPage(): React.ReactElement {
       <PageHeader title="Orçamentos" subtitle="Gerencie os orçamentos da gráfica">
         <Link
           href="/orcamentos/novo"
-          className="inline-flex items-center gap-2 rounded-lg bg-cyan-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 transition-colors duration-200 ease-out cursor-pointer"
+          className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-primary-hover transition-colors duration-200 ease-out cursor-pointer"
         >
           <Plus className="h-4 w-4" aria-hidden="true" />
           Novo Orçamento
@@ -113,15 +113,15 @@ export default function OrcamentosPage(): React.ReactElement {
           />
 
           {/* View mode toggle */}
-          <div className="flex items-center rounded-lg border border-slate-200 bg-white p-1 shrink-0">
+          <div className="flex items-center rounded-lg border border-border bg-card-bg p-1 shrink-0">
             <button
               type="button"
               onClick={() => setViewMode('kanban')}
               className={cn(
                 'flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium min-h-[44px] transition-colors duration-200 ease-out cursor-pointer',
                 viewMode === 'kanban'
-                  ? 'bg-cyan-50 text-cyan-700'
-                  : 'text-gray-500 hover:text-gray-700 hover:bg-slate-50'
+                  ? 'bg-primary/10 text-primary'
+                  : 'text-text-muted hover:text-text-primary hover:bg-card-bg-secondary'
               )}
               aria-label="Modo Kanban"
               aria-pressed={viewMode === 'kanban'}
@@ -135,8 +135,8 @@ export default function OrcamentosPage(): React.ReactElement {
               className={cn(
                 'flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium min-h-[44px] transition-colors duration-200 ease-out cursor-pointer',
                 viewMode === 'list'
-                  ? 'bg-cyan-50 text-cyan-700'
-                  : 'text-gray-500 hover:text-gray-700 hover:bg-slate-50'
+                  ? 'bg-primary/10 text-primary'
+                  : 'text-text-muted hover:text-text-primary hover:bg-card-bg-secondary'
               )}
               aria-label="Modo Lista"
               aria-pressed={viewMode === 'list'}
@@ -152,9 +152,9 @@ export default function OrcamentosPage(): React.ReactElement {
 
       {/* Contador de resultados */}
       <div className="flex items-center justify-between">
-        <p className="text-xs text-gray-500">
-          Mostrando <span className="font-semibold text-gray-700">{filteredQuotes.length}</span> de{' '}
-          <span className="font-semibold text-gray-700">{quotes.length}</span> orçamentos
+        <p className="text-xs text-text-muted">
+          Mostrando <span className="font-semibold text-text-primary">{filteredQuotes.length}</span> de{' '}
+          <span className="font-semibold text-text-primary">{quotes.length}</span> orçamentos
         </p>
       </div>
 
