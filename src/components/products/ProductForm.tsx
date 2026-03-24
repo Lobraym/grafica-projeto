@@ -18,15 +18,15 @@ const selectBase = inputBase;
 function productToFormData(p: Product): ProductFormData {
   return {
     name: p.name,
-    category: p.category,
+    category: p.category ?? 'impressao_digital',
     description: p.description ?? '',
-    calculationType: p.calculationType,
-    measurementUnit: p.measurementUnit,
+    calculationType: p.calculationType ?? 'por_area',
+    measurementUnit: p.measurementUnit ?? 'm2',
     productMaterials: p.productMaterials ?? [],
     finishings: p.finishings ?? [],
     minQuantity: p.minQuantity ?? null,
     defaultMarginPercent: p.defaultMarginPercent ?? 0,
-    status: p.status,
+    status: p.status ?? 'ativo',
   };
 }
 

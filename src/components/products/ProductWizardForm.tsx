@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
@@ -217,7 +217,7 @@ export function ProductWizardForm({
     trigger,
     formState: { errors, isSubmitting },
   } = useForm<ProductWizardValues>({
-    resolver: zodResolver(productWizardSchema),
+    resolver: zodResolver(productWizardSchema) as Resolver<ProductWizardValues>,
     defaultValues,
     mode: 'onChange',
   });
@@ -320,7 +320,7 @@ export function ProductWizardForm({
   }, [initialData, preselectedGroupId]);
 
   const goNext = async (): Promise<void> => {
-    const fieldsByStep: Record<number, (keyof ProductWizardValues | string)[]> = {
+    const fieldsByStep: Record<number, (keyof ProductWizardValues)[]> = {
       0: ['name'],
       1: ['productType'],
       2: ['billingType', 'minArea', 'priceTiers'],

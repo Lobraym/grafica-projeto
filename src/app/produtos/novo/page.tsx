@@ -1,13 +1,13 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { Suspense, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useProductStore } from '@/stores/useProductStore';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { ProductWizardForm } from '@/components/products/ProductWizardForm';
 import { buildTemplateInitialData } from '@/lib/product-templates';
 
-export default function NovoProdutoPage(): React.ReactElement {
+function NovoProdutoPageContent(): React.ReactElement {
   const router = useRouter();
   const addProduct = useProductStore((s) => s.addProduct);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -57,5 +57,13 @@ export default function NovoProdutoPage(): React.ReactElement {
         />
       </div>
     </div>
+  );
+}
+
+export default function NovoProdutoPage(): React.ReactElement {
+  return (
+    <Suspense fallback={<div className="space-y-6" />}>
+      <NovoProdutoPageContent />
+    </Suspense>
   );
 }

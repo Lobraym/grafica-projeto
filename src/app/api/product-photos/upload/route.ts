@@ -31,37 +31,30 @@ export async function POST(request: Request): Promise<NextResponse> {
   const formData = await request.formData();
   const file = formData.get('file');
 
-  const maybeFile = file as unknown as Partial<File> | null;
-  const isFileLike =
-    !!maybeFile &&
-    typeof maybeFile.arrayBuffer === 'function' &&
-    typeof maybeFile.size === 'number' &&
-    typeof maybeFile.type === 'string';
-
-  if (!isFileLike) {
+  if (!(file instanceof File)) {
     return NextResponse.json({ message: 'Arquivo inválido' }, { status: 400 });
   }
 
-  if (!ALLOWED_MIME.has(maybeFile!.type)) {
+  if (!ALLOWED_MIME.has(file.type)) {
     return NextResponse.json({ message: 'Tipo de arquivo não suportado' }, { status: 400 });
   }
 
-  if (maybeFile!.size > MAX_BYTES) {
+  if (file.size > MAX_BYTES) {
     return NextResponse.json({ message: 'Arquivo muito grande (máx. 2MB)' }, { status: 400 });
   }
 
-  const ext = getExtensionFromMime(maybeFile!.type);
+  const ext = getExtensionFromMime(file.type);
   if (!ext) return NextResponse.json({ message: 'Extensão inválida' }, { status: 400 });
 
   const uploadsDir = path.join(process.cwd(), 'public', 'uploads', 'produtos');
   await ensureDir(uploadsDir);
 
-  const safeBase = sanitizeFileBaseName((maybeFile as unknown as { name?: string }).name ?? 'produto');
+  const safeBase = sanitizeFileBaseName(file.name || 'produto');
   const id = generateId();
   const filename = `${id}_${safeBase}.${ext}`;
   const fullPath = path.join(uploadsDir, filename);
 
-  const arrayBuffer = await maybeFile!.arrayBuffer();
+  const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
   await fs.writeFile(fullPath, buffer);
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { PRODUCT_TEMPLATES, buildTemplateInitialData, type ProductTemplateCard } from '@/lib/product-templates';
@@ -14,7 +14,7 @@ function buildNextUrl(params: { readonly groupId: string | null; readonly templa
   return `/produtos/novo${query}`;
 }
 
-export default function TemplateSelectPage(): React.ReactElement {
+function TemplateSelectPageContent(): React.ReactElement {
   const router = useRouter();
   const searchParams = useSearchParams();
   const groupId = searchParams.get('groupId');
@@ -177,6 +177,14 @@ export default function TemplateSelectPage(): React.ReactElement {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function TemplateSelectPage(): React.ReactElement {
+  return (
+    <Suspense fallback={<div className="fixed inset-0 z-50 bg-[#0a0f1a]/80" />}>
+      <TemplateSelectPageContent />
+    </Suspense>
   );
 }
 

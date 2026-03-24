@@ -1,21 +1,23 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import type { Product } from '@/types/product';
 import { readProducts, writeProducts } from '../_storage';
 
 type Params = {
-  readonly params: { readonly id: string };
+  readonly params: Promise<{ readonly id: string }>;
 };
 
-export async function GET(_request: Request, { params }: Params): Promise<NextResponse> {
+export async function GET(_request: NextRequest, { params }: Params): Promise<NextResponse> {
+  const { id } = await params;
   const items = await readProducts();
-  const product = items.find((p) => p.id === params.id);
+  const product = items.find((p) => p.id === id);
   if (!product) {
     return NextResponse.json({ message: 'Produto não encontrado' }, { status: 404 });
   }
   return NextResponse.json(product);
 }
 
-export async function PUT(request: Request, { params }: Params): Promise<NextResponse> {
+export async function PUT(request: NextRequest, { params }: Params): Promise<NextResponse> {
+  const { id } = await params;
   let body: unknown;
   try {
     body = await request.json();
@@ -24,7 +26,7 @@ export async function PUT(request: Request, { params }: Params): Promise<NextRes
   }
 
   const items = await readProducts();
-  const index = items.findIndex((p) => p.id === params.id);
+  const index = items.findIndex((p) => p.id === id);
   if (index < 0) {
     return NextResponse.json({ message: 'Produto não encontrado' }, { status: 404 });
   }
@@ -81,9 +83,10 @@ export async function PUT(request: Request, { params }: Params): Promise<NextRes
   return NextResponse.json(updated);
 }
 
-export async function DELETE(_request: Request, { params }: Params): Promise<NextResponse> {
+export async function DELETE(_request: NextRequest, { params }: Params): Promise<NextResponse> {
+  const { id } = await params;
   const items = await readProducts();
-  const next = items.filter((p) => p.id !== params.id);
+  const next = items.filter((p) => p.id !== id);
   const existed = next.length !== items.length;
   if (!existed) {
     return NextResponse.json({ message: 'Produto não encontrado' }, { status: 404 });

@@ -6,7 +6,8 @@ import { generateId } from '@/lib/utils';
 
 const API_BASE = '/api/products';
 
-type ProductInput = ProductFormData | Partial<Product> & Pick<Product, 'name'>;
+type AddProductInput = ProductFormData | (Partial<Product> & Pick<Product, 'name'>);
+type UpdateProductInput = Partial<Product> & { name?: string };
 
 /** Migra produto legado para manter o `defaultMarginPercent` consistente. */
 function migrateProduct(p: Record<string, unknown>): Product {
@@ -70,8 +71,8 @@ async function deleteProductFromApi(id: string): Promise<boolean> {
 interface ProductStore {
   products: Product[];
   hydrate: () => void;
-  addProduct: (data: ProductInput) => Product;
-  updateProduct: (id: string, data: ProductInput) => void;
+  addProduct: (data: AddProductInput) => Product;
+  updateProduct: (id: string, data: UpdateProductInput) => void;
   deleteProduct: (id: string) => void;
   getProductById: (id: string) => Product | undefined;
   getActiveProducts: () => Product[];
@@ -87,7 +88,7 @@ export const useProductStore = create<ProductStore>((set, get) => ({
     })();
   },
 
-  addProduct: (data: ProductInput) => {
+  addProduct: (data: AddProductInput) => {
     const now = new Date().toISOString();
     const id = generateId();
     const newProduct: Product = {
@@ -130,7 +131,7 @@ export const useProductStore = create<ProductStore>((set, get) => ({
     return newProduct;
   },
 
-  updateProduct: (id: string, data: ProductInput) => {
+  updateProduct: (id: string, data: UpdateProductInput) => {
     const now = new Date().toISOString();
     set((state) => ({
       products: state.products.map((p) =>

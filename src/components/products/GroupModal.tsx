@@ -49,7 +49,7 @@ export function GroupModal({ open, groupId, onClose }: GroupModalProps): React.R
 
     if (group) {
       setName(group.name);
-      setColorHex((CORES as readonly string[]).includes(group.colorHex) ? (group.colorHex as ProductGroupInput['colorHex']) : CORES[0]);
+      setColorHex(CORES.find((c) => c === group.colorHex) ?? CORES[0]);
       setIconEmoji(group.iconEmoji || '📦');
     } else {
       setName('');

@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import type { ProductGroup } from '@/types/product-group';
 import { readGroups, writeGroups } from '../_storage';
 
@@ -25,7 +25,10 @@ function normalizePartial(payload: unknown): Partial<ProductGroup> | null {
 
   if (name !== undefined && !name) return null;
 
-  const out: Partial<ProductGroup> = {};
+  type MutablePartialProductGroup = {
+    -readonly [K in keyof ProductGroup]?: ProductGroup[K];
+  };
+  const out: MutablePartialProductGroup = {};
   if (name !== undefined) out.name = name;
   if (colorHex !== undefined) {
     if (!isValidHexColor(colorHex)) return null;
@@ -37,17 +40,19 @@ function normalizePartial(payload: unknown): Partial<ProductGroup> | null {
 }
 
 type Params = {
-  readonly params: { readonly id: string };
+  readonly params: Promise<{ readonly id: string }>;
 };
 
-export async function GET(_request: Request, { params }: Params): Promise<NextResponse> {
+export async function GET(_request: NextRequest, { params }: Params): Promise<NextResponse> {
+  const { id } = await params;
   const items = await readGroups();
-  const group = items.find((g) => g.id === params.id);
+  const group = items.find((g) => g.id === id);
   if (!group) return NextResponse.json({ message: 'Grupo não encontrado' }, { status: 404 });
   return NextResponse.json(group);
 }
 
-export async function PUT(request: Request, { params }: Params): Promise<NextResponse> {
+export async function PUT(request: NextRequest, { params }: Params): Promise<NextResponse> {
+  const { id } = await params;
   let body: unknown;
   try {
     body = await request.json();
@@ -56,7 +61,7 @@ export async function PUT(request: Request, { params }: Params): Promise<NextRes
   }
 
   const currentGroups = await readGroups();
-  const index = currentGroups.findIndex((g) => g.id === params.id);
+  const index = currentGroups.findIndex((g) => g.id === id);
   if (index < 0) return NextResponse.json({ message: 'Grupo não encontrado' }, { status: 404 });
 
   const partial = normalizePartial(body);
@@ -80,9 +85,10 @@ export async function PUT(request: Request, { params }: Params): Promise<NextRes
   return NextResponse.json(updated);
 }
 
-export async function DELETE(_request: Request, { params }: Params): Promise<NextResponse> {
+export async function DELETE(_request: NextRequest, { params }: Params): Promise<NextResponse> {
+  const { id } = await params;
   const items = await readGroups();
-  const next = items.filter((g) => g.id !== params.id);
+  const next = items.filter((g) => g.id !== id);
   const existed = next.length !== items.length;
   if (!existed) return NextResponse.json({ message: 'Grupo não encontrado' }, { status: 404 });
   await writeGroups(next);
