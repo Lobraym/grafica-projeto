@@ -42,6 +42,20 @@ export function QuoteForm({
   onCancel,
   preselectedClientId,
 }: QuoteFormProps): React.ReactElement {
+  const formatCurrencyInput = (amount: number): string => {
+    const safe = Number.isFinite(amount) ? Math.max(0, amount) : 0;
+    return new Intl.NumberFormat('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(safe);
+  };
+
+  const parseCurrencyInput = (raw: string): number => {
+    const digits = raw.replace(/\D/g, '');
+    if (!digits) return 0;
+    return Number(digits) / 100;
+  };
+
   const { theme } = useTheme();
   const isBlueTheme = theme === 'blue';
   const clients = useClientStore((state) => state.clients);
@@ -165,8 +179,19 @@ export function QuoteForm({
   const height = useWatch({ control, name: 'height' });
   const measurementUnit = useWatch({ control, name: 'measurementUnit' });
   const watchedValue = useWatch({ control, name: 'value' });
+  const [valueInputText, setValueInputText] = useState<string>(
+    formatCurrencyInput(initialData?.value ?? 0)
+  );
 
   const selectedProduct = selectedProductId ? getProductById(selectedProductId) : null;
+
+  useEffect(() => {
+    const current = typeof watchedValue === 'number' && Number.isFinite(watchedValue) ? watchedValue : 0;
+    const next = formatCurrencyInput(current);
+    if (valueInputText !== next) {
+      setValueInputText(next);
+    }
+  }, [watchedValue, valueInputText]);
 
   const normalizePrdBillingType = (tipo: unknown): BillingType | null => {
     if (typeof tipo !== 'string') return null;
@@ -1016,11 +1041,14 @@ export function QuoteForm({
               </span>
               <input
                 id="value"
-                type="number"
-                step="0.01"
-                min="0"
+                type="text"
+                inputMode="decimal"
                 placeholder="0,00"
-                {...register('value', { valueAsNumber: true })}
+                value={valueInputText}
+                onChange={(e) => {
+                  const parsed = parseCurrencyInput(e.target.value);
+                  setValue('value', parsed, { shouldValidate: true, shouldDirty: true });
+                }}
                 className={cn(
                   inputBaseClass,
                   'pl-10',

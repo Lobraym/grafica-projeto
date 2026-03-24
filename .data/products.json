@@ -1,0 +1,110 @@
+[
+  {
+    "id": "0szpsudsr",
+    "name": "Banner",
+    "groupId": null,
+    "photoUrl": null,
+    "description": "",
+    "minQuantity": null,
+    "createdAt": "2026-03-18T20:58:02.148Z",
+    "updatedAt": "2026-03-18T20:58:02.148Z",
+    "productType": "proprio",
+    "billingType": "m2",
+    "minArea": 0.5,
+    "marginPercent": 45,
+    "active": true,
+    "costBlocks": [
+      {
+        "id": "fo9zf8boh",
+        "name": "Lona impressa",
+        "blockType": "material_m2",
+        "options": [
+          {
+            "id": "okk6pzxu7",
+            "label": "Fosca",
+            "unit": "m2",
+            "value": 12
+          },
+          {
+            "id": "4l2zq6j88",
+            "label": "Brilho",
+            "unit": "m2",
+            "value": 15
+          }
+        ]
+      }
+    ],
+    "priceTiers": []
+  },
+  {
+    "id": "6qvbu4oo3",
+    "name": "Banner",
+    "groupId": null,
+    "photoUrl": null,
+    "description": "",
+    "minQuantity": null,
+    "createdAt": "2026-03-18T21:08:00.710Z",
+    "updatedAt": "2026-03-18T21:08:00.710Z",
+    "productType": "proprio",
+    "billingType": "m2",
+    "minArea": 0.5,
+    "marginPercent": 45,
+    "active": true,
+    "costBlocks": [
+      {
+        "id": "oba8cplil",
+        "name": "Lona impressa",
+        "blockType": "material_m2",
+        "options": [
+          {
+            "id": "p2mrpqxo0",
+            "label": "Fosca",
+            "unit": "m2",
+            "value": 12
+          },
+          {
+            "id": "zz1am6w93",
+            "label": "Brilho",
+            "unit": "m2",
+            "value": 15
+          }
+        ]
+      },
+      {
+        "id": "2dlgk3y3x",
+        "name": "Madeira",
+        "blockType": "material_metro",
+        "temOpcoes": false,
+        "custoRolo": 15,
+        "tamanhoRolo": 6,
+        "calc": "largura2",
+        "options": [
+          {
+            "id": "yg8ye6r1s",
+            "label": "Padrão",
+            "unit": "metro",
+            "value": 2.5
+          }
+        ]
+      },
+      {
+        "id": "hohpwhw2j",
+        "name": "Barbante ",
+        "blockType": "material_metro",
+        "temOpcoes": false,
+        "custoRolo": 60,
+        "tamanhoRolo": 60,
+        "calc": "largura1",
+        "options": [
+          {
+            "id": "kaahhh9kf",
+            "label": "Padrão",
+            "unit": "metro",
+            "value": 1
+          }
+        ]
+      }
+    ],
+    "priceTiers": []
+  }
+]

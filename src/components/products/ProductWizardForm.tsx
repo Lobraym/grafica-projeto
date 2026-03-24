@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -29,11 +29,25 @@ const costBlockTypeOptions = [
   { value: 'energia_maquina', label: 'Energia / máquina' },
 ] as const;
 
-function emptyOption(): CostBlockOption {
+function getDefaultOptionUnit(blockType: CostBlock['blockType']): string {
+  switch (blockType) {
+    case 'material_m2':
+      return 'm2';
+    case 'material_metro':
+      return 'metro';
+    case 'energia_maquina':
+      return 'hora';
+    case 'custo_fixo':
+    default:
+      return 'unidade';
+  }
+}
+
+function emptyOption(blockType: CostBlock['blockType'] = 'material_m2'): CostBlockOption {
   return {
     id: generateId(),
     label: '',
-    unit: '',
+    unit: getDefaultOptionUnit(blockType),
     value: 0,
   };
 }
@@ -43,7 +57,7 @@ function emptyBlock(): CostBlock {
     id: generateId(),
     name: '',
     blockType: 'material_m2',
-    options: [emptyOption()],
+    options: [emptyOption('material_m2')],
   };
 }
 
@@ -165,13 +179,57 @@ export function ProductWizardForm({
 }: ProductWizardFormProps): React.ReactElement {
   const [step, setStep] = useState(0);
 
+  // Quando vier de template, alguns campos já chegam definidos e não precisam virar etapa visual.
+  const shouldSkipProductTypeStep = Boolean(initialData && typeof initialData.productType !== 'undefined');
   // Quando vier de um template, os campos de cobrança já chegam pré-preenchidos em `initialData`.
   // Nesse caso, removemos a etapa visual de "Tipo de cobrança" para o usuário não precisar selecionar.
   const shouldSkipBillingStep = Boolean(initialData && typeof initialData.billingType !== 'undefined');
-  const totalVisibleSteps = shouldSkipBillingStep ? 4 : 5;
-  const displayStep = shouldSkipBillingStep && step >= 2 ? step - 1 : step;
+  const allSteps = [0, 1, 2, 3, 4] as const;
+  const visibleSteps = allSteps.filter((s) => {
+    if (s === 1 && shouldSkipProductTypeStep) return false;
+    if (s === 2 && shouldSkipBillingStep) return false;
+    return true;
+  });
+  const totalVisibleSteps = visibleSteps.length;
+  const displayStep = Math.max(0, visibleSteps.indexOf(step as (typeof allSteps)[number]));
 
-  const normalizeMaterialMetroBlocks = (): void => {
+  const defaultValues: ProductWizardValues = useMemo(
+    () => ({
+      name: initialData?.name ?? '',
+      productType: initialData?.productType ?? 'proprio',
+      billingType: initialData?.billingType ?? 'm2',
+      minArea: typeof initialData?.minArea === 'number' ? initialData.minArea : null,
+      priceTiers: initialData?.priceTiers ?? [],
+      costBlocks: initialData?.costBlocks ?? [],
+      marginPercent: typeof initialData?.marginPercent === 'number' ? initialData.marginPercent : 0,
+      active: typeof initialData?.active === 'boolean' ? initialData.active : true,
+      groupId: typeof initialData?.groupId !== 'undefined' ? initialData.groupId ?? null : preselectedGroupId ?? null,
+      photoUrl: typeof initialData?.photoUrl !== 'undefined' ? initialData.photoUrl ?? null : null,
+    }),
+    [initialData, preselectedGroupId]
+  );
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    trigger,
+    formState: { errors, isSubmitting },
+  } = useForm<ProductWizardValues>({
+    resolver: zodResolver(productWizardSchema),
+    defaultValues,
+    mode: 'onChange',
+  });
+
+  const billingType = watch('billingType');
+  const costBlocks = watch('costBlocks');
+  const priceTiers = watch('priceTiers');
+  const photoUrl = watch('photoUrl');
+  const watchedGroupId = watch('groupId');
+  const watchedName = watch('name');
+
+  const normalizeMaterialMetroBlocks = useCallback((): void => {
     // Garantimos campos essenciais para o Zod schema não falhar
     // quando o usuário clicar "Próximo" rápido após preencher/alterar blocos.
     costBlocks.forEach((block, bi) => {
@@ -212,43 +270,21 @@ export function ProductWizardForm({
         }
       }
     });
-  };
+  }, [costBlocks, setValue]);
 
-  const defaultValues: ProductWizardValues = useMemo(
-    () => ({
-      name: initialData?.name ?? '',
-      productType: initialData?.productType ?? 'proprio',
-      billingType: initialData?.billingType ?? 'm2',
-      minArea: typeof initialData?.minArea === 'number' ? initialData.minArea : null,
-      priceTiers: initialData?.priceTiers ?? [],
-      costBlocks: initialData?.costBlocks ?? [],
-      marginPercent: typeof initialData?.marginPercent === 'number' ? initialData.marginPercent : 0,
-      active: typeof initialData?.active === 'boolean' ? initialData.active : true,
-      groupId: typeof initialData?.groupId !== 'undefined' ? initialData.groupId ?? null : preselectedGroupId ?? null,
-      photoUrl: typeof initialData?.photoUrl !== 'undefined' ? initialData.photoUrl ?? null : null,
-    }),
-    [initialData, preselectedGroupId]
-  );
+  useEffect(() => {
+    if (step !== 3) return;
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    trigger,
-    formState: { errors, isSubmitting },
-  } = useForm<ProductWizardValues>({
-    resolver: zodResolver(productWizardSchema),
-    defaultValues,
-    mode: 'onChange',
-  });
-
-  const billingType = watch('billingType');
-  const costBlocks = watch('costBlocks');
-  const priceTiers = watch('priceTiers');
-  const photoUrl = watch('photoUrl');
-  const watchedGroupId = watch('groupId');
-  const watchedName = watch('name');
+    costBlocks.forEach((block, bi) => {
+      if (!Array.isArray(block.options)) return;
+      const defaultUnit = getDefaultOptionUnit(block.blockType);
+      block.options.forEach((opt, oi) => {
+        if (opt.unit !== defaultUnit) {
+          setValue(`costBlocks.${bi}.options.${oi}.unit` as const, defaultUnit, { shouldValidate: false });
+        }
+      });
+    });
+  }, [step, costBlocks, setValue]);
 
   const hydrateGroups = useProductGroupStore((s) => s.hydrate);
   const groups = useProductGroupStore((s) => s.groups);
@@ -264,7 +300,7 @@ export function ProductWizardForm({
   useEffect(() => {
     if (step !== 3) return;
     normalizeMaterialMetroBlocks();
-  }, [step, costBlocks, setValue]);
+  }, [step, normalizeMaterialMetroBlocks]);
 
   const groupColorHex = useMemo(() => {
     if (!watchedGroupId) return '#0F9B7A';
@@ -303,16 +339,17 @@ export function ProductWizardForm({
     if (!ok) return;
 
     setStep((s) => {
-      const next = Math.min(4, s + 1);
-      if (shouldSkipBillingStep && next === 2) return 3; // pula "Passo 3" (Tipo de cobrança)
-      return next;
+      const idx = visibleSteps.indexOf(s as (typeof allSteps)[number]);
+      if (idx < 0) return s;
+      return visibleSteps[Math.min(visibleSteps.length - 1, idx + 1)] ?? s;
     });
   };
 
   const goBack = (): void =>
     setStep((s) => {
-      if (shouldSkipBillingStep && s === 3) return 1; // volta por cima do passo pulado
-      return Math.max(0, s - 1);
+      const idx = visibleSteps.indexOf(s as (typeof allSteps)[number]);
+      if (idx <= 0) return s;
+      return visibleSteps[idx - 1] ?? s;
     });
 
   const submit = (values: ProductWizardValues): void => {
@@ -331,13 +368,15 @@ export function ProductWizardForm({
   };
 
   const title =
-    displayStep === 0
+    step === 0
       ? 'Nome do produto'
-      : displayStep === 1
+      : step === 1
         ? 'Tipo do produto'
-        : displayStep === 2
-          ? 'Blocos de custo'
-          : 'Margem de lucro';
+        : step === 2
+          ? 'Tipo de cobrança'
+          : step === 3
+            ? 'Blocos de custo'
+            : 'Margem de lucro';
 
   return (
     <form
@@ -403,7 +442,7 @@ export function ProductWizardForm({
       )}
 
       {/* Passo 2 */}
-      {step === 1 && (
+      {!shouldSkipProductTypeStep && step === 1 && (
         <section className="rounded-xl border border-border bg-card-bg p-5">
           <label className="block text-sm font-medium text-text-muted mb-2">
             Tipo do produto <span className="text-primary">*</span>
@@ -785,7 +824,9 @@ export function ProductWizardForm({
                       <button
                         type="button"
                         onClick={() => {
-                          const next = costBlocks.map((b, idx) => (idx === bi ? { ...b, options: [...b.options, emptyOption()] } : b));
+                          const next = costBlocks.map((b, idx) => (
+                            idx === bi ? { ...b, options: [...b.options, emptyOption(b.blockType)] } : b
+                          ));
                           setValue('costBlocks', next, { shouldValidate: true });
                         }}
                         className="inline-flex items-center gap-2 rounded-lg border border-border bg-card-bg px-3 py-2 text-sm font-medium text-text-primary hover:bg-card-bg-secondary focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer min-h-[44px]"
@@ -798,7 +839,7 @@ export function ProductWizardForm({
                     <div className="space-y-3">
                       {block.options.map((opt, oi) => (
                         <div key={opt.id} className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
-                          <div className="sm:col-span-4">
+                          <div className="sm:col-span-6">
                             <label className="block text-xs font-medium text-text-muted mb-1.5">
                               Nome <span className="text-primary">*</span>
                             </label>
@@ -809,18 +850,7 @@ export function ProductWizardForm({
                               className="block w-full rounded-lg border border-border bg-card-bg px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
                             />
                           </div>
-                          <div className="sm:col-span-3">
-                            <label className="block text-xs font-medium text-text-muted mb-1.5">
-                              Unidade <span className="text-primary">*</span>
-                            </label>
-                            <input
-                              type="text"
-                              placeholder="m², metro, peça..."
-                              {...register(`costBlocks.${bi}.options.${oi}.unit` as const)}
-                              className="block w-full rounded-lg border border-border bg-card-bg px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
-                            />
-                          </div>
-                          <div className="sm:col-span-4">
+                          <div className="sm:col-span-5">
                             <label className="block text-xs font-medium text-text-muted mb-1.5">
                               Valor de custo (R$) <span className="text-primary">*</span>
                             </label>
@@ -929,7 +959,7 @@ export function ProductWizardForm({
             </button>
           )}
 
-          {step < 4 && (
+          {step !== (visibleSteps[visibleSteps.length - 1] ?? 4) && (
             <button
               type="button"
               onClick={() => void goNext()}
@@ -939,7 +969,7 @@ export function ProductWizardForm({
             </button>
           )}
 
-          {step === 4 && (
+          {step === (visibleSteps[visibleSteps.length - 1] ?? 4) && (
             <button
               type="submit"
               disabled={isSubmitting}
